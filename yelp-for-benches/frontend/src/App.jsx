@@ -6,7 +6,8 @@ import './App.css'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-const position = [34.0689, -118.4452] // UCLA area
+
+const position = [34.0696, -118.4448] // UCLA area
 
 function FixMap() {
   const map = useMap()
@@ -45,21 +46,23 @@ function App() {
           Count is {count}
         </button>
 
-        <div id="map">
-            <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: '500px', width: '100%' }}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <FixMap />
-              <Marker position={position}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-            </MapContainer>
-          </div>
-
+        <div id="map-wrapper">
+          <MapContainer
+            center={position}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <FixMap />
+            <Marker position={position}>
+              <Popup>UCLA</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
       </section>
 
       <div className="ticks"></div>

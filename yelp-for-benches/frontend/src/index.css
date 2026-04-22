@@ -109,3 +109,13 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+#map-wrapper {
+  height: 500px;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
