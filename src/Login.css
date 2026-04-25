@@ -1,0 +1,26 @@
+/* from gemini */
+/* The container fills the whole browser window */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100vh;           /* 100% of the Viewport Height */
+    width: 100vw;            /* 100% of the Viewport Width */
+    background-color: #f0f2f5; /* Light grey background */
+}
+
+/* The actual white box */
+.login-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    
+    /* This is the magic line */
+    display: flex;
+    flex-direction: column; /* Ensure it's spelled exactly like this */    
+    
+    gap: 1rem; /* This adds a nice gap between each row */
+    width: 300px;
+}
