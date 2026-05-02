@@ -5,30 +5,31 @@ import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [bench, setBench] = useState( {} );
+  const [ bench, setBench ] = useState("");
 
   async function getBench() {
     try {
-      const response = await fetch('http://localhost:8080/api/bench');
+      const response = await fetch('http://localhost:8080/bench');
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);
+        console.log(`Got new bench: ${result}`);
       }
       const data = await response.json();
-      setBench(data);
+      setBench(data.title);
     } catch(error) {
       console.log(`Error message: `, error);
     }
   }
 
   async function resetBench() {
-    setBench( {} );
+    setBench( "" );
   }
 
   return (
     <>
-        {bench && bench.name}
+        <p>{bench}</p>
         <button onClick={() => getBench()}>Press me!</button>
-        <button onClick={() => resetBench()}>Destroy Benchamin</button>
+        <button onClick={() => resetBench()}>Destroy!!!</button>
     </>
   )
 }
