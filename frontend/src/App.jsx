@@ -15,7 +15,7 @@ function FixMap() {
   useEffect(() => {
     setTimeout(() => {
       map.invalidateSize()
-    }, 100)
+    }, 300)
   }, [map])
 
   return null
