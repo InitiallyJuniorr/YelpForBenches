@@ -30,7 +30,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bench', async (req, res) => {
-    const result = await pool.query("SELECT * FROM notes");
+    const latitude = req.query.lat;
+    const longitude = req.query.long;
+    const result = await pool.query(`
+        SELECT description
+        FROM benches
+        WHERE latitude = ? AND longitude = ?
+        `, [latitude, longitude]);
     res.send(result[0][0]);
 })
 
