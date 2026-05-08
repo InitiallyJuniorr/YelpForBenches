@@ -1,0 +1,205 @@
+/* src/components/TopResultsPanel.css */
+
+.results-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2.5px);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 35px;
+  border: 1px solid #5a2522;
+  padding: 48px 32px 32px;
+  max-width: 700px;
+  width: 100%;
+  height: 93%;
+  overflow-y: scroll;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 25px;
+  border: 1px solid #5a2522;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+  padding: 0 12px;
+  height: 52px;
+  flex: 1;
+  max-width: 500px;
+  gap: 8px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 20px;
+  color: #434343;
+}
+
+.clear-button {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.filter-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-left: 16px;
+  padding: 10px 13px 11px;
+  height: 40px;
+  border-radius: 25px;
+  border: 1px solid #5a2522;
+  background: #fff;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.results-title {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #5a2522;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.bench-card {
+  position: relative;
+  display: flex;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  border: 1px solid rgba(90, 37, 34, 0.25);
+  overflow: hidden;
+  height: 180px;
+}
+
+.bench-card-info {
+  padding: 16px 16px 16px 21px;
+  flex: 1;
+}
+
+.bench-card-title {
+  margin: 0 0 5px;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #000;
+}
+
+.bench-card-address {
+  margin: 0 0 10px;
+  max-width: 152px;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 10px;
+  color: #000;
+}
+
+.bench-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bench-card-stars {
+  display: flex;
+  gap: 4px;
+}
+
+.bench-card-star {
+  width: 12px;
+  height: 12px;
+  background: #231f20;
+  border-radius: 3px; /* temp; swap for real star icon */
+}
+
+.bench-card-rating-text {
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #000;
+}
+
+.bench-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.results-footer {
+  margin-top: 32px;
+  text-align: center;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.footer-text {
+  color: #000;
+  display: block;
+}
+
+.add-link {
+  border: none;
+  background: none;
+  color: #3d77bf;
+  text-decoration: underline;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.result-button {
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid rgba(90, 37, 34, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.result-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.result-button.selected {
+  border: 2px solid #5a2522;
+  box-shadow: 0 0 0 3px rgba(90, 37, 34, 0.12);
+}
+
+.result-image-wrap {
+  width: 42%;
+  min-width: 180px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.results-status {
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 16px;
+  color: #5a2522;
+  margin: 8px 0 0;
+}
