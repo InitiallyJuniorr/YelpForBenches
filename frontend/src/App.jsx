@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { NavBar } from '../components/navbar'
 import { Home } from '../pages/home'
+import { Profile } from '../pages/profile'
 import { HashRouter as Router, Routes, Route} from 'react-router-dom';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
     <NavBar/>
     <Routes>
       <Route path="/" element={<Home/>}/>
+      <Route path="/profile" element={<Profile/>}/>
     </Routes>
     </>
   )
