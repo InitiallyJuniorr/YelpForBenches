@@ -1,0 +1,155 @@
+.navbar
+{
+ 
+    position: fixed;
+    top: 30px;
+    width: 90%;
+    margin: 0 auto;
+    
+    /* centers navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    /* left: 30px; */
+
+    display: flex;
+    height: 81px;
+    /* padding: 25px 15px 25px 43px; */
+    align-items:center;
+    justify-content:center;
+    gap: 167px;
+    background: #FFF;
+    flex-shrink:0;
+
+    border-radius: 40px;
+    border: 1px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #FFF;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+ul{
+   flex: 1;
+   list-style:none;
+   text-align: center; 
+   
+}
+ul li {
+    /* makes them be in one line instead of column */
+    display: inline-block;
+
+    /* padding? */
+    margin: 10px 60px;
+
+    /* on hover pointer cursor */
+    cursor: pointer;
+    
+    /* space between the words */
+    width: 95.817px;
+    flex-shrink: 0;
+
+    /* size + boldness */
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+ul li a{
+    color: #5A2522;
+    font-family: "Kumbh Sans", sans-serif;
+    text-decoration: none;
+}
+.something
+{
+    width: 95.817px;
+    flex-shrink: 0;
+
+    color: #5A2522;
+    font-family: "Kumbh Sans",sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.Images{
+    width: auto;
+    height: auto;
+}
+navbar .title{
+    width: 95.817px;
+    flex-shrink: 0;
+
+    color: #5A2522;
+    font-family: "Kumbh Sans",sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.homedivider
+{
+    display: flex;
+    width: 100%px;
+    height: 170px;
+    padding: 54px 327px 54px 356px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    background: #B1805B;
+
+}
+
+.bottomtab
+{
+    display: flex;
+    height: 300px;
+    width: 100%;
+    background: #B1805B;
+
+}
+
+.RevButton{
+    
+    /* display: flex; */
+    display: grid;
+    place-items: center;
+
+    width: 258px;
+    height: 61px;
+    padding: 10px 29px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 25px;
+    background: #3D77BF;
+
+    text-align: center;
+    color: #FFF;
+    font-family: "Kumbh Sans",sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}
+
+.ProfileBanner
+{
+    width: 803px;
+    height: 247px;
+    border-bottom: 1px solid rgba(90, 37, 34, 0.50);
+    background: #8f8f8f;
+
+    padding-top: 20px;
+    color: #5A2522;
+    text-align: center;
+    font-family: "Kumbh Sans", sans-serif;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.ProfileImage
+{
+    border-radius: 50px;
+}

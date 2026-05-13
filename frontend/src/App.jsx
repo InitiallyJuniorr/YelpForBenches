@@ -5,16 +5,19 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-
-
-
+import { NavBar } from '../components/navbar'
+import { Home } from '../pages/home'
+import { HashRouter as Router, Routes, Route} from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <h1>cleansed</h1>
+    <NavBar/>
+    <Routes>
+      <Route path="/" element={<Home/>}/>
+    </Routes>
     </>
   )
 }
