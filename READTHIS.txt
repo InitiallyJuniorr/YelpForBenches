@@ -1,0 +1,11 @@
+Currently on Sophie's Branch:
+
+Description + List of changes:
+1. Added React Router to Link different pages via NavBar component (navbar.jsx)
+2. Removed everything from App.jsx into Map.jsx (new file's name is based on assumption) //KEEP APP EMPTY FOR NOW ON (besides routes + static components)
+3. Removed file links on main.jsx //KEEP MAIN EMPTY FROM NOW ON
+4. Structured project to hvae folders for components + pages
+5. TODO: Cleaner CSS files + typescale into index.css
+
+Add info:
+1. General naming scheme I used: file name all lower case; functions are PascalCase (UpperCamelCase)
