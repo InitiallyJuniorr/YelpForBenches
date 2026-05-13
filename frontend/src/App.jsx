@@ -118,15 +118,15 @@ function App() {
 
       const response = await fetch(url)
       const data = await response.json()
-      
-      console.log(typeof(data.features[0].place_name))
 
-      const formattedResults = data.features.map((feature) => ({
+      console.log(data)
+
+      const formattedResults = benchData.map((feature) => ({
         id: feature.id,
-        name: feature.text,
-        address: feature.place_name,
-        lon: feature.center[0],
-        lat: feature.center[1],
+        name: feature.name,
+        address: feature.address,
+        lon: feature.lon,
+        lat: feature.lat,
       }))
 
       setResults(formattedResults)
