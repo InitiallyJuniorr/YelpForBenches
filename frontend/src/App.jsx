@@ -49,14 +49,77 @@ function App() {
     if (!query.trim()) return
 
     setLoading(true)
+    
+    // try {
+    // //   const url = `https://nominatim.openstreetmap.org/search?q=/${encodeURIComponent(
+    // //     query
+    // //   )}&format=json&limit=1&addressdetails=1`
 
+    // //   const response = await fetch(url, {
+    // //     headers: {
+    // //       'User-Agent': 'YelpForBenches (fakeemail@gmail.com)'
+    // //     }
+    // //   })
+      
+    // //   const data = await response.json()
+
+    // //   if (!data.length) throw new Error('No results found')
+
+    // //   const feature = data[0]
+
+    // //   const formattedResults = [{
+    // //     id: feature.place_id,
+    // //     name: feature.display_name,
+    // //     lon: parseFloat(feature.lon),
+    // //     lat: parseFloat(feature.lat)
+    // //   }]
+
+    // //   setResults(formattedResults)
+
+    // //   setSelectedPlace(null) // reset selected place when new search is made
+    // // } catch (error) {
+    // //   console.error('Search failed:', error)
+    // // } finally {
+    // //   setLoading(false)
+    // // }
+    
     try {
+      const organicUrl = `https://nominatim.openstreetmap.org/search?q=/${encodeURIComponent( // To find coords of requested location
+        query
+      )}&format=json&limit=1&addressdetails=1`
+
+      const organicResponse = await fetch(organicUrl, {
+        headers: {
+          'User-Agent': 'YelpForBenches (fakeemail@gmail.com)'
+        }
+      })
+      
+      const organicData = await organicResponse.json()
+
+      if (!organicData.length) throw new Error('No results found')
+
+      const organicFeature = organicData[0]
+
+      const organicFormattedResults = {
+        id: organicFeature.place_id,
+        name: organicFeature.display_name,
+        lon: parseFloat(organicFeature.lon),
+        lat: parseFloat(organicFeature.lat)
+      }
+
+      const benchUrl = `http://localhost:8080/bench-lookup?lat=${organicFormattedResults.lat}&lon=${organicFormattedResults.lon}`
+      const benchResponse = await fetch(benchUrl)
+      const benchData = await benchResponse.json()
+      console.log(benchData)
+      
       const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(
         query
       )}.json?key=${API_KEY}&limit=10&proximity=-118.4448,34.0696`
 
       const response = await fetch(url)
       const data = await response.json()
+      
+      console.log(typeof(data.features[0].place_name))
 
       const formattedResults = data.features.map((feature) => ({
         id: feature.id,
