@@ -24,3 +24,27 @@
     gap: 1rem; /* This adds a nice gap between each row */
     width: 300px;
 }
+
+h1 {
+    display: block;
+    text-align: center;
+}
+
+.center {
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+}
+
+.guest {
+    color: blue;
+    display: block;
+    text-align: center;
+}
+
+.guest:hover {
+    cursor: pointer; /* Shows the hand/clicker icon */
+}
+
+.error {
+    color: red;
+}

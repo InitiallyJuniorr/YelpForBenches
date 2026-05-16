@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Login.css'
 
 export default function Login() {
+    const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
     const [emailError,   setEmailError] = useState("");
     const [pwError,   setpwError] = useState("");
@@ -35,15 +37,31 @@ export default function Login() {
         setpwError(!(re.test(String(password))));
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        if (!(emailError) && !(pwError) && !(isLogin)){
+            try {
+                const res = await fetch("http://localhost:8080/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                })
+                const data = await res.json()
+                if (data.success) navigate('/app')  
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        else if (!(emailError) && isLogin) {
+            const res = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            })
+            if (res.ok) navigate('/app')
+        }
         setSubmitted(true);
     }
 
-
-
-    const routetoMap = () => {
-
-    };
 
     function PwError_Display({ password }) {
         const re_lowercase = /(?=.*[a-z])/;
@@ -52,25 +70,7 @@ export default function Login() {
         const re_special = /(?=.*[@$!%&?])/;
         const re_8 = /^.{8,}$/;
 
-        // function Error_Display() {
-        //     const errors = []
-        //     if (!re_lowercase.test(password)) errors.push("a lowercase letter");
-        //     if (!re_uppercase.test(password)) errors.push("an uppercase letter");
-        //     if (!re_digit.test(password)) errors.push("a digit");
-        //     if (!re_special.test(password)) errors.push("a special character");
-        //     if (!re_8.test(password)) errors.push("at least 8 characters");
-        //     const all_errors = errors.join(", ");
-        //     return (
-        //     <div>
-        //         <p className="error">Password must include: {all_errors}</p>
-        //     </div>
-        //     )
-        // }
-
     return (
-        // <div>
-        //     { <Error_Display /> }
-        // </div>
         <div>
             { !(re_uppercase.test(String(password))) && <p className="error ">Password must include an uppercase letter.</p> }
             { !(re_lowercase.test(String(password))) && <p className="error ">Password must include a lowercase letter.</p> }
@@ -93,7 +93,7 @@ export default function Login() {
                <input type="password" placeholder="Password" onChange={handlePChange} />
                 { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
                 <button onClick={handleSubmit}>Submit</button>
-                <p className="guest" onClick={routetoMap}>Sign in Later</p>
+                <p className="guest" onClick={() => navigate('/app')}>Sign in Later</p>
             </div>
         </div>
     );
