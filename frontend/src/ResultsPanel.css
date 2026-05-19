@@ -1,17 +1,21 @@
 /* src/components/TopResultsPanel.css */
 
 .results-panel {
-  position: relative;
+  position: absolute;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(2.5px);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 35px;
   border: 1px solid #5a2522;
-  padding: 48px 32px 32px;
-  max-width: 700px;
+  padding: 50px 32px 32px;
+  max-width: 500px;
   width: 100%;
-  height: 93%;
+  height: 85%;
   overflow-y: scroll;
+  z-index: 1000;
+  top: 30px;
+  left: 30px;
+  bottom: 30px;
 }
 
 .results-header {
@@ -74,6 +78,13 @@
   font-family: 'Kumbh Sans', system-ui, sans-serif;
   font-weight: 700;
   font-size: 40px;
+  color: #5a2522;
+}
+
+.results-state {
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
   color: #5a2522;
 }
 

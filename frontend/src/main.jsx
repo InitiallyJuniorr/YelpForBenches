@@ -4,11 +4,14 @@ import './index.css'
 import Test from './Test.jsx'
 import Login from './Login.jsx'
 import App from './App.jsx'
+import MapView from './MapView.jsx'
+import MapPage from './MapPage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <Test /> */}
     {/* <Login /> */}
     <App />
+    {/* < MapPage /> */}
   </StrictMode>
 )
