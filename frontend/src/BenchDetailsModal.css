@@ -1,0 +1,309 @@
+.bench-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.bench-modal-card {
+  position: relative;
+  width: min(825px, 94vw);
+  padding: 28px 30px 30px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #5a2522;
+  border-radius: 25px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: 'Kumbh Sans', sans-serif;
+}
+
+.bench-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 26px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #231f20;
+  font-size: 34px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bench-modal-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.bench-main-image {
+  width: 100%;
+  height: 184px;
+  object-fit: cover;
+  border-radius: 25px;
+  background: #d9d9d9;
+}
+
+.bench-header-content h2 {
+  margin: 26px 0 14px;
+  color: #5a2522;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.bench-address {
+  margin: 0 0 18px;
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.bench-stars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.bench-stars-large .bench-star {
+  font-size: 30px;
+}
+
+.bench-star {
+  color: #231f20;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.bench-star.filled {
+  color: #231f20;
+}
+
+.bench-reviews-section h3 {
+  margin: 6px 0 12px;
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.bench-review-card {
+  position: relative;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid rgba(90, 37, 34, 0.25);
+  box-shadow: 0 2px 4px rgba(90, 37, 34, 0.15);
+  padding: 18px 20px 18px;
+  margin-bottom: 22px;
+}
+
+.bench-review-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.bench-review-avatar-wrap {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #d9d9d9;
+  border: 1px solid #000;
+}
+
+.bench-review-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bench-review-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.bench-review-name {
+  margin: 0 0 4px;
+  color: #000;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.bench-review-badge {
+  margin-bottom: 8px;
+  color: #000;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.bench-review-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bench-review-rating-text {
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bench-review-label {
+  margin: 0 0 6px;
+  color: #000;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bench-review-body {
+  min-height: 37px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 0.5px solid rgba(0, 0, 0, 0.25);
+  color: #000;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.bench-read-review {
+  display: block;
+  margin: 8px 0 0 auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #3d77bf;
+  font-size: 10px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.bench-no-reviews {
+  padding: 24px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(90, 37, 34, 0.25);
+  color: #444;
+  font-size: 16px;
+}
+
+.bench-write-review {
+  width: 100%;
+  height: 61px;
+  border: none;
+  border-radius: 25px;
+  background: #3d77bf;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+  font-family: 'Kumbh Sans', sans-serif;
+  cursor: pointer;
+}
+
+.bench-modal-close:focus,
+.bench-write-review:focus,
+.bench-read-review:focus {
+  outline: 2px solid rgba(61, 119, 191, 0.55);
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .bench-modal-card {
+    width: min(94vw, 700px);
+    padding: 24px 20px 22px;
+  }
+
+  .bench-modal-header {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .bench-main-image {
+    max-width: 320px;
+    height: 190px;
+  }
+
+  .bench-header-content h2 {
+    margin-top: 0;
+    font-size: 28px;
+    padding-right: 42px;
+  }
+
+  .bench-address,
+  .bench-reviews-section h3 {
+    font-size: 18px;
+  }
+
+  .bench-write-review {
+    height: 54px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 560px) {
+  .bench-modal-overlay {
+    padding: 12px;
+  }
+
+  .bench-modal-card {
+    border-radius: 20px;
+    padding: 20px 14px 16px;
+  }
+
+  .bench-modal-close {
+    top: 16px;
+    right: 16px;
+    font-size: 30px;
+  }
+
+  .bench-main-image {
+    height: 170px;
+    border-radius: 20px;
+  }
+
+  .bench-header-content h2 {
+    font-size: 22px;
+  }
+
+  .bench-address {
+    font-size: 15px;
+  }
+
+  .bench-stars-large .bench-star {
+    font-size: 24px;
+  }
+
+  .bench-review-top {
+    gap: 12px;
+  }
+
+  .bench-review-avatar-wrap {
+    width: 58px;
+    height: 58px;
+  }
+
+  .bench-review-name {
+    font-size: 17px;
+  }
+
+  .bench-review-rating-text {
+    font-size: 13px;
+  }
+
+  .bench-write-review {
+    height: 48px;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+}
