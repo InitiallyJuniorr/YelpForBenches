@@ -30,8 +30,29 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bench', async (req, res) => {
-    const result = await pool.query("SELECT * FROM notes");
-    res.send(result[0][0]);
+    const result = await pool.query("SELECT * FROM benches");
+    res.send(result[0]);
+})
+
+app.get('/bench-lookup', async (req, res) => {
+    const lat = Number(req.query.lat);
+    const lon = Number(req.query.lon);
+    const result = await pool.query(`
+        SELECT
+            id,
+            name,
+            address,
+            ST_Y(coordinates) as lon,
+            ST_X(coordinates) as lat,
+            ST_Distance_Sphere(coordinates, ST_SRID(
+                POINT(?, ?)
+                , 4326)) AS distance_meters
+        FROM benches
+        WHERE ST_Distance_Sphere(coordinates, ST_SRID(
+            POINT(?, ?)
+            , 4326)) <= 50000
+        `, [lon, lat, lon, lat])
+    res.send(result[0])
 })
 
 app.post('/register', async (req, res) => {
