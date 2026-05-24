@@ -11,16 +11,19 @@ app.use(express.json())
 app.use(cors({ origin: ["http://127.0.0.1:5173", "http://localhost:5173"] }))
 const PORT = 8080;
 
-console.log(process.env.MYSQL_HOST);
-console.log(process.env.MYSQL_USER);
-console.log(process.env.MYSQL_PASSWORD);
-console.log(process.env.MYSQL_DATABASE);
+// Testing Database is corect
+console.log(process.env.DB_HOST);
+console.log(process.env.DB_PORT);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_DATABASE);
 
 const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 }).promise();
 
 
