@@ -91,8 +91,9 @@ const handleSubmit = async () => {
 
 
     return (
+        <>
         <div className="login-container">
-            <h1>BenchMark©</h1>
+            <h1>BenchMark</h1>
             <div className="login-card">
                <h1>{isLogin ? "Login" : "Register"}</h1>    
                <button onClick={toggleLogin}>{isLogin ? "Create Account" : "Sign in"}</button>
@@ -107,6 +108,9 @@ const handleSubmit = async () => {
                 <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
             </div>
         </div>
+        {/* TEMP, REMOVE LATE */}
+        <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
+        </>
     );
 }
 

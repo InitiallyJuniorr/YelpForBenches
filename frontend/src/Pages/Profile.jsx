@@ -6,13 +6,14 @@ import ProfileBanner from '../Components/ProfileComponents.jsx';
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { BenchMarks } from '../Components/ProfileComponents.jsx';
 import { NavBar } from '../Components/Navbar.jsx'
+import Login from '../Login.jsx'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 import { jwtDecode } from 'jwt-decode'
 import { Navigate } from 'react-router-dom'
 
-export function Profile()
+export function Profile({isLoggedIn = true})
 {
     const token = localStorage.getItem('token')
     if (!token) return <Navigate to="/" />
@@ -26,6 +27,7 @@ export function Profile()
         return <Navigate to="/" />
     }
 
+
     return(
     <>
     <NavBar/>
@@ -34,7 +36,7 @@ export function Profile()
 
     <div style={{display: 'flex'}}>
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
-                <ProfileBanner name="Tobias Düerschmid" tag="Ultimate Bench Sitter" photo={Tobi}>
+                <ProfileBanner name="Tobias.Düerschmid" tag="Ultimate Bench Sitter" photo={Tobi}>
                     
                 </ProfileBanner>
                 <div style={{paddingTop: '30px'}}/>

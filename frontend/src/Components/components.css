@@ -294,8 +294,8 @@ navbar .title{
         line-height: normal;
     }
     h2{
-        color: #5A2522, san-serif;
-        font-family: "Kumbh Sans";
+        color: #5A2522;
+        font-family: "Kumbh Sans" sans-serif;
         font-size: 35px;
         font-style: normal;
         font-weight: 700;
@@ -304,7 +304,7 @@ navbar .title{
     p1{
         color: #5A2522;
         text-align: left;
-        font-family: "Kumbh Sans", sans-serif;
+        font-family: "Kumbh Sans" sans-serif;
         font-size: 25px;
         font-style: normal;
         font-weight: 400;

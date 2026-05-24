@@ -1,0 +1,139 @@
+.loginCard
+{
+    
+    display: flexgrid;
+    justify-content:center;
+    align-items: left;
+    padding-left: 10%;
+    width: 626px;
+    height: 100vh;
+    border-left: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #F4F1EC;
+    box-shadow: -4px 0 4px 0 rgba(0, 0, 0, 0.05);
+
+
+    p1{
+        color: #5A2522;
+        font-family: "Kumbh Sans", sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+    }
+    h1{
+        color: #5A2522;
+        text-align: left;
+        font-family: "Kumbh Sans", sans-serif;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    .button
+    {
+        display: flex;
+        /* flex-direction: column;
+        gap: 1rem; */
+        width: 488px;
+        height: 66px;
+        padding: 22px 201px 23px 202px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 35px;
+        background: #3D77BF;
+        color: #FFF;
+        font-family: "Kumbh Sans",sans-serif;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Adjust duration as needed */
+            pointer-events: none;         /* Optional: makes element unclickable once faded */
+          }
+    }
+
+}
+
+/* JAMEY HERE */
+/* from gemini */
+/* The container fills the whole browser window */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100vh;           /* 100% of the Viewport Height */
+    width: 100vw;            /* 100% of the Viewport Width */
+    background-color: #f0f2f5; /* Light grey background */
+}
+
+/* The actual white box */
+.login-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    
+    /* This is the magic line */
+    display: flex;
+    flex-direction: column; /* Ensure it's spelled exactly like this */    
+    
+    gap: 1rem; /* This adds a nice gap between each row */
+    width: 300px;
+}
+.sophie-card
+{
+    display: grid;
+    /* align-items: right; */
+    padding: 2rem;
+    gap: 1rem;
+    height: 100%;
+    width: 300px;
+    border: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #F4F1EC;
+    box-shadow: -4px 0 4px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 25px;
+}
+
+h1 {
+    display: block;
+    text-align: center;
+}
+
+.center {
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+}
+
+.guest {
+    /* color: blue;
+    display: block;
+    text-align: center; */
+    display: block;
+    color: #5a4deb;
+    text-align: center;
+    font-weight: 700;
+    font-family: "Kumbh Sans", sans-serif;
+}
+
+.guest:hover {
+    cursor: pointer; /* Shows the hand/clicker icon */
+}
+
+.error {
+    color: red;
+}
+.input
+{
+    border-radius: 35px;
+    border: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #FCFCFC;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    width: 488px;
+    height: 65px;
+}
