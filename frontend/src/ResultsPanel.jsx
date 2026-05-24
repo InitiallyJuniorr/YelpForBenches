@@ -2,17 +2,9 @@ import './ResultsPanel.css';
 
 function BenchCard({ title, address, rating, count, imageUrl, onClick, isSelected }) {
   return (
-<<<<<<< HEAD
-    <button
-      type="button"
-      className={`bench-card result-button ${isSelected ? 'selected' : ''}`}
-      onClick={onClick}
-    >
-=======
     <>
     <div style={{paddingTop: '160px'}}/>
     <div className="bench-card">
->>>>>>> a605438676c649202e680ef6e6a500cde15437e7
       <div className="bench-card-info">
         <h3 className="bench-card-title">{title}</h3>
         <p className="bench-card-address">{address}</p>
@@ -29,17 +21,6 @@ function BenchCard({ title, address, rating, count, imageUrl, onClick, isSelecte
           </span>
         </div>
       </div>
-<<<<<<< HEAD
-
-      <div className="result-image-wrap">
-        <img
-          className="bench-card-image"
-          src={imageUrl}
-          alt={title}
-        />
-      </div>
-    </button>
-=======
       <img
         className="bench-card-image"
         src={imageUrl}
@@ -47,7 +28,6 @@ function BenchCard({ title, address, rating, count, imageUrl, onClick, isSelecte
       />
     </div>
     </>
->>>>>>> a605438676c649202e680ef6e6a500cde15437e7
   );
 }
 
