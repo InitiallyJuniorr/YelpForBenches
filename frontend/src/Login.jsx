@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Login.css'
 
+import { Navigate } from 'react-router-dom'
+
 export default function Login() {
     const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
@@ -37,31 +39,37 @@ export default function Login() {
         setpwError(!(re.test(String(password))));
     }
 
-    const handleSubmit = async () => {
-        if (!(emailError) && !(pwError) && !(isLogin)){
-            try {
-                const res = await fetch("http://localhost:8080/register", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password })
-                })
-                const data = await res.json()
-                if (data.success) navigate('/app')  
-            } catch (err) {
-                console.error(err)
-            }
-        }
-        else if (!(emailError) && isLogin) {
-            const res = await fetch("http://localhost:8080/login", {
+const handleSubmit = async () => {
+    if (!(emailError) && !(pwError) && !(isLogin)){
+        try {
+            const res = await fetch("http://localhost:8080/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
             })
-            if (res.ok) navigate('/app')
+            const data = await res.json()
+            if (data.success) {
+                localStorage.setItem('token', data.token)  // add this
+                navigate('/app')
+            }
+        } catch (err) {
+            console.error(err)
         }
-        setSubmitted(true);
     }
-
+    else if (!(emailError) && isLogin) {
+        const res = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        })
+        const data = await res.json()
+        if (res.ok) {
+            localStorage.setItem('token', data.token)
+            navigate('/app')
+        }
+    }
+    setSubmitted(true);
+}
 
     function PwError_Display({ password }) {
         const re_lowercase = /(?=.*[a-z])/;

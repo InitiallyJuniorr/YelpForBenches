@@ -9,10 +9,23 @@ import { NavBar } from '../Components/Navbar.jsx'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
-
+import { jwtDecode } from 'jwt-decode'
+import { Navigate } from 'react-router-dom'
 
 export function Profile()
 {
+    const token = localStorage.getItem('token')
+    if (!token) return <Navigate to="/" />
+    
+    let email = ''
+    try {
+        const decoded = jwtDecode(token)
+        email = decoded.email
+    } catch (err) {
+        console.error('Token decode error:', err)
+        return <Navigate to="/" />
+    }
+
     return(
     <>
     <NavBar/>

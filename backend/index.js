@@ -4,6 +4,7 @@ import express from 'express';
 import mysql from 'mysql2'
 import cors from 'cors'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 
 const app = express();
@@ -67,7 +68,9 @@ app.post('/register', async (req, res) => {
             'INSERT INTO users (email, password) VALUES (?, ?)',
             [email, hashed]
         )
-        res.status(200).json({ success: true })
+
+        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7d' })
+        res.status(200).json({ success: true, token })
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({ error: 'Email already exists' })
@@ -86,7 +89,8 @@ app.post('/login', async (req, res) => {
         const match = await bcrypt.compare(password, rows[0].password)
         if (!match) return res.status(401).json({ error: 'Invalid email or password' })
         
-        res.status(200).json({ success: true })
+        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7d' })
+        res.status(200).json({ success: true, token })
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
