@@ -2,6 +2,7 @@
 {
  
     position: fixed;
+    z-index: 10000;
     top: 30px;
     width: 90%;
     margin: 0 auto;
@@ -321,4 +322,13 @@ navbar .title{
     border: 1px solid rgba(0, 0, 0, 0.25);
     background: #FFF;
     padding-top: 20px;
+}
+h1{
+    color: #5A2522;
+    text-align: center;
+    font-family: "Kumbh Sans", sans-serif;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
 }

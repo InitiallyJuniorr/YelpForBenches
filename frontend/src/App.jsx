@@ -149,7 +149,7 @@ function App() {
 
   return (
     <>
-    
+
       <NavBar/>
 
       <section id="center">
