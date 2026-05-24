@@ -1,5 +1,5 @@
 
-.rating:not(:checked)>label {
+.rating:not(:checked) label {
     color: #ccc;
 }
 
@@ -23,7 +23,8 @@ input[type="radio"] {
     display: none;
 }
 
-.rating>input:checked~label {
+.rating span:has(input:checked) label,
+.rating span:has(input:checked)~span label {
     color: orange
 }
 
@@ -31,7 +32,7 @@ input[type="radio"] {
     color: #ccc;
 }
 
-.rating>label:hover,
-.rating>label:hover~label {
+.rating span:hover label,
+.rating span:hover~span label {
     color: orange !important;
 }

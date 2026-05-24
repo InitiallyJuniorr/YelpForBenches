@@ -191,3 +191,62 @@
   border-radius: 8px;
   overflow: hidden;
 }
+
+.map-view.confirm-mode .leaflet-control-container {
+  display: none;
+}
+
+.confirm-location-cancel,
+.confirm-location-submit {
+  position: absolute;
+  z-index: 1200;
+  border: none;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.confirm-location-cancel {
+  top: 130px;
+  right: 100px;
+  min-width: 96px;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 21px;
+  background: #fff;
+  color: #5a2522;
+  border: 1px solid rgba(90, 37, 34, 0.35);
+}
+
+.confirm-location-submit {
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  min-width: min(340px, calc(100vw - 36px));
+  height: 54px;
+  padding: 0 24px;
+  border-radius: 27px;
+  background: #3d77bf;
+  color: #fff;
+  font-size: 18px;
+}
+
+.confirm-location-cancel:focus,
+.confirm-location-submit:focus {
+  outline: 3px solid rgba(61, 119, 191, 0.38);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .confirm-location-cancel {
+    top: 14px;
+    right: 14px;
+  }
+
+  .confirm-location-submit {
+    bottom: 18px;
+    height: 50px;
+    font-size: 16px;
+  }
+}

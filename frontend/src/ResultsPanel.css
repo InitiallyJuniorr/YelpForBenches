@@ -7,15 +7,44 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 35px;
   border: 1px solid #5a2522;
-  padding: 50px 32px 32px;
+  padding: 40px 32px 32px;
   max-width: 500px;
   width: 100%;
-  height: 85%;
+  height: 75%;
   overflow-y: scroll;
   z-index: 1000;
-  top: 30px;
+  top: 130px;
   left: 30px;
   bottom: 30px;
+}
+
+.search-mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 0px;
+  border: 1px solid rgba(90, 37, 34, 0.35);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.search-mode-toggle button {
+  height: 36px;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  color: #5a2522;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.search-mode-toggle button.active {
+  background: #3d77bf;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(61, 119, 191, 0.28);
 }
 
 .results-header {
@@ -29,7 +58,7 @@
   display: flex;
   align-items: center;
   background: #fff;
-  border-radius: 25px;
+  border-radius: 22px;
   border: 1px solid #5a2522;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
   padding: 0 12px;
@@ -52,6 +81,20 @@
   border: none;
   background: transparent;
   font-size: 18px;
+  cursor: pointer;
+}
+
+.icon-btn {
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 17px;
+  background: #3d77bf;
+  color: #fff;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -106,8 +149,21 @@
   height: 180px;
 }
 
+.location-card {
+  display: block;
+  min-height: 110px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.location-card.result-button {
+  padding: 22px 28px;
+}
+
 .bench-card-info {
-  padding: 16px 16px 16px 21px;
+  padding: 16px 16px 16px 16px;
   flex: 1;
 }
 
@@ -127,6 +183,14 @@
   color: #000;
 }
 
+.location-card-address {
+  margin: 0;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #333;
+}
+
 .bench-card-rating {
   display: flex;
   align-items: center;
@@ -139,10 +203,13 @@
 }
 
 .bench-card-star {
-  width: 12px;
-  height: 12px;
-  background: #231f20;
-  border-radius: 3px; /* temp; swap for real star icon */
+  color: #cfcfcf;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.bench-card-star.filled {
+  color: #f2a51a;
 }
 
 .bench-card-rating-text {
@@ -156,6 +223,18 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.bench-card-no-image {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  background: #d8d8d8;
+  color: #6b6b6b;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .results-footer {
