@@ -5,7 +5,6 @@ import mysql from 'mysql2'
 import cors from 'cors'
 import bcrypt from 'bcrypt'
 
-
 const app = express();
 app.use(express.json())
 app.use(cors({ origin: ["http://127.0.0.1:5173", "http://localhost:5173"] }))
@@ -25,8 +24,6 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 }).promise();
-
-
 
 app.get('/', (req, res) => {
     res.send( {success: true} );
@@ -56,6 +53,19 @@ app.get('/bench-lookup', async (req, res) => {
             , 4326)) <= 50000
         `, [lon, lat, lon, lat])
     res.send(result[0])
+})
+
+app.post('/add-bench', async (req, res) => {
+    const { name, address, lon, lat } = req.body
+
+    try {
+        await pool.query(
+            'INSERT INTO benches (name, address, coordinates) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326))',
+            [name, address, lon, lat]
+        )
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
 })
 
 app.post('/register', async (req, res) => {
