@@ -93,7 +93,10 @@ export default function Login() {
                <input type="password" placeholder="Password" onChange={handlePChange} />
                 { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
                 <button onClick={handleSubmit}>Submit</button>
-                <p className="guest" onClick={() => navigate('/app')}>Sign in Later</p>
+
+                {/* PLACEHOLDER */}
+                {/* <p className="guest" onClick={() => navigate('/app')}>Sign in Later</p> */}
+                <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
             </div>
         </div>
     );

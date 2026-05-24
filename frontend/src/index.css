@@ -1,0 +1,18 @@
+body{
+    background-color: white;
+   }
+   *{
+    /* removes side whtie broders */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+  
+   html, body{
+    /* prevent horizontal scrollign */
+    width: 100%;
+    overflow-x: hidden;
+    
+    /* remove scroll bar auto; if hidden then scrolling disable */
+    overflow: auto;
+   }
