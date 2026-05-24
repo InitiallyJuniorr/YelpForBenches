@@ -21,7 +21,7 @@ export function Profile()
 
     <div style={{display: 'flex'}}>
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
-                <ProfileBanner name="Tobias Duerschmid" tag="Ultimate Bench Sitter" photo={Tobi}>
+                <ProfileBanner name="Tobias Düerschmid" tag="Ultimate Bench Sitter" photo={Tobi}>
                     
                 </ProfileBanner>
                 <div style={{paddingTop: '30px'}}/>

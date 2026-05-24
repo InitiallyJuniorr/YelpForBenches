@@ -84,7 +84,7 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <h1>YelpForBenches©</h1>
+            <h1>BenchMark©</h1>
             <div className="login-card">
                <h1>{isLogin ? "Login" : "Register"}</h1>    
                <button onClick={toggleLogin}>{isLogin ? "Create Account" : "Sign in"}</button>
