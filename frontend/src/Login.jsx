@@ -100,6 +100,7 @@ export default function Login() {
                 <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
             </div>
         </div>
+        {/* TEMP, REMOVE LATE */}
         <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
         </>
     );

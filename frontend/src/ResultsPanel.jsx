@@ -36,7 +36,7 @@ function BenchCard({ bench, onClick, isSelected }) {
 
   return (
     <>
-    <div style={{paddingTop: '160px'}}/>
+    
     <div className="bench-card">
       <div className="bench-card-info">
         <h3 className="bench-card-title">{bench.name || 'Untitled Bench'}</h3>
