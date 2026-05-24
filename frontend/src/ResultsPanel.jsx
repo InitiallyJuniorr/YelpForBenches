@@ -35,11 +35,9 @@ function BenchCard({ bench, onClick, isSelected }) {
   const coordinateText = `${bench.lat.toFixed(5)}, ${bench.lng.toFixed(5)}`;
 
   return (
-    <button
-      type="button"
-      className={`bench-card result-button ${isSelected ? 'selected' : ''}`}
-      onClick={onClick}
-    >
+    <>
+    <div style={{paddingTop: '160px'}}/>
+    <div className="bench-card">
       <div className="bench-card-info">
         <h3 className="bench-card-title">{bench.name || 'Untitled Bench'}</h3>
         <p className="bench-card-address">{coordinateText}</p>
@@ -63,7 +61,8 @@ function BenchCard({ bench, onClick, isSelected }) {
           <div className="bench-card-no-image">No image</div>
         )}
       </div>
-    </button>
+      </div>
+    </>
   );
 }
 
