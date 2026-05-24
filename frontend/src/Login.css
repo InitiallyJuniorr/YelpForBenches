@@ -24,6 +24,19 @@
     gap: 1rem; /* This adds a nice gap between each row */
     width: 300px;
 }
+.sophie-card
+{
+    display: grid;
+    /* align-items: right; */
+    padding: 2rem;
+    gap: 1rem;
+    height: 100%;
+    width: 300px;
+    border: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #F4F1EC;
+    box-shadow: -4px 0 4px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 25px;
+}
 
 h1 {
     display: block;
@@ -36,9 +49,14 @@ h1 {
 }
 
 .guest {
-    color: blue;
+    /* color: blue;
     display: block;
+    text-align: center; */
+    display: block;
+    color: #5a4deb;
     text-align: center;
+    font-weight: 700;
+    font-family: "Kumbh Sans", sans-serif;
 }
 
 .guest:hover {

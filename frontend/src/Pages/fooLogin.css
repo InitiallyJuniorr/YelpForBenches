@@ -1,0 +1,41 @@
+.loginCard
+{
+    
+    display: flexgrid;
+    justify-content:center;
+    align-items: center;
+    width: 626px;
+    height: 100vh;
+    border-left: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
+    background: #F4F1EC;
+    box-shadow: -4px 0 4px 0 rgba(0, 0, 0, 0.05);
+
+    p1{
+        color: #5A2522;
+        font-family: "Kumbh Sans", sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+    }
+    .button
+    {
+        display: flex;
+        width: 488px;
+        height: 66px;
+        padding: 22px 201px 23px 202px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 35px;
+        background: #3D77BF;
+        color: #FFF;
+        font-family: "Kumbh Sans",sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+}

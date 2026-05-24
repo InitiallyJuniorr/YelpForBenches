@@ -6,13 +6,27 @@ import ProfileBanner from '../Components/ProfileComponents.jsx';
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { BenchMarks } from '../Components/ProfileComponents.jsx';
 import { NavBar } from '../Components/Navbar.jsx'
+import Login from '../Login.jsx'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 
 
-export function Profile()
+export function Profile({isLoggedIn = true})
 {
+    if(!isLoggedIn)
+    {
+        return (
+            <>
+            <NavBar/>
+            <div style={{paddingTop: '161px'}}/>
+            <h1>Please Log In To View Profile</h1>
+            <Login/>
+
+            </>
+        )
+    }
+    else{
     return(
     <>
     <NavBar/>
@@ -40,4 +54,5 @@ export function Profile()
     </div>
     </>
     )
+}
 }
