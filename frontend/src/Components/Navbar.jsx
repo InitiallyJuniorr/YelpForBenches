@@ -7,7 +7,10 @@ export const NavBar = () => {
         <>
         <nav className="navbar">
             <ul>
-                <li><Link to="/Home">Home</Link></li>
+                <li><Link to="/home">Home</Link></li>
+                {/* PLACEHOLDER */}
+                <li><Link to="/app">Map</Link></li>
+            
             </ul>
         </nav>
         </>

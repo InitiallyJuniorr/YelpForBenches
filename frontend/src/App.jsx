@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import ResultsPanel from './ResultsPanel'
+import { NavBar } from './Components/Navbar.jsx'
 
 
 const defaultCenter = [34.0696, -118.4448] // UCLA area
@@ -148,6 +149,9 @@ function App() {
 
   return (
     <>
+    
+      <NavBar/>
+
       <section id="center">
         <div className="page" style={{ display: 'block', width: '100%', height: '500px' }}>
           <aside className="search-panel">
