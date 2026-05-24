@@ -3,6 +3,8 @@ import './fooLogin.css'
 import '../Components/components.css'
 import { useState } from 'react';
 
+import Tobi from '../assets/tobi.jpg'
+
 // JAMEY HERE
 import { useNavigate } from 'react-router-dom'
 
@@ -136,6 +138,7 @@ export default function LoginFoo() {
             <div style={{overflow: 'auto'}}>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <div className="loginCard" style={{paddingTop: '8%'}}>
+                <button onClick={() => (signedUp == false)}>Back</button>
                 <h1>BenchMark</h1>
                 <div style={{width: '287px'}}>
                 <p1>In a world of Benches, be sure to find the right one for you.</p1>

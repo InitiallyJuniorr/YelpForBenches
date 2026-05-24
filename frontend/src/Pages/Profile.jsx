@@ -14,19 +14,19 @@ import Tobi from '../assets/tobi.jpg'
 
 export function Profile({isLoggedIn = true})
 {
-    if(!isLoggedIn)
-    {
-        return (
-            <>
-            <NavBar/>
-            <div style={{paddingTop: '161px'}}/>
-            <h1>Please Log In To View Profile</h1>
-            <Login/>
+    // if(!isLoggedIn)
+    // {
+    //     return (
+    //         <>
+    //         <NavBar/>
+    //         <div style={{paddingTop: '161px'}}/>
+    //         <h1>Please Log In To View Profile</h1>
+    //         <Login/>
 
-            </>
-        )
-    }
-    else{
+    //         </>
+    //     )
+    // }
+    // else{
     return(
     <>
     <NavBar/>
@@ -54,5 +54,5 @@ export function Profile({isLoggedIn = true})
     </div>
     </>
     )
-}
+// }
 }
