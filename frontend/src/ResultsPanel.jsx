@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 
 function BenchCard({ title, address, rating, count, imageUrl }) {
   return (
+    <>
+    <div style={{paddingTop: '160px'}}/>
     <div className="bench-card">
       <div className="bench-card-info">
         <h3 className="bench-card-title">{title}</h3>
@@ -26,6 +28,7 @@ function BenchCard({ title, address, rating, count, imageUrl }) {
         alt={title}
       />
     </div>
+    </>
   );
 }
 
