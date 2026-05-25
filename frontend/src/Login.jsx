@@ -14,6 +14,10 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const [loginError, setLoginError] = useState("");
+    const [showForgot, setShowForgot] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState("");
+    const [forgotMsg, setForgotMsg] = useState("");
 
     const toggleLogin = () => {
         setIsLogin(!isLogin);
@@ -79,10 +83,24 @@ const handleSubmit = async () => {
         if (res.ok) {
             localStorage.setItem('token', data.token)
             navigate('/app')
+        } else {
+            setLoginError(data.error) 
         }
     }
     setSubmitted(true);
 }
+
+const handleForgot = async () => {
+    const res = await fetch("http://localhost:8080/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: forgotEmail })
+    })
+    const data = await res.json()
+    if (res.ok) setForgotMsg("Reset link sent! Check your email.")
+    else setForgotMsg(data.error)
+}
+
 
     function PwError_Display({ password }) {
         const re_lowercase = /(?=.*[a-z])/;
@@ -117,6 +135,16 @@ const handleSubmit = async () => {
                 { !(isLogin) && <input type="text" placeholder="Username" onChange={handleUChange} /> }
                 { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}
                 <button onClick={handleSubmit}>Submit</button>
+                { loginError && <p className="error">{loginError}</p> }
+                { isLogin && <p className="guest" onClick={() => setShowForgot(true)}>Forgot Password?</p> }
+                { showForgot && (
+                <div>
+                    <input type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)} />
+                    <button onClick={handleForgot}>Send Reset Link</button>
+                    { forgotMsg && <p>{forgotMsg}</p> }
+                </div>
+                )}
+
                 <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
                 <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
             </div>

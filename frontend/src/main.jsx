@@ -6,6 +6,8 @@ import App from './App.jsx'
 import { Home } from './Pages/Home.jsx'
 import { Profile } from './Pages/Profile.jsx'
 import LoginFoo from './Pages/fooLogin.jsx'
+import ResetPassword from './ResetPassword.jsx'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,6 +18,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/home" element={<Home />} /> 
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/foo" element={<LoginFoo />} /> 
+        <Route path="/reset-password" element={<ResetPassword/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

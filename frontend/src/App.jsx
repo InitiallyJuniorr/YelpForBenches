@@ -9,6 +9,7 @@ import L from 'leaflet'
 import ResultsPanel from './ResultsPanel'
 import { NavBar } from './Components/Navbar.jsx'
 import MapPage from './MapPage.jsx'
+import ResetPassword from './ResetPassword.jsx'
 
 
 const defaultCenter = [34.0696, -118.4448] // UCLA area
