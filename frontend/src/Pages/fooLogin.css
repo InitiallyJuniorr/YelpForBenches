@@ -3,7 +3,8 @@
     
     display: flexgrid;
     justify-content:center;
-    align-items: left;
+    align-items: center;
+    text-align: left;
     padding-left: 10%;
     width: 626px;
     height: 100vh;
@@ -130,7 +131,7 @@ h1 {
 }
 .input
 {
-    border-radius: 35px;
+    border-radius: 30px;
     border: 2px solid var(--gahbe, rgba(90, 37, 34, 0.45));
     background: #FCFCFC;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
