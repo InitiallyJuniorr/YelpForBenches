@@ -2,6 +2,7 @@ import React from 'react'
 import './fooLogin.css'
 import '../Components/components.css'
 import { useState } from 'react';
+import SignUp from './Signup.jsx'
 
 import Tobi from '../assets/tobi.jpg'
 
@@ -19,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 export default function LoginFoo() {
 
     const [isClicked, setIsClicked] = useState(false);
-    const [signedUp, setIsSigned] = useState(false);
+    const [signedUp, setIsSigned] = useState(false);;
 
     const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
@@ -96,97 +97,30 @@ export default function LoginFoo() {
         </div>
     )
     }
-    if(isClicked == true)
-    {
-        return(
-            <>
-            <div style={{overflow: 'auto'}}>
-            <div style={{justifyContent: 'right', display: 'flex'}}>
-            <div className="loginCard" style={{paddingTop: '8%'}}>
-                <h1>BenchMark</h1>
-                <div style={{width: '287px'}}>
-                <p1>In a world of Benches, be sure to find the right one for you.</p1>
-                </div>
 
-                <div style={{padding: "100px"}}/>
-                <p1>Email</p1>
-                <input className="input" type="text" placeholder="Email" onChange={handleEChange} />
-               { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
-               <div style={{padding: "15px"}}/>
-
-               <p1>Password</p1>
-               <input className="input" type="password" placeholder="Password" onChange={handlePChange} />
-                { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
-                <div style={{padding: "15px"}}/>
-
-                <button className="button" onClick={handleSubmit}>Log In</button>
-
-                <div style={{padding: "115px"}}/>
-            
-            </div>
-            </div>
     
-            {/* width: 287px; */}
-            </div>
-            </>
-        )
-    }
-    if(signedUp == true)
-    {
-        return(
-            <>
-            <div style={{overflow: 'auto'}}>
-            <div style={{justifyContent: 'right', display: 'flex'}}>
-            <div className="loginCard" style={{paddingTop: '8%'}}>
-                <button onClick={() => (signedUp == false)}>Back</button>
-                <h1>BenchMark</h1>
-                <div style={{width: '287px'}}>
-                <p1>In a world of Benches, be sure to find the right one for you.</p1>
-                </div>
-
-                <div style={{padding: "100px"}}/>
-                <p1>Email</p1>
-                <input className="input" type="text" placeholder="Email" onChange={handleEChange} />
-               { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
-               <div style={{padding: "15px"}}/>
-
-               <p1>Password</p1>
-               <input className="input" type="password" placeholder="Password" onChange={handlePChange} />
-                { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
-                <div style={{padding: "15px"}}/>
-
-                <button className="button" onClick={handleSubmit}>Sign In</button>
-
-                <div style={{padding: "115px"}}/>
-            
-            </div>
-            </div>
-    
-            {/* width: 287px; */}
-            </div>
-            </>
-        )
-    }
-    else return(
+    return(
         <>
         <div style={{overflow: 'auto'}}>
         <div style={{justifyContent: 'right', display: 'flex'}}>
         <div className="loginCard" style={{paddingTop: '8%'}}>
-            <h1>BenchMark</h1>
+            <h1>Benchmark</h1>
             <div style={{width: '287px'}}>
             <p1>In a world of Benches, be sure to find the right one for you.</p1>
             </div>
             <div style={{padding: "115px"}}/>
-            <div>
-            <button className="button" onClick={() => setIsClicked(true)}>Log In</button>
-            </div>
+            {/* <button className="button" onClick={() => setIsClicked(true)}>Log In</button> */}
+            <button className="button">Log In</button>
+            <div style={{padding: "10px"}}/>
+            <button className="button" onClick={() => navigate('/signup')}>Sign Up</button>
 
             
             {/* <button className="button" onClick={SignUpClick}>Login</button> */}
-            <div style={{padding: "10px"}}/>
-            <button className="button" onClick={() => setIsSigned(true)}>Sign Up</button>
+            
+            {/* <button className="button" onClick={() => setIsSigned(true)}>Sign Up</button> */}
         </div>
         </div>
+        <p onClick={() => navigate('/home')}>shortcut</p>
 
         {/* width: 287px; */}
         </div>
