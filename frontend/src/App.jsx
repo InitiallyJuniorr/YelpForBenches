@@ -22,7 +22,7 @@ function App() {
       <NavBar/>
       
       <section id="center">
-        <div className="page" style={{ display: 'block', width: '100%', height: '500px' }}>
+        <div className="page" style={{ display: 'block', width: '100%', height: '100%' }}>
           <MapPage />
         </div>
       </section>
