@@ -100,10 +100,12 @@ export default function SignUp()
 
             {/* ADD INPUT FIELDS HERE */}
             <p1>Email</p1>
+            <br/>
             <input className="input" type="text" placeholder="Email" onChange={handleEChange} />
                { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
             <div style={{padding: "1%"}}/>
             <p1>Password</p1>
+            <br/>
             <input className="input"  type="password" placeholder="Password" onChange={handlePChange} />
                 { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
             <div style={{padding: "1%"}}/>

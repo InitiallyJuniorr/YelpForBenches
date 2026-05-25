@@ -1,7 +1,9 @@
 body{
     background-color: white;
-   }
-   *{
+    margin: 0;
+    padding: 0;
+}
+*{
     /* removes side whtie broders */
     margin: 0;
     padding: 0;

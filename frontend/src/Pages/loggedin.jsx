@@ -87,7 +87,7 @@ export default function LoggedIn()
     
     return(
         <>
-        <div style={{overflow: 'auto'}}>
+ 
         <div style={{justifyContent: 'right', display: 'flex'}}>
         <div className="loginCard" style={{paddingTop: '5%'}}>
             <button onClick={() => navigate('/foo')}>back</button>
@@ -115,7 +115,7 @@ export default function LoggedIn()
            
         </div>
         </div>
-        </div>
+
         </>
     )
 }
