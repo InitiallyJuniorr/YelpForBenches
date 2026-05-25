@@ -60,13 +60,13 @@ app.get('/bench-lookup', async (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, username } = req.body
     
     try {
         const hashed = await bcrypt.hash(password, 10)
         await pool.query(
-            'INSERT INTO users (email, password) VALUES (?, ?)',
-            [email, hashed]
+            'INSERT INTO users (email, password, username) VALUES (?, ?, ?)',
+            [email, hashed, username]
         )
 
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7d' })
