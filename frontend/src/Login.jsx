@@ -9,8 +9,10 @@ export default function Login() {
     const [isLogin, setIsLogin] = useState(true);
     const [emailError,   setEmailError] = useState("");
     const [pwError,   setpwError] = useState("");
+    const [userError, setUserError] = useState("");
     const [email,   setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     const [submitted, setSubmitted] = useState(false);
 
     const toggleLogin = () => {
@@ -29,6 +31,12 @@ export default function Login() {
         validatePassword(value);
     }
 
+    const handleUChange = (e) => {
+        const value = e.target.value;
+        setUsername(value);
+        validateUsername(value);
+    }
+
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setEmailError(!(re.test(String(email).toLowerCase())));
@@ -39,17 +47,22 @@ export default function Login() {
         setpwError(!(re.test(String(password))));
     }
 
+    const validateUsername = (username) => {
+        const re = /^[A-Za-zÀ-ÿ1-9_]{4,16}$/;
+        setUserError(!(re.test(String(username))));
+    }
+
 const handleSubmit = async () => {
-    if (!(emailError) && !(pwError) && !(isLogin)){
+    if (!(emailError) && !(pwError) && !(isLogin) && !(userError)){
         try {
             const res = await fetch("http://localhost:8080/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password, username })
             })
             const data = await res.json()
             if (data.success) {
-                localStorage.setItem('token', data.token)  // add this
+                localStorage.setItem('token', data.token)
                 navigate('/app')
             }
         } catch (err) {
@@ -100,16 +113,16 @@ const handleSubmit = async () => {
                <input type="text" placeholder="Email" onChange={handleEChange} />
                { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
                <input type="password" placeholder="Password" onChange={handlePChange} />
-                { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
+                { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> }
+                { !(isLogin) && <input type="text" placeholder="Username" onChange={handleUChange} /> }
+                { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}
                 <button onClick={handleSubmit}>Submit</button>
-
-                {/* PLACEHOLDER */}
-                {/* <p className="guest" onClick={() => navigate('/app')}>Sign in Later</p> */}
                 <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
+                <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
             </div>
         </div>
         {/* TEMP, REMOVE LATE */}
-        <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
+        
         </>
     );
 }
