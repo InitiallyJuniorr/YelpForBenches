@@ -7,6 +7,9 @@ import { Home } from './Pages/Home.jsx'
 import { Profile } from './Pages/Profile.jsx'
 import LoginFoo from './Pages/fooLogin.jsx'
 import ResetPassword from './ResetPassword.jsx'
+import SignUp from './Pages/Signup.jsx'
+import LoggedIn from './Pages/loggedin.jsx'
+
 
 
 createRoot(document.getElementById('root')).render(
@@ -19,6 +22,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/foo" element={<LoginFoo />} /> 
         <Route path="/reset-password" element={<ResetPassword/>} />
+        <Route path="/signup" element={<SignUp />} /> 
+        <Route path="/loggingin" element={<LoggedIn />} /> 
       </Routes>
     </BrowserRouter>
   </StrictMode>

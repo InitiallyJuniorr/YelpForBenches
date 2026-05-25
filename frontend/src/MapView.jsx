@@ -185,19 +185,49 @@ export default function MapView({
     setLoading(true);
 
     try {
+      const organicUrl = `https://nominatim.openstreetmap.org/search?q=/${encodeURIComponent( // To find coords of requested location
+        query
+      )}&format=json&limit=1&addressdetails=1`
+
+      const organicResponse = await fetch(organicUrl, {
+        headers: {
+          'User-Agent': 'YelpForBenches (fakeemail@gmail.com)'
+        }
+      })
+
+      const organicData = await organicResponse.json()
+
+      if (!organicData.length) throw new Error('No results found')
+
+      const organicFeature = organicData[0]
+
+      const organicFormattedResults = {
+        id: organicFeature.place_id,
+        name: organicFeature.display_name,
+        lon: parseFloat(organicFeature.lon),
+        lat: parseFloat(organicFeature.lat)
+      }
+
+      const benchUrl = `http://localhost:8080/bench-lookup?lat=${organicFormattedResults.lat}&lon=${organicFormattedResults.lon}`
+      const benchResponse = await fetch(benchUrl)
+      const benchData = await benchResponse.json()
+      console.log(benchData)
+
       const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(
         query
-      )}.json?key=${API_KEY}&limit=10&proximity=-118.4448,34.0696`;
+      )}.json?key=${API_KEY}&limit=10&proximity=-118.4448,34.0696`
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await fetch(url)
+      const data = await response.json()
 
-      const formattedResults = data.features.map((feature) => ({
+      console.log(data)
+
+      const formattedResults = benchData.map((feature) => ({
         id: feature.id,
-        name: feature.text,
-        address: feature.place_name,
-        lon: feature.center[0],
-        lat: feature.center[1],
+        name: feature.name,
+        address: feature.address,
+        lon: feature.lon,
+        lat: feature.lat,
       }));
 
       setResults(formattedResults);
