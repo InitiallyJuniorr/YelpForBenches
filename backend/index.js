@@ -103,7 +103,7 @@ app.get('/bench-lookup', async (req, res) => {
     res.send(result[0])
 })
 
-app.post('/add-bench', async (req, res) => {
+app.post('/add-bench', async (req, res) => {    // Adds bench to database, returns id of new bench
     const { name, address, lng, lat } = req.body
 
     try {
@@ -111,8 +111,27 @@ app.post('/add-bench', async (req, res) => {
             'INSERT INTO benches (name, address, coordinates) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326))',
             [name, address, lng, lat]
         )
-        res.send(result.insertId)
+        console.log({ insertId: result.insertId })
+        res.send({ insertId: result.insertId })
     } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+})
+
+app.post('/add-review', async (req, res) => {    // Adds review to database, returns nothing
+    const { benchId, userId, stars, review } = req.body
+    console.log(typeof benchId)
+    console.log(typeof userId)
+    console.log(typeof stars)
+    console.log(typeof review)
+
+    try {
+        await pool.query(
+            'INSERT INTO reviews (bench_id, user_id, stars, review) VALUES (?, ?, ?, ?)',
+            [benchId, userId, stars, review]
+        )
+    } catch (err) {
+        console.log(err.message)
         res.status(500).json({ error: err.message })
     }
 })

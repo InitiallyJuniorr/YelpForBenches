@@ -97,7 +97,7 @@ navbar .title{
 {
     display: flex;
     width: 100%px;
-    height: 170px;
+    height: 150px;
     padding: 54px 327px 54px 356px;
     flex-direction: column;
     align-items: flex-start;
@@ -105,6 +105,19 @@ navbar .title{
     background: #B1805B;
 
 }
+.homedividertwo
+{
+    display: flex;
+    width: 100%px;
+    height: 80px;
+    padding: 54px 327px 54px 356px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    background: #B1805B;
+
+}
+
 
 .bottomtab
 {
@@ -334,3 +347,23 @@ h1{
     font-weight: 700;
     line-height: normal;
 }
+.card
+{
+  width: 280px;
+  height: 420px;
+  flex-shrink: 0;
+  background: #FFFCEF;
+  border: 2px solid var(--gah, rgba(90, 37, 34, 0.55));
+  border-radius: 35px;
+  border-width: 3px;
+  
+  cursor: pointer;
+  outline: none; 
+
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
