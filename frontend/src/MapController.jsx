@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import MapView from './MapView';
-import CreateBenchModal from './CreateBenchModal';
-import BenchDetailsModal from './BenchDetailsModal';
-import WriteReviewModal from './WriteReviewModal';
+import CreateBenchPopup from './CreateBenchPopup';
+import BenchDetailsPopup from './BenchDetailsPopup';
+import WriteReviewPopup from './WriteReviewPopup';
 
 import exampleBench from './assets/exampleBench.png';
 import toby from './assets/toby.png';
@@ -23,7 +23,7 @@ const formatDroppedPinAddress = (location) => {
   return `Dropped pin: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
 };
 
-export default function MapPage() {
+export default function MapController() {
   const initialBenches = [
     {
       id: 'bench-1',
@@ -245,7 +245,7 @@ export default function MapPage() {
         onCancelAddBench={handleCancelAddBench}
       />
       
-      <CreateBenchModal
+      <CreateBenchPopup
         open={isCreateBenchOpen}
         draft={benchDraft}
         setDraft={setBenchDraft}
@@ -253,14 +253,14 @@ export default function MapPage() {
         onSubmit={handleCreateBenchSubmit}
       />
 
-      <BenchDetailsModal
+      <BenchDetailsPopup
         open={!!selectedBench}
         bench={selectedBench}
         onClose={() => setSelectedBench(null)}
         onWriteReview={handleOpenWriteReview}
       />
 
-      <WriteReviewModal
+      <WriteReviewPopup
         open={isWriteReviewOpen}
         bench={selectedBench}
         onClose={handleCloseWriteReview}
