@@ -5,6 +5,10 @@ import mysql from 'mysql2'
 import cors from 'cors'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
+
+
+
 
 const app = express();
 app.use(express.json())
@@ -18,6 +22,8 @@ console.log(process.env.DB_USER);
 console.log(process.env.DB_PASSWORD);
 console.log(process.env.DB_DATABASE);
 
+
+
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -25,6 +31,47 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 }).promise();
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+})
+
+app.post('/forgot-password', async (req, res) => {
+    const { email } = req.body
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+    if (rows.length === 0) return res.status(404).json({ error: 'Email not found' })
+
+    const resetToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '15m' })
+    const resetLink = `http://localhost:5173/reset-password?token=${resetToken}`
+
+    await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'BenchMark Password Reset',
+        text: `Click this link to reset your password: ${resetLink}`
+    })
+
+    res.status(200).json({ success: true })
+})
+
+
+
+app.post('/reset-password', async (req, res) => {
+    const { token, newPassword } = req.body
+    try {
+        const { email } = jwt.verify(token, process.env.JWT_SECRET)
+        const hashed = await bcrypt.hash(newPassword, 10)
+        await pool.query('UPDATE users SET password = ? WHERE email = ?', [hashed, email])
+        res.status(200).json({ success: true })
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid or expired token' })
+    }
+})
+
 
 app.get('/', (req, res) => {
     res.send( {success: true} );
@@ -94,16 +141,26 @@ app.post('/login', async (req, res) => {
     
     try {
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email])
-        if (rows.length === 0) return res.status(401).json({ error: 'Invalid email or password' })
+        if (rows.length === 0) return res.status(401).json({ error: 'Incorrect email or password' })
         
         const match = await bcrypt.compare(password, rows[0].password)
-        if (!match) return res.status(401).json({ error: 'Invalid email or password' })
+        if (!match) return res.status(401).json({ error: 'Incorrect email or password' })
         
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7d' })
         res.status(200).json({ success: true, token })
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
+})
+
+// Queries necessary profile information linked to the email
+app.get('/user', async (req, res) => {
+    const { email } = req.query;
+    const [rows] = await pool.query(
+        'SELECT username, pfp_url, num_reviewed FROM users WHERE email = ?',
+        [email]
+    );
+    res.json(rows[0]);
 })
 
 app.listen(8080, () => {
