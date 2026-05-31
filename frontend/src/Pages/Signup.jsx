@@ -3,6 +3,7 @@ import './fooLogin.css'
 import '../Components/components.css'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import gang from '../assets/gang.png'
 
 export default function SignUp()
 {
@@ -87,35 +88,34 @@ export default function SignUp()
     
     return(
         <>
-        <div style={{overflow: 'auto'}}>
-        <div style={{justifyContent: 'right', display: 'flex'}}>
-        <div className="loginCard" style={{paddingTop: '8%'}}>
-            <button onClick={() => navigate('/foo')}>back</button>
-
-            <h1>Benchmark</h1>
-            <div style={{width: '287px'}}>
-            <p1>In a world of Benches, be sure to find the right one for you.</p1>
-            </div>
-            <div style={{padding: "115px"}}/>
-
-            {/* ADD INPUT FIELDS HERE */}
-            <p1>Email</p1>
-            <br/>
-            <input className="input" type="text" placeholder="Email" onChange={handleEChange} />
-               { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
-            <div style={{padding: "1%"}}/>
-            <p1>Password</p1>
-            <br/>
-            <input className="input"  type="password" placeholder="Password" onChange={handlePChange} />
-                { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
-            <div style={{padding: "1%"}}/>
-            <button className="button" onClick={handleSubmit}>Sign Up</button>
-
+       <div style={{justifyContent: 'right', display: 'flex'}}>
+                   <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
+               <div className="loginCard" style={{paddingTop: '5%'}}>
+                   <button onClick={() => navigate('/foo')}>back</button>
+       
+                   <h1>Benchmark</h1>
+                   <div style={{width: '287px'}}>
+                   <p1>In a world of Benches, be sure to find the right one for you.</p1>
+                   </div>
+                   <div style={{padding: "70px"}}/>
+       
+                   {/* ADD INPUT FIELDS HERE */}
+                   <p1>Email</p1>
+                   <br/>
+                   <input className="input" type="text" placeholder="Email" onChange={handleEChange} />
+                      { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
+                   <div style={{padding: "1%"}}/>
+                   <p1>Password</p1>
+                   <br/>
+                   <input className="input"  type="password" placeholder="Password" onChange={handlePChange} />
+                       { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
+                    <div style={{padding: "10px"}}/>
+                   <button className="button" onClick={handleSubmit}>Sign Up</button>
             
            
         </div>
         </div>
-        </div>
+        
         </>
     )
 }

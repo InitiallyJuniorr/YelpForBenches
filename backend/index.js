@@ -104,13 +104,14 @@ app.get('/bench-lookup', async (req, res) => {
 })
 
 app.post('/add-bench', async (req, res) => {
-    const { name, address, lon, lat } = req.body
+    const { name, address, lng, lat } = req.body
 
     try {
-        await pool.query(
+        const [result] = await pool.query(
             'INSERT INTO benches (name, address, coordinates) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326))',
-            [name, address, lon, lat]
+            [name, address, lng, lat]
         )
+        res.send(result.insertId)
     } catch (err) {
         res.status(500).json({ error: err.message })
     }

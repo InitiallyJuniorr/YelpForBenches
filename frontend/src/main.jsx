@@ -9,7 +9,7 @@ import LoginFoo from './Pages/fooLogin.jsx'
 import ResetPassword from './ResetPassword.jsx'
 import SignUp from './Pages/Signup.jsx'
 import LoggedIn from './Pages/loggedin.jsx'
-
+import Jamey from './Pages/jamey.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/app" element={<App />} />
         <Route path="/home" element={<Home />} /> 
         <Route path="/profile" element={<Profile />} /> 
-        <Route path="/foo" element={<LoginFoo />} /> 
+        <Route path="/foo" element={<Jamey />} /> 
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/signup" element={<SignUp />} /> 
         <Route path="/loggingin" element={<LoggedIn />} /> 
