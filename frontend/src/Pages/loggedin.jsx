@@ -3,7 +3,7 @@ import './fooLogin.css'
 import '../Components/components.css'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-
+import gang from '../assets/gang.png'
 export default function LoggedIn()
 {
         const navigate = useNavigate(); 
@@ -87,8 +87,9 @@ export default function LoggedIn()
     
     return(
         <>
- 
+        
         <div style={{justifyContent: 'right', display: 'flex'}}>
+            <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
         <div className="loginCard" style={{paddingTop: '5%'}}>
             <button onClick={() => navigate('/foo')}>back</button>
 
@@ -96,7 +97,7 @@ export default function LoggedIn()
             <div style={{width: '287px'}}>
             <p1>In a world of Benches, be sure to find the right one for you.</p1>
             </div>
-            <div style={{padding: "50px"}}/>
+            <div style={{padding: "70px"}}/>
 
             {/* ADD INPUT FIELDS HERE */}
             <p1>Email</p1>
@@ -108,14 +109,14 @@ export default function LoggedIn()
             <br/>
             <input className="input"  type="password" placeholder="Password" onChange={handlePChange} />
                 { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> } 
-            <div style={{padding: "1%"}}/>
+            <div style={{padding: "10px"}}/>
             <button className="button" onClick={handleSubmit}>Log In</button>
 
             
            
         </div>
         </div>
-
+        
         </>
     )
 }
