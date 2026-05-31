@@ -129,10 +129,11 @@ export default function Jamey() {
    
     const toggleKKLogIn = () => {
         isKKSlider(!kkSlider);
+        
     }
     const toggleKKSignIn = () => {
-        isKKSlider(!kkSlider);
         setIsLogin(!isLogin);
+        isKKSlider(!kkSlider);
     }
 
     return (
@@ -211,7 +212,7 @@ export default function Jamey() {
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button onClick={toggleKKLogIn}>back</button>
+                    <button onClick={toggleKKSignIn}>back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
