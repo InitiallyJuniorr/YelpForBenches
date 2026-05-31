@@ -1,10 +1,12 @@
 import  '../Components/components.css'
 // default exports dont need curly braces
 import ProfileBanner from '../Components/ProfileComponents.jsx';
+import React, { useState, useEffect } from 'react'
 
 // non default export functions NEED curly braces
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { BenchMarks } from '../Components/ProfileComponents.jsx';
+import { Honorific } from './Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
 import Login from '../Login.jsx'
 
@@ -13,21 +15,28 @@ import Tobi from '../assets/tobi.jpg'
 import { jwtDecode } from 'jwt-decode'
 import { Navigate } from 'react-router-dom'
 
+
 export function Profile({isLoggedIn = true})
 {
-    const token = localStorage.getItem('token')
-    if (!token) return <Navigate to="/" />
-    
-    let email = ''
-    try {
-        const decoded = jwtDecode(token)
-        email = decoded.email
-    } catch (err) {
-        console.error('Token decode error:', err)
-        return <Navigate to="/" />
-    }
 
+    const [userInfo, setUserInfo] = useState(null);
 
+    const token = localStorage.getItem('token');
+    const email = token ? jwtDecode(token).email : null;
+
+    useEffect(() => {
+        if (!email) return;
+            const fetchUser = async () => {
+            const res = await fetch(`http://localhost:8080/user?email=${email}`);
+            const data = await res.json();
+            console.log("data", data)
+            setUserInfo(data);
+        };
+        fetchUser();
+    }, [email]);
+
+    if (!token) return <Navigate to="/" />;
+    if (!userInfo) return <div>Loading...</div>;
     return(
     <>
     <NavBar/>
@@ -36,7 +45,7 @@ export function Profile({isLoggedIn = true})
 
     <div style={{display: 'flex'}}>
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
-                <ProfileBanner name="Tobias.Düerschmid" tag="Ultimate Bench Sitter" photo={Tobi}>
+                <ProfileBanner name={ userInfo.username } tag={Honorific(userInfo.num_reviewed)} photo={Tobi}>
                     
                 </ProfileBanner>
                 <div style={{paddingTop: '30px'}}/>
