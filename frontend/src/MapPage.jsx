@@ -162,7 +162,7 @@ export default function MapPage() {
     setIsWriteReviewOpen(false);
   };
 
-  const handleCreateBenchSubmit = (draft) => {
+  const handleCreateBenchSubmit = async (draft) => {
     if (draft.lat == null || draft.lng == null) {
       alert('Choose a bench location first.');
       return;
@@ -170,26 +170,39 @@ export default function MapPage() {
 
     const rating = Number(draft.rating) || 0;
     const newBench = {
-      id: crypto.randomUUID?.() || `bench-${Date.now()}`,
       name: draft.name,
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
-      lng: draft.lng,
-      avgRating: rating,
+      lon: draft.lng,
       imageUrl: draft.imageUrl || exampleBench,
-      reviews: [
-        {
-          id: `review-${Date.now()}`,
-          author: 'You',
-          badge: 'Bench Scout',
-          rating,
-          avatarUrl: toby,
-          preview: draft.review,
-        },
-      ],
     };
 
+    // id: crypto.randomUUID?.() || `bench-${Date.now()}`,
+    // avgRating: rating,
+    // reviews: [
+    //   {
+    //     id: `review-${Date.now()}`,
+    //     author: 'You',
+    //     badge: 'Bench Scout',
+    //     rating,
+    //     avatarUrl: toby,
+    //     preview: draft.review,
+    //   },
+    // ],
+
+
     // TODO: POST newBench to the backend once bench creation endpoints are ready.
+
+    try {
+      const response = await fetch('http://localhost:8080/add-bench', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Inform server you are sending JSON
+        },
+        body: JSON.stringify(newBench)
+      })
+    } catch (error) {}
+
     setBenches((prev) => [...prev, newBench]);
     setSelectedBenchId(newBench.id);
     setSelectedBench(newBench);
