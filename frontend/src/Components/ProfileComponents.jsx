@@ -6,7 +6,7 @@ import './components.css';
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 
-export function RecentReviews({name="Null", address="Null", review="Null", rating="Null"})
+export function RecentReviews({name="Null", address="Null", review="Null", rating="Null", img="Tobi"})
 {
     return(
     <>
@@ -25,7 +25,7 @@ export function RecentReviews({name="Null", address="Null", review="Null", ratin
                         <p1>{review}</p1>
                     </div>
                 </div>
-                <img src={Tobi} alt="" style={{height: '150px', width: '150px'}}/>
+                <img src={img} alt="" style={{height: '150px', width: '150px'}}/>
             </div>
            
         </div>
