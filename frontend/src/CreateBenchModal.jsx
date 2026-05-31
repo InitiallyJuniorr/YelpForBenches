@@ -39,7 +39,7 @@ export default function CreateBenchModal({
 
   return (
     <>
-    <div style={{padding: '100px'}}/>
+    <div style={{padding: '110px'}}/>
     <div className="modal-overlay" onClick={onClose}>
     
       <div
