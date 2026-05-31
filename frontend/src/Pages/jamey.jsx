@@ -125,6 +125,8 @@ export default function Jamey() {
         </div>
     )
     }
+
+    
     const [kkSlider, isKKSlider] = useState(true);
    
     const toggleKKLogIn = () => {
@@ -154,15 +156,16 @@ export default function Jamey() {
                     <div style={{padding: "10px"}}/>
                     <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
                     <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
-        
-        
+                    <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
+
+
                     </div>
 
                 </div>
                 
                 </div>
         
-                {/* width: 287px; */}
+                
                 </div>
         </>
         }
@@ -184,6 +187,7 @@ export default function Jamey() {
                     <input className='input'type="text" placeholder="Email" onChange={handleEChange} />
                     {/* needs styling */}
                     { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
+                    <div style={{padding: "10px"}}/>
                     <p1>Password</p1>
                     <br/>
                     <input className='input' type="password" placeholder="Password" onChange={handlePChange} />
@@ -218,18 +222,24 @@ export default function Jamey() {
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
                     </div>
 
-                    <div style={{padding: "70px"}}/>
+                    <div style={{padding: "40px"}}/>
                     <p1>Email</p1>
                     <br/>
                     <input className='input'type="text" placeholder="Email" onChange={handleEChange} />
                     {/* needs styling */}
                     { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
+                    <div style={{padding: "10px"}}/>
                     <p1>Password</p1>
                     <br/>
                     <input className='input' type="password" placeholder="Password" onChange={handlePChange} />
                     {/* needs styling */}
                     { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> }
                     <div style={{padding: "10px"}}/>
+                    <p1>Username</p1>
+                    { !(isLogin) && <input className='input'type="text" placeholder="Username" onChange={handleUChange} /> }
+                    { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}
+                    <div style={{padding: "10px"}}/>
+
                     <button className="button" onClick={handleSubmit}>Submit</button>
 
                     { loginError && <p className="error">{loginError}</p> }
@@ -243,48 +253,3 @@ export default function Jamey() {
         </>
     );
 }
-
-// {!kkSlider &&
-
-//     <div className="login-container">
-//         <h1>BenchMark Jamey</h1>
-//         <div className="login-card">
-
-//             {/* Header*/}
-//             {/* if isLogin is true, then on login page, if not, register */}
-//         <h1>{isLogin ? "Login" : "Register"}</h1> 
-
-//             {/* Button  */}
-//         <button onClick={toggleLogin}>{isLogin ? "Create Account" : "Sign in"}</button>
-
-
-//         <input type="text" placeholder="Email" onChange={handleEChange} />
-//             {/* needs styling */}
-//         { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
-        
-        
-//         <input type="password" placeholder="Password" onChange={handlePChange} />
-//         {/* needs styling */}
-//             { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> }
-
-//             {/* this needs to appear without isLogin and just on signup page */}
-//             { !(isLogin) && <input type="text" placeholder="Username" onChange={handleUChange} /> }
-//             { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}
-        
-//             <button onClick={handleSubmit}>Submit</button>
-
-//             { loginError && <p className="error">{loginError}</p> }
-//             { isLogin && <p className="guest" onClick={() => setShowForgot(true)}>Forgot Password?</p> }
-//             { showForgot && (
-//             <div>
-//                 <input type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)} />
-//                 <button onClick={handleForgot}>Send Reset Link</button>
-//                 { forgotMsg && <p>{forgotMsg}</p> }
-//             </div>
-//             )}
-
-//             <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
-//             <p className="guest" onClick={() => navigate('/foo')}>Login Foo</p>
-//         </div>
-//     </div>
-// }
