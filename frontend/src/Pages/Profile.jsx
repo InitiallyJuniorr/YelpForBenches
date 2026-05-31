@@ -29,7 +29,6 @@ export function Profile({isLoggedIn = true})
             const fetchUser = async () => {
             const res = await fetch(`http://localhost:8080/user?email=${email}`);
             const data = await res.json();
-            console.log("data", data)
             setUserInfo(data);
         };
         fetchUser();
@@ -37,6 +36,7 @@ export function Profile({isLoggedIn = true})
 
     if (!token) return <Navigate to="/" />;
     if (!userInfo) return <div>Loading...</div>;
+
     return(
     <>
     <NavBar/>
@@ -45,8 +45,8 @@ export function Profile({isLoggedIn = true})
 
     <div style={{display: 'flex'}}>
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
-                <ProfileBanner name={ userInfo.username } tag={Honorific(userInfo.num_reviewed)} photo={Tobi}>
-                    
+                <ProfileBanner name={ userInfo.username } tag={Honorific(userInfo.num_reviewed)} photo={userInfo.pfp_url ? userInfo.pfp_url : Tobi}>
+                console.log(userInfo.num_reviewed)
                 </ProfileBanner>
                 <div style={{paddingTop: '30px'}}/>
                 <h2>Recent Reviews</h2>

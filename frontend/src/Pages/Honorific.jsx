@@ -1,4 +1,4 @@
-    export function Honorific({num}) {
+    export function Honorific(num) {
         if (num === 0) return "Complacent Sitter";
         if (num <= 5) return "Occasional Sitter";
         if (num <= 15) return "Regular Sitter";
