@@ -38,7 +38,10 @@ export default function CreateBenchModal({
   };
 
   return (
+    <>
+    <div style={{padding: '110px'}}/>
     <div className="modal-overlay" onClick={onClose}>
+    
       <div
         className="modal-card"
         onClick={(e) => e.stopPropagation()}
@@ -46,10 +49,11 @@ export default function CreateBenchModal({
         <button type="button" className="modal-close" onClick={onClose}>
           ×
         </button>
-
+        
         <h2>Add a Bench</h2>
-
+        
         <form onSubmit={handleSubmit} className="modal-form">
+        
             <div>
                 <label className="field-label">
                 Name <span className="required">*</span>
@@ -141,5 +145,6 @@ export default function CreateBenchModal({
             </form>
       </div>
     </div>
+  </>
   );
 }
