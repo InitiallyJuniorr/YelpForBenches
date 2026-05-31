@@ -24,10 +24,7 @@ export default function Jamey() {
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
     const [forgotMsg, setForgotMsg] = useState("");
-
-    const toggleLogin = () => {
-        setIsLogin(!isLogin);
-    };  
+    const [kkSlider, isKKSlider] = useState(true);
     
     const handleEChange = (e) => {
         const value = e.target.value;
@@ -126,8 +123,8 @@ export default function Jamey() {
     )
     }
 
+
     
-    const [kkSlider, isKKSlider] = useState(true);
    
     const toggleKKLogIn = () => {
         isKKSlider(!kkSlider);
