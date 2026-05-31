@@ -38,19 +38,6 @@ const highlightedMarkerIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-function FlyToSelectedPlace({ selectedPlace }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (selectedPlace?.lat == null || selectedPlace?.lon == null) return;
-
-    map.flyTo([selectedPlace.lat, selectedPlace.lon], 16, {
-      duration: 1.1,
-    });
-  }, [selectedPlace, map]);
-
-  return null;
-}
 
 function FlyToSelectedBench({ selectedBench }) {
   const map = useMap();
@@ -145,9 +132,9 @@ export default function MapView({
   onCancelAddBench,
 }) {
   const [query, setQuery] = useState("");
-  const [searchMode, setSearchMode] = useState("location");
+  //const [searchMode, setSearchMode] = useState("location");
   const [results, setResults] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  //const [selectedPlace, setSelectedPlace] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState({
     lat: DEFAULT_CENTER[0],
@@ -179,7 +166,6 @@ export default function MapView({
   }, [benches, mapCenter, query]);
 
   const handleSearch = async () => {
-    if (searchMode === "bench") return;
     if (!query.trim()) return;
 
     setLoading(true);
@@ -231,7 +217,6 @@ export default function MapView({
       }));
 
       setResults(formattedResults);
-      setSelectedPlace(null);
     } catch (error) {
       console.error("Search failed:", error);
     } finally {
@@ -242,12 +227,6 @@ export default function MapView({
   const clearSearch = () => {
     setQuery("");
     setResults([]);
-    setSelectedPlace(null);
-  };
-
-  const handleSearchModeChange = (nextMode) => {
-    setSearchMode(nextMode);
-    setSelectedPlace(null);
   };
 
   const handleAddBench = () => {
@@ -258,8 +237,7 @@ export default function MapView({
     onMarkerClick?.(bench.id);
   };
 
-  const visibleBenches = searchMode === "bench" ? nearbyBenchResults : benches;
-  const panelResults = searchMode === "bench" ? nearbyBenchResults : results;
+  const panelResults = nearbyBenchResults;
 
   return (
     <div
@@ -275,13 +253,9 @@ export default function MapView({
           query={query}
           setQuery={setQuery}
           results={panelResults}
-          selectedPlace={selectedPlace}
           selectedBenchId={selectedBenchId}
-          searchMode={searchMode}
-          onSearchModeChange={handleSearchModeChange}
           onSearch={handleSearch}
           onClear={clearSearch}
-          onSelectPlace={setSelectedPlace}
           onSelectBench={handleSelectBench}
           loading={loading}
           onAddBench={handleAddBench}
@@ -305,13 +279,13 @@ export default function MapView({
         {!confirmLocationMode && (
           <>
             <FlyToSelectedBench selectedBench={selectedBench} />
-            <FlyToSelectedPlace selectedPlace={selectedPlace} />
+            {/* <FlyToSelectedPlace selectedPlace={selectedPlace} /> */}
 
             <Marker position={DEFAULT_CENTER} icon={defaultMarkerIcon}>
               <Popup>UCLA</Popup>
             </Marker>
 
-            {visibleBenches.map((bench) => (
+            {panelResults.map((bench) => (
               <Marker
                 key={bench.id}
                 icon={
