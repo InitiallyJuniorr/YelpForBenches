@@ -211,6 +211,7 @@ export default function MapPage() {
 
   return (
     <>
+    
       <MapView
         benches={benches}
         selectedBenchId={selectedBenchId}
@@ -223,7 +224,7 @@ export default function MapPage() {
         onConfirmBenchLocation={handleConfirmBenchLocation}
         onCancelAddBench={handleCancelAddBench}
       />
-
+      
       <CreateBenchModal
         open={isCreateBenchOpen}
         draft={benchDraft}
