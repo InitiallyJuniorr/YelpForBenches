@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import './WriteReviewModal.css';
+import './WriteReviewPopup.css';
 
 const MAX_WORDS = 240;
 
@@ -25,7 +25,7 @@ function ReviewStars({ value, onChange }) {
   );
 }
 
-export default function WriteReviewModal({
+export default function WriteReviewPopup({
   open,
   bench,
   onClose,

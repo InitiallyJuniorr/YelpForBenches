@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import ResultsPanel from './ResultsPanel'
 import { NavBar } from './Components/Navbar.jsx'
-import MapPage from './MapPage.jsx'
+import MapController from './MapController.jsx'
 import ResetPassword from './ResetPassword.jsx'
 
 
@@ -24,7 +24,7 @@ function App() {
       
       <section id="center">
         <div className="page" style={{ display: 'block', width: '100%', height: '100%' }}>
-          <MapPage />
+          <MapController />
         </div>
       </section>
     </>

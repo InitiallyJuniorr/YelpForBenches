@@ -1,4 +1,4 @@
-import './BenchDetailsModal.css';
+import './BenchDetailsPopup.css';
 
 function StarRow({ rating = 0, large = false }) {
   const fullStars = Math.round(rating);
@@ -17,7 +17,7 @@ function StarRow({ rating = 0, large = false }) {
   );
 }
 
-export default function BenchDetailsModal({
+export default function BenchDetailsPopup({
   open,
   bench,
   onClose,

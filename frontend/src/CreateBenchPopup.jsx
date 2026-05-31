@@ -1,10 +1,10 @@
-// CreateBenchModal.jsx
+// CreateBenchPopup.jsx
 import { useEffect, useState } from 'react';
-import './CreateBenchModal.css';
+import './CreateBenchPopup.css';
 import Ratings from './Ratings';
 import { uploadToCloudinary } from './utils/cloudinary.js';
 
-export default function CreateBenchModal({
+export default function CreateBenchPopup({
   open,
   draft,
   setDraft,
