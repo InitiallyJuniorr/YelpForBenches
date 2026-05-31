@@ -54,40 +54,29 @@ function profilePhoto()
 
 }
 
-// when adding multiple inputs, format {like, this}
-export default function ProfileBanner ({name="Null", tag="Null", photo})
+export default function ProfileBanner ({name="Null", tag="Null", photo, onPhotoUpload})
 {
     return(
         <>
- 
-
         <div className="ProfileBanner"> 
-            <img src={Tobi} alt="" style={{height: '150px', width: '150px', borderRadius: '200px'}}/>
+            <div onClick={() => document.getElementById('pfp-upload').click()} style={{cursor: 'pointer'}}>
+                <img src={photo} alt="" style={{height: '150px', width: '150px', borderRadius: '200px'}}/>
+                <input 
+                    id="pfp-upload"
+                    type="file" 
+                    accept="image/*"
+                    style={{display: 'none'}}
+                    onChange={onPhotoUpload}
+                />
+            </div>
             <div className="ProfileContent" style={{paddingLeft: '29px'}}>
-
                 <h1>{name}</h1>
                 <p1>{tag}</p1>
-                {/* <div style={{justifyContent: "left",}}>{photo}</div> */}
-                
-                <button className='ProfileButton'>
-                    <s1>Edit</s1>
-                </button>
-                <button className='ProfileButton'>
-                    <s1>Share</s1>
-                </button>
-
-                {/* TODO: implement this */}
-                <button className='ProfileButton'>
-                    <s1>LogOut</s1>
-                </button>
+                <button className='ProfileButton'><s1>Edit</s1></button>
+                <button className='ProfileButton'><s1>Share</s1></button>
+                <button className='ProfileButton'><s1>LogOut</s1></button>
             </div> 
-
-            
         </div>
-        
-
-
-
         </>
     )
 }
