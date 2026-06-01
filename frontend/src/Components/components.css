@@ -272,32 +272,103 @@ navbar .title{
     }
 }
 .honorific1{ 
-    color: #808080;
-    font-family: "Kumbh Sans", sans-serif;
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #98fffa;
+    border-radius: 35px;
+
+    color: #fa618a;
+    font-family: Comic Sans MS;
 }
 .honorific2 {
-    color: #4caf50; 
-    font-family: "Kumbh Sans", sans-serif;
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #000;
+    border-radius: 35px;
+    
+    color: #eaff96; 
+    font-family: Marker Felt;
 } 
 .honorific3 {
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #ffc868;
+    border-radius: 35px;
+    
     color: #2196f3;
-    font-family: "Kumbh Sans", sans-serif;
+    font-family: Noteworthy;
 }
 .honorific4 {
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #ffebf0;
+    border-radius: 35px;
+    
     color: #9c27b0; 
-    font-family: "Kumbh Sans", sans-serif;
+    font-family: Impact;
 } 
 .honorific5 {
-    color: #ff9800; 
-    font-family: "Kumbh Sans", sans-serif;
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #d28ad8;
+    border-radius: 35px;
+    
+    color: #ffc0f1; 
+    font-family: Bangers;
 }
 .honorific6 {
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #fab13d;
+    border-radius: 35px;
+    
     color: #e91e63; 
-    font-family: "Kumbh Sans", sans-serif;
+    font-family: Bubblegum Sans;
 }
 .honorific7 {
-    color: #f44336; 
-    font-family: "Kumbh Sans", sans-serif;
+    width: 200px;
+    height: 500px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500px;
+    background-color: #d3eeed;
+    border-radius: 35px;
+    
+    color: #272633; 
+    font-family: Papyrus;
 } 
 
 .review{

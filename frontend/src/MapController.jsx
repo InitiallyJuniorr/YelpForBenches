@@ -178,12 +178,26 @@ export default function MapController() {
     // to /add-review using the logged-in user's id/email from auth state.
     const newReview = {
       id: `review-${Date.now()}`,
+      benchId: selectedBenchId,
+      userId: 'user@gmail.com',    // Replace user@gmail.com with actual user
       author: 'You',
       badge: 'Bench Scout',
+      stars: rating,
       rating,
       avatarUrl: toby,
-      preview,
+      review: preview,
+      preview
     };
+
+    try {
+      fetch('http://localhost:8080/add-review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Inform server you are sending JSON
+        },
+        body: JSON.stringify(newReview)
+      })
+    } catch (error) {}
 
     setBenches((prevBenches) =>
       prevBenches.map((bench) =>

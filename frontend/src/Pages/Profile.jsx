@@ -72,16 +72,21 @@ export function Profile({isLoggedIn = true})
         setUserInfo(prev => ({ ...prev, pfp_url: url }));
     }
 
-    const honorificData = Honorific(userInfo.num_reviewed);
 
+    // const honorificData = Honorific(6);
+    // const honorificData = Honorific(16);
+    // const honorificData = Honorific(51);
+    // const honorificData = Honorific(101);
+    // const honorificData = Honorific(251);
+    const honorificData = Honorific(userInfo.num_reviewed);
     return(
     <>
     <NavBar/>
     {/* must include */}
     <div style={{paddingTop: '161px'}}/>
 
-    <div style={{display: 'flex'}}>
-        <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
+    <div style={{display: 'flex', paddingRight: '50px'}}>
+        <div style={{paddingLeft: '61px', paddingRight: '50px'}}>
         <ProfileBanner 
             name={userInfo.username} 
 
@@ -110,9 +115,14 @@ export function Profile({isLoggedIn = true})
             {showMore ? 'Show Less' : 'Show More'}
         </button>
         </div>
-        <BenchMarks/>
+
+        <div className="ProfileBenchMarks">
+            <h1>My BenchMarks</h1>
+        </div>
+        
         <div style={{paddingBottom: '500px'}}/>
     </div>
+    <div style={{paddingBottom: '50px'}}/>
     </>
     )
 }
