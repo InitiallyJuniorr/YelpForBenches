@@ -104,12 +104,12 @@ app.get('/bench-lookup', async (req, res) => {
 })
 
 app.post('/add-bench', async (req, res) => {    // Adds bench to database, returns id of new bench
-    const { name, address, lng, lat } = req.body
+    const { name, address, lng, lat, imageURL } = req.body
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO benches (name, address, coordinates) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326))',
-            [name, address, lng, lat]
+            'INSERT INTO benches (name, address, coordinates,image_url) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326), ?)',
+            [name, address, lng, lat, imageURL]
         )
         console.log({ insertId: result.insertId })
         res.send({ insertId: result.insertId })
@@ -186,15 +186,21 @@ app.get('/user', async (req, res) => {
 // Queries necessary profile reviews linked with email
 app.get('/reviews', async (req, res) => {
     const { user_id } = req.query;
-    console.log("user_id received:", user_id);
-    const [rows] = await pool.query(
-        'SELECT bench_id, stars, review, created_at FROM reviews WHERE user_id = ?',
-        [user_id]
-    )
-    console.log("rows:", rows);
-    res.json(rows)
+    try {
+        const [rows] = await pool.query(
+            `SELECT r.id, r.bench_id, r.stars, r.review, r.created_at,
+                    b.name, b.address, b.image_url
+             FROM reviews r
+             JOIN benches b ON r.bench_id = b.id
+             WHERE r.user_id = ?`,
+            [user_id]
+        );
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 })
-
 // POST the username profile picture
 app.post('/update-pfp', async (req, res) => {
     const { email, url } = req.body;
