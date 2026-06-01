@@ -55,10 +55,6 @@ export function Profile({isLoggedIn = true})
     if (!token) return <Navigate to="/" />;
     if (!userInfo) return <div>Loading...</div>;
 
-    console.log("Review Length", userReviews.length)
-    console.log("Some_review length", someReviews.length)
-    console.log("Visible_reviews length", visibleReviews.length)
-
     const handlePfpUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
