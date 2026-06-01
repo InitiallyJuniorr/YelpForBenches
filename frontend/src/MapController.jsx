@@ -194,7 +194,7 @@ export default function MapController() {
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
       lng: draft.lng,
-      imageUrl: draft.imageUrl || exampleBench,
+      imageURL: draft.imageURL || exampleBench,
       avgRating: rating,
       reviews: [draftReview],
     };
