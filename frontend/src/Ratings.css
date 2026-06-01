@@ -1,12 +1,11 @@
 
-.rating:not(:checked) label {
+.rating label {
     color: #ccc;
 }
 
 .rating {
     gap: 4px;
     display: flex;
-    flex-direction: row-reverse;
     justify-content: start;
 }
 
@@ -23,16 +22,6 @@ input[type="radio"] {
     display: none;
 }
 
-.rating span:has(input:checked) label,
-.rating span:has(input:checked)~span label {
-    color: orange
-}
-
-.rating:hover input:checked~label {
-    color: #ccc;
-}
-
-.rating span:hover label,
-.rating span:hover~span label {
+.rating label.active {
     color: orange !important;
 }

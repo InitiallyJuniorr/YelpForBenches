@@ -8,14 +8,22 @@ function countWords(text) {
 }
 
 function ReviewStars({ value, onChange }) {
+  const [hoverRating, setHoverRating] = useState(0);
+  const displayRating = hoverRating || value;
+
   return (
-    <div className="write-review-stars" aria-label="Review rating">
+    <div
+      className="write-review-stars"
+      aria-label="Review rating"
+      onMouseLeave={() => setHoverRating(0)}
+    >
       {[1, 2, 3, 4, 5].map((rating) => (
         <button
           type="button"
-          className={rating <= value ? 'active' : ''}
+          className={rating <= displayRating ? 'active' : ''}
           key={rating}
           onClick={() => onChange(rating)}
+          onMouseEnter={() => setHoverRating(rating)}
           aria-label={`${rating} star${rating === 1 ? '' : 's'}`}
         >
           ★
@@ -62,6 +70,7 @@ export default function WriteReviewPopup({
       rating,
       preview: reviewText.trim(),
     });
+    onClose();
   };
 
   return (
@@ -83,7 +92,7 @@ export default function WriteReviewPopup({
         <div className="write-review-header">
           <img
             className="write-review-image"
-            src={bench.imageUrl}
+            src={bench.imageURL || bench.imageUrl}
             alt={bench.name}
           />
 

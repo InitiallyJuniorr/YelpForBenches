@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import './Ratings.css';
 
 export default function Ratings({ value = 0, onChange, name = 'rating' }) {
+  const [hoverRating, setHoverRating] = useState(0);
+  const displayRating = hoverRating || Number(value) || 0;
+
   return (
-    <div className="rating">
-      {[5, 4, 3, 2, 1].map((rating) => (
+    <div className="rating" onMouseLeave={() => setHoverRating(0)}>
+      {[1, 2, 3, 4, 5].map((rating) => (
         <span key={rating}>
           <input
             checked={Number(value) === rating}
@@ -13,7 +17,13 @@ export default function Ratings({ value = 0, onChange, name = 'rating' }) {
             type="radio"
             value={rating}
           />
-          <label htmlFor={`${name}-${rating}`}>★</label>
+          <label
+            className={rating <= displayRating ? 'active' : ''}
+            htmlFor={`${name}-${rating}`}
+            onMouseEnter={() => setHoverRating(rating)}
+          >
+            ★
+          </label>
         </span>
       ))}
     </div>

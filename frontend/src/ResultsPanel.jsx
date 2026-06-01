@@ -1,4 +1,5 @@
 import './ResultsPanel.css';
+import noBenchImage from "./assets/nobenchimage.png";
 
 function StarRating({ rating = 0 }) {
   const roundedRating = Math.round(Number(rating) || 0);
@@ -60,7 +61,11 @@ function BenchCard({ bench, onClick, isSelected }) {
             alt={bench.name}
           />
         ) : (
-          <div className="bench-card-no-image">No image</div>
+          <img
+            className="bench-card-image"
+            src={noBenchImage}
+            alt={'No Bench Image'}
+          />
         )}
       </div>
     </button>
@@ -137,22 +142,12 @@ export default function ResultsPanel({
 
         {!loading &&
           safeResults.map((result) => (
-            // isBenchMode ? (
               <BenchCard
                 bench={result}
                 isSelected={selectedBenchId === result.id}
                 key={result.id}
                 onClick={() => onSelectBench?.(result)}
               />
-            // ) : (
-            //   <LocationCard
-            //     address={result.address || result.fullName || 'No address provided'}
-            //     isSelected={selectedPlace?.id === result.id}
-            //     key={result.id}
-            //     onClick={() => onSelectPlace?.(result)}
-            //     title={result.name || result.title || 'Untitled Location'}
-            //   />
-            // )
           ))}
       </div>
 

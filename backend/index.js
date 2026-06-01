@@ -7,9 +7,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
-
-
-
 const app = express();
 app.use(express.json())
 app.use(cors({ origin: ["http://127.0.0.1:5173", "http://localhost:5173"] }))
@@ -77,13 +74,31 @@ app.get('/', (req, res) => {
     res.send( {success: true} );
 })
 
-app.get('/bench', async (req, res) => {
+app.get('/bench', async (req, res) => { // Get all benches
     const result = await pool.query("SELECT * FROM benches");
     res.send(result[0]);
 })
 
-// Elise put this here to test a search for benches
-app.get('/bench-search', async (req, res) => {
+app.get('/bench-ratings', async (req, res) => {
+    try {
+        const [rows] = await pool.query(`
+            SELECT
+                bench_id AS benchId,
+                COALESCE(AVG(stars), 0) AS avgRating,
+                COUNT(*) AS reviewCount
+            FROM reviews
+            GROUP BY bench_id
+        `);
+
+        res.json(rows);
+    } catch (err) {
+        console.error('bench-ratings error:', err);
+        res.status(500).json({ error: err.message });
+    }
+})
+
+
+app.get('/bench-search', async (req, res) => { // Search for benches near the users location, optionally filtered by a query string 
   const q = (req.query.q || '').trim();
   const lat = Number(req.query.lat);
   const lng = Number(req.query.lng);
@@ -95,25 +110,35 @@ app.get('/bench-search', async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT
-        id,
-        name,
-        address,
-        image_url AS imageURL,
-        ST_X(coordinates) AS lat,
-        ST_Y(coordinates) AS lng,
+        b.id,
+        b.name,
+        b.address,
+        b.image_url AS imageURL,
+        ST_X(b.coordinates) AS lat,
+        ST_Y(b.coordinates) AS lng,
+        COALESCE(review_stats.avgRating, 0) AS avgRating,
+        COALESCE(review_stats.reviewCount, 0) AS reviewCount,
         ST_Distance_Sphere(
-          coordinates,
+          b.coordinates,
           ST_SRID(POINT(?, ?), 4326)
         ) AS distance_meters
-      FROM benches
+      FROM benches b
+      LEFT JOIN (
+        SELECT
+          bench_id,
+          AVG(stars) AS avgRating,
+          COUNT(*) AS reviewCount
+        FROM reviews
+        GROUP BY bench_id
+      ) review_stats ON review_stats.bench_id = b.id
       WHERE ST_Distance_Sphere(
-        coordinates,
+        b.coordinates,
         ST_SRID(POINT(?, ?), 4326)
       ) <= 5000
       AND (
         ? = '' OR
-        name LIKE CONCAT('%', ?, '%') OR
-        address LIKE CONCAT('%', ?, '%')
+        b.name LIKE CONCAT('%', ?, '%') OR
+        b.address LIKE CONCAT('%', ?, '%')
       )
       ORDER BY distance_meters ASC
       LIMIT 50
@@ -177,6 +202,41 @@ app.post('/add-review', async (req, res) => {    // Adds review to database, ret
     } catch (err) {
         console.log(err.message)
         res.status(500).json({ error: err.message })
+    }
+})
+
+app.get('/bench-reviews', async (req, res) => { // Gets reviews for a bench, returns array of reviews with author info
+    const benchId = Number(req.query.bench_id);
+
+    if (!benchId) {
+        return res.status(400).json({ error: 'bench_id is required' });
+    }
+
+    try {
+        const [rows] = await pool.query(
+            `SELECT
+                r.id,
+                r.bench_id AS benchId,
+                r.user_id AS userId,
+                r.stars,
+                r.stars AS rating,
+                r.review,
+                r.review AS preview,
+                r.created_at AS createdAt,
+                COALESCE(u.username, r.user_id, 'Anonymous') AS author,
+                COALESCE(u.pfp_url, '') AS avatarUrl,
+                'Bench Scout' AS badge
+             FROM reviews r
+             LEFT JOIN users u ON r.user_id = u.email
+             WHERE r.bench_id = ?
+             ORDER BY r.created_at DESC, r.id DESC`,
+            [benchId]
+        );
+
+        res.json(rows);
+    } catch (err) {
+        console.error('bench-reviews error:', err);
+        res.status(500).json({ error: err.message });
     }
 })
 
