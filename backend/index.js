@@ -82,6 +82,44 @@ app.get('/bench', async (req, res) => {
     res.send(result[0]);
 })
 
+// Elise put this here to test a search for benches
+app.get('/bench-search', async (req, res) => {
+  const q = (req.query.q || '').trim();
+  const lat = Number(req.query.lat);
+  const lng = Number(req.query.lng);
+
+  if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    return res.status(400).json({ error: 'lat and lng are required' });
+  }
+
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+        id,
+        name,
+        address,
+        ST_X(coordinates) AS lng,
+        ST_Y(coordinates) AS lat,
+        ST_Distance_Sphere(
+          coordinates,
+          ST_SRID(POINT(?, ?), 4326)
+        ) AS distance_meters
+      FROM benches
+      WHERE
+        (? = '' OR
+          name LIKE CONCAT('%', ?, '%') OR
+          address LIKE CONCAT('%', ?, '%'))
+      ORDER BY distance_meters ASC
+      LIMIT 50
+    `, [lng, lat, q, q, q]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error('bench-search error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/bench-lookup', async (req, res) => {
     const lat = Number(req.query.lat);
     const lon = Number(req.query.lon);
@@ -104,12 +142,12 @@ app.get('/bench-lookup', async (req, res) => {
 })
 
 app.post('/add-bench', async (req, res) => {    // Adds bench to database, returns id of new bench
-    const { name, address, lng, lat } = req.body
+    const { name, address, lng, lat, imageURL } = req.body
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO benches (name, address, coordinates) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326))',
-            [name, address, lng, lat]
+            'INSERT INTO benches (name, address, coordinates,image_url) VALUES (?, ?, ST_SRID(POINT(?, ?), 4326), ?)',
+            [name, address, lng, lat, imageURL]
         )
         console.log({ insertId: result.insertId })
         res.send({ insertId: result.insertId })
@@ -182,6 +220,34 @@ app.get('/user', async (req, res) => {
     );
     res.json(rows[0]);
 })
+
+// Queries necessary profile reviews linked with email
+app.get('/reviews', async (req, res) => {
+    const { user_id } = req.query;
+    try {
+        const [rows] = await pool.query(
+            `SELECT r.id, r.bench_id, r.stars, r.review, r.created_at,
+                    b.name, b.address, b.image_url
+             FROM reviews r
+             JOIN benches b ON r.bench_id = b.id
+             WHERE r.user_id = ?`,
+            [user_id]
+        );
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+})
+// POST the username profile picture
+app.post('/update-pfp', async (req, res) => {
+    const { email, url } = req.body;
+    await pool.query(
+        'UPDATE users SET pfp_url = ? WHERE email = ?',
+        [url, email]
+    );
+    res.json({ success: true });
+});
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
