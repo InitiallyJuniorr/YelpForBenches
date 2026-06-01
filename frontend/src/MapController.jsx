@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
@@ -70,7 +70,7 @@ const addReviewToBench = (bench, review) => {
 };
 
 export default function MapController() {
-  const [benches, setBenches] = useState(MOCK_BENCHES);
+  const [benches, setBenches] = useState([]);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
   const [isCreateBenchOpen, setIsCreateBenchOpen] = useState(false);
@@ -78,6 +78,35 @@ export default function MapController() {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
+
+  useEffect(() => {
+    const fetchBenches = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/bench');
+
+        if (!response.ok) {
+          throw new Error(`Error fetching benches: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const formatted = data.map((bench) => ({
+          id: bench.id,
+          name: bench.name,
+          address: bench.address,
+          imageURL: bench.image_url,
+          lat: bench.coordinates.y,
+          lng: bench.coordinates.x,
+        }));
+
+        setBenches(formatted);
+      } catch (error) {
+        console.error('Error fetching benches:', error);
+      }
+    };
+
+    fetchBenches();
+  }, []);
 
   // TODO_BACKEND: Once backend loading is wired, this selection should use the
   // backend bench id consistently instead of mixing mock ids and database ids.
