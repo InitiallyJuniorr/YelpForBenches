@@ -49,9 +49,13 @@ export function BenchMarks()
     )
 }
 
-
-export default function ProfileBanner ({name="Null", tag="Null", tagClass="", photo, onPhotoUpload})
+export default function ProfileBanner ({name="Null", tag="Null", tagClass="",photo, onPhotoUpload})
 {
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+    navigate('/')
+    }
+
     return(
         <>
         <div className="ProfileBanner"> 
@@ -67,10 +71,11 @@ export default function ProfileBanner ({name="Null", tag="Null", tagClass="", ph
             </div>
             <div className="ProfileContent" style={{paddingLeft: '29px'}}>
                 <h1>{name}</h1>
+                <p1>{tag}</p1>
                 <p className={`profile-tag ${tagClass}`}>{tag}</p>
                 <button className='ProfileButton'><s1>Edit</s1></button>
                 <button className='ProfileButton'><s1>Share</s1></button>
-                <button className='ProfileButton'><s1>LogOut</s1></button>
+                <button className='ProfileButton' onClick={handleLogout}><s1>LogOut</s1></button>
             </div> 
         </div>
         </>

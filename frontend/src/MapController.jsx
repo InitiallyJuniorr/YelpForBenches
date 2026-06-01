@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode'
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
@@ -78,6 +79,8 @@ export default function MapController() {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
+  const token = localStorage.getItem('token');
+  const email = token ? jwtDecode(token).email : null;
 
   useEffect(() => {
     const fetchBenches = async () => {
@@ -246,7 +249,7 @@ export default function MapController() {
     // TODO_BACKEND: Replace user@gmail.com with the authenticated user's id.
     const newReview = {
       benchId: lastBenchId,
-      userId: "user@gmail.com",
+      userId: email,
       stars: rating,
       review: draft.review
     }
