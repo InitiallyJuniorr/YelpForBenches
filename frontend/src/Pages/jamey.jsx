@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import '../Login.css'
 import './fooLogin.jsx'
 import gang from '../assets/gang.png'
-import { Navigate } from 'react-router-dom'
+
 
 export default function Jamey() {
 
@@ -172,7 +172,7 @@ export default function Jamey() {
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button onClick={toggleKKLogIn}>back</button>
+                    <button className="back" onClick={toggleKKLogIn}>Back</button>
                     <h1>Benchmark</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
@@ -194,14 +194,21 @@ export default function Jamey() {
                     <button className="button" onClick={handleSubmit}>Submit</button>
 
                     { loginError && <p className="error">{loginError}</p> }
+                    
                     { isLogin && <p className="guest" onClick={() => setShowForgot(true)}>Forgot Password?</p> }
                     { showForgot && (
-                    <div>
-                        <input type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)} />
-                        <button onClick={handleForgot}>Send Reset Link</button>
+                    <div style={{justifyContent: 'flex-center', alignItems: 'center', display: 'flex'}}>
+                        {/* add className */}
+                        <input className="forgot" type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)} />
+                        <br/>
+                        <button className="forgotbutton" onClick={handleForgot}>send</button>
+                    
                         { forgotMsg && <p>{forgotMsg}</p> }
+                        
                     </div>
+                    
                     )}
+                    <div style={{padding: "10px"}}/>
                     
                 </div>
             </div>
@@ -213,7 +220,7 @@ export default function Jamey() {
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button onClick={toggleKKSignIn}>back</button>
+                    <button className="back" onClick={toggleKKSignIn}>Back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
