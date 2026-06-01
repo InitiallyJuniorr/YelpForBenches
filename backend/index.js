@@ -221,6 +221,28 @@ app.get('/user', async (req, res) => {
     res.json(rows[0]);
 })
 
+// Queries necessary profile reviews linked with email
+app.get('/reviews', async (req, res) => {
+    const { user_id } = req.query;
+    console.log("user_id received:", user_id);
+    const [rows] = await pool.query(
+        'SELECT bench_id, stars, review, created_at FROM reviews WHERE user_id = ?',
+        [user_id]
+    )
+    console.log("rows:", rows);
+    res.json(rows)
+})
+
+// POST the username profile picture
+app.post('/update-pfp', async (req, res) => {
+    const { email, url } = req.body;
+    await pool.query(
+        'UPDATE users SET pfp_url = ? WHERE email = ?',
+        [url, email]
+    );
+    res.json({ success: true });
+});
+
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 })

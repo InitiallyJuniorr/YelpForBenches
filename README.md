@@ -11,6 +11,7 @@
 
 ### Instructions to **use** Locally:
 
+###### -Add a .env file with the proper information
 ###### -have both the "frontend" folder and "backend" folder running by opening two separate terminal windows and using the "npm run dev" command on frontend and "node index.js" command on backend 
 ###### -Create a valid user profile under the sign up page or press "Sign In Later"
 ###### -Explore our website and features

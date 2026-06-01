@@ -173,6 +173,7 @@ export default function MapController() {
       return;
     }
 
+    const imageURL = draft.imageUrls?.[0] || exampleBench; 
     const rating = Number(draft.rating) || 0;
     const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
     const draftReview = {

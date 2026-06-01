@@ -14,13 +14,15 @@ import Login from '../Login.jsx'
 import Tobi from '../assets/tobi.jpg'
 import { jwtDecode } from 'jwt-decode'
 import { Navigate } from 'react-router-dom'
+import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 
 export function Profile({isLoggedIn = true})
 {
 
     const [userInfo, setUserInfo] = useState(null);
-
+    const [userReviews, setUserReviews] = useState([]);
+    const [showMore, setShowMore] = useState(false);
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
 
@@ -34,8 +36,45 @@ export function Profile({isLoggedIn = true})
         fetchUser();
     }, [email]);
 
+  useEffect(() => {
+        if (!email) return;
+            const fetchReviews = async () => {
+            const res = await fetch(`http://localhost:8080/reviews?user_id=${email}`);
+            const data = await res.json();
+            setUserReviews(data);
+        };
+        fetchReviews();
+    }, [email]);
+
+    const someReviews = userReviews
+    .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0,8)
+
+    const visibleReviews = showMore ? userReviews : someReviews;
+
     if (!token) return <Navigate to="/" />;
     if (!userInfo) return <div>Loading...</div>;
+
+    console.log("Review Length", userReviews.length)
+    console.log("Some_review length", someReviews.length)
+    console.log("Visible_reviews length", visibleReviews.length)
+
+    const handlePfpUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const url = await uploadToCloudinary(file);
+        
+        // save to backend
+        await fetch('http://localhost:8080/update-pfp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, url })
+        });
+
+        // update local state so UI refreshes
+        setUserInfo(prev => ({ ...prev, pfp_url: url }));
+    }
 
     return(
     <>
@@ -45,19 +84,29 @@ export function Profile({isLoggedIn = true})
 
     <div style={{display: 'flex'}}>
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
-                <ProfileBanner name={ userInfo.username } tag={Honorific(userInfo.num_reviewed)} photo={userInfo.pfp_url ? userInfo.pfp_url : Tobi}>
-                console.log(userInfo.num_reviewed)
-                </ProfileBanner>
-                <div style={{paddingTop: '30px'}}/>
-                <h2>Recent Reviews</h2>
-                <div style={{paddingTop: '23px'}}/>
-                <RecentReviews name="Cool Bench" address="330 De Neve Drive, Los Angeles CA, 90024" rating="4.0" review="My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair? The birds get to sit on the bench but I can’t? HOA, listen up! You’re ruining this Bench’s potential t"/>
-                <RecentReviews name="Cool Bench" address="330 De Neve Drive, Los Angeles CA, 90024" review="My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair? The birds get to sit on the bench but I can’t? HOA, listen up! You’re ruining this Bench’s potential t"/>
-                <RecentReviews name="Cool Bench" address="330 De Neve Drive, Los Angeles CA, 90024" review="My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair? The birds get to sit on the bench but I can’t? HOA, listen up! You’re ruining this Bench’s potential t"/>
-                <RecentReviews/>
-                <h2>Recent Activities</h2>
-                {/* photo=<img src={Tobi} alt ="" style ={{ width: '178px', height: '178', borderRadius:"100px"}}/> */}
-                
+        <ProfileBanner 
+            name={userInfo.username} 
+            tag={Honorific(userInfo.num_reviewed)} 
+            photo={userInfo.pfp_url ? userInfo.pfp_url : Tobi}
+            onPhotoUpload={handlePfpUpload}
+        >                </ProfileBanner>
+            <div style={{paddingTop: '30px'}}/>
+            <h2>Recent Reviews</h2>
+            <div style={{paddingTop: '23px'}}/>
+            
+        {visibleReviews.map((review) => (
+            <RecentReviews
+                key={review.id}
+                name={review.name}
+                address={review.address}
+                rating={review.stars}
+                review={review.review}
+                img={review.image_url}
+            />
+        ))}
+        <button onClick={() => setShowMore(!showMore)}>
+            {showMore ? 'Show Less' : 'Show More'}
+        </button>
         </div>
         <BenchMarks/>
         <div style={{paddingBottom: '500px'}}/>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import './CreateBenchPopup.css';
 import Ratings from './Ratings';
+import { uploadToCloudinary } from './utils/cloudinary.js';
 
 export default function CreateBenchPopup({
   open,
@@ -10,7 +11,10 @@ export default function CreateBenchPopup({
   onClose,
   onSubmit,
 }) {
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedFileNames, setSelectedFileNames] = useState([]);
+
+
 
   useEffect(() => {
     if (!open) {
@@ -27,14 +31,19 @@ export default function CreateBenchPopup({
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(draft);
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      
+      const imageUrls = await Promise.all(
+          selectedFiles.map(file => uploadToCloudinary(file))
+      );
+      
+      onSubmit({ ...draft, imageUrls });
   };
-
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    setSelectedFileNames(files.map((file) => file.name));
+      const files = Array.from(e.target.files || []);
+      setSelectedFiles(files);
+      setSelectedFileNames(files.map((file) => file.name));
   };
 
   return (
@@ -115,11 +124,11 @@ export default function CreateBenchPopup({
                 <label className="upload-button">
                     Browse Files
                     <input
-                    className="upload-input"
-                    type="file"
-                    multiple
-                    accept=".jpg,.jpeg,.png,.heic"
-                    onChange={handleFileChange}
+                        className="upload-input"
+                        type="file"
+                        multiple
+                        accept=".jpg,.jpeg,.png,.heic"
+                        onChange={handleFileChange}
                     />
                 </label>
 
