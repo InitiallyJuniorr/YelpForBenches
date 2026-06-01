@@ -168,14 +168,16 @@ export default function MapController() {
       return;
     }
 
+    const imageURL = draft.imageUrls?.[0] || exampleBench; 
     const rating = Number(draft.rating) || 0;
+
     const newBench = {
       id: crypto.randomUUID?.() || `bench-${Date.now()}`, // NOT USED BY BACKEND
       name: draft.name,
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
       lng: draft.lng,
-      imageUrl: draft.imageUrl || exampleBench,
+      imageURL: imageURL,
       avgRating: rating,  // NOT USED BY BACKEND
       reviews: [    // NOT USED BY BACKEND
         {

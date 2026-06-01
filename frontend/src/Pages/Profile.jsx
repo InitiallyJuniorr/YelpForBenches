@@ -50,12 +50,7 @@ export function Profile({isLoggedIn = true})
     .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
     .slice(0,8)
 
-    const visibleReviews = userReviews.filter(t =>
-      { 
-        if (showMore === true) return userReviews;
-        if (showMore === false) return someReviews;
-        return true;
-      }); 
+    const visibleReviews = showMore ? userReviews : someReviews;
 
     if (!token) return <Navigate to="/" />;
     if (!userInfo) return <div>Loading...</div>;
@@ -106,7 +101,7 @@ export function Profile({isLoggedIn = true})
                 address={review.address}
                 rating={review.stars}
                 review={review.review}
-                pfp={userInfo.pfp_url}
+                img={review.image_url}
             />
         ))}
         <button onClick={() => setShowMore(!showMore)}>
