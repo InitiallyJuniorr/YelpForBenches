@@ -76,7 +76,12 @@ export function Profile({isLoggedIn = true})
         setUserInfo(prev => ({ ...prev, pfp_url: url }));
     }
 
-    const honorificData = Honorific(userInfo.num_reviewed);
+    // const honorificData = Honorific(userInfo.num_reviewed);
+    // const honorificData = Honorific(6);
+    // const honorificData = Honorific(16);
+    // const honorificData = Honorific(51);
+    // const honorificData = Honorific(101);
+    const honorificData = Honorific(251);
 
     return(
     <>
@@ -117,6 +122,7 @@ export function Profile({isLoggedIn = true})
         <BenchMarks/>
         <div style={{paddingBottom: '500px'}}/>
     </div>
+    <div style={{paddingBottom: '50px'}}/>
     </>
     )
 }
