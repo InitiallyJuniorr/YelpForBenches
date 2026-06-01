@@ -76,6 +76,8 @@ export function Profile({isLoggedIn = true})
         setUserInfo(prev => ({ ...prev, pfp_url: url }));
     }
 
+    const honorificData = Honorific(userInfo.num_reviewed);
+
     return(
     <>
     <NavBar/>
@@ -86,7 +88,11 @@ export function Profile({isLoggedIn = true})
         <div style={{paddingLeft: '61px', paddingRight: '100px'}}>
         <ProfileBanner 
             name={userInfo.username} 
-            tag={Honorific(userInfo.num_reviewed)} 
+
+            tag={honorificData.tag}
+            
+            tagClass={honorificData.className}
+
             photo={userInfo.pfp_url ? userInfo.pfp_url : Tobi}
             onPhotoUpload={handlePfpUpload}
         >                </ProfileBanner>

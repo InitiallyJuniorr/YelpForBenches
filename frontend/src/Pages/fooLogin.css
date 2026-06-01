@@ -178,6 +178,7 @@ input::placeholder {
 {
     border-radius: 25px;
     background: #3D77BF;
+    
     display: flex;
     width: 100px;
     height: 20px;
@@ -192,13 +193,14 @@ input::placeholder {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    border: none;
 }
 .back
 {
     display: flex;
     width: 70px;
-    height: 37px;
-    padding: 11px 47px 11px 48px;
+    height: 30px;
+    
     justify-content: center;
     align-items: center;
     gap: 10px;

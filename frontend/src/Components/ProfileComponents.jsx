@@ -49,12 +49,8 @@ export function BenchMarks()
     )
 }
 
-function profilePhoto()
-{
 
-}
-
-export default function ProfileBanner ({name="Null", tag="Null", photo, onPhotoUpload})
+export default function ProfileBanner ({name="Null", tag="Null", tagClass="", photo, onPhotoUpload})
 {
     return(
         <>
@@ -71,7 +67,7 @@ export default function ProfileBanner ({name="Null", tag="Null", photo, onPhotoU
             </div>
             <div className="ProfileContent" style={{paddingLeft: '29px'}}>
                 <h1>{name}</h1>
-                <p1>{tag}</p1>
+                <p className={`profile-tag ${tagClass}`}>{tag}</p>
                 <button className='ProfileButton'><s1>Edit</s1></button>
                 <button className='ProfileButton'><s1>Share</s1></button>
                 <button className='ProfileButton'><s1>LogOut</s1></button>

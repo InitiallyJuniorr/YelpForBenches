@@ -271,6 +271,35 @@ navbar .title{
         line-height: normal;
     }
 }
+.honorific1{ 
+    color: #808080;
+    font-family: "Kumbh Sans", sans-serif;
+}
+.honorific2 {
+    color: #4caf50; 
+    font-family: "Kumbh Sans", sans-serif;
+} 
+.honorific3 {
+    color: #2196f3;
+    font-family: "Kumbh Sans", sans-serif;
+}
+.honorific4 {
+    color: #9c27b0; 
+    font-family: "Kumbh Sans", sans-serif;
+} 
+.honorific5 {
+    color: #ff9800; 
+    font-family: "Kumbh Sans", sans-serif;
+}
+.honorific6 {
+    color: #e91e63; 
+    font-family: "Kumbh Sans", sans-serif;
+}
+.honorific7 {
+    color: #f44336; 
+    font-family: "Kumbh Sans", sans-serif;
+} 
+
 .review{
     display: flex;
     align-items:center;
