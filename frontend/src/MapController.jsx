@@ -218,6 +218,7 @@ export default function MapController() {
     const imageURL = draft.imageURL; 
     const rating = Number(draft.rating) || 0;
     const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
+
     const draftReview = {
       id: `review-${Date.now()}`,
       author: 'You',
@@ -227,6 +228,7 @@ export default function MapController() {
       preview: draft.review,
     };
 
+    // create new bench object with temporary id and data from the draft, which will be replaced with the actual bench data returned from the backend (including the real id) after the POST request
     const newBench = {
       id: temporaryBenchId,
       name: draft.name,

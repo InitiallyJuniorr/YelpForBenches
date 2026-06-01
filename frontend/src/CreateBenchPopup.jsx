@@ -14,8 +14,6 @@ export default function CreateBenchPopup({
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedFileNames, setSelectedFileNames] = useState([]);
 
-
-
   useEffect(() => {
     if (!open) {
       setSelectedFileNames([]);

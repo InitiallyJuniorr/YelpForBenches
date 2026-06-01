@@ -22,8 +22,8 @@ function StarRow({ rating = 0, large = false }) {
   );
 }
 
-function getReviewText(review) {
-  return review.review || review.preview || '';
+function getReviewText(review) { 
+  return review.review || '';
 }
 
 function getAverageRating(reviews) {
@@ -37,15 +37,17 @@ function getAverageRating(reviews) {
   return totalRating / reviews.length;
 }
 
-function ReviewCard({ review, expanded, onToggleExpanded }) {
+// Component for showing the details of a bench, including its reviews. 
+function ReviewCard({ review, expanded, onToggleExpanded }) { 
   const author = review.author || 'Anonymous';
   const fullText = getReviewText(review);
   const needsExpansion =
-    fullText.length > REVIEW_PREVIEW_CHARS || review.preview !== fullText;
+    fullText.length > REVIEW_PREVIEW_CHARS || review.preview !== fullText; // Show "Read full review" if the review text is longer than the preview
+
   const reviewText =
     expanded || !needsExpansion
       ? fullText
-      : `${fullText.slice(0, REVIEW_PREVIEW_CHARS).trim()}...`;
+      : `${fullText.slice(0, REVIEW_PREVIEW_CHARS).trim()}...`; // Show the preview text if not expanded and the full text is longer than the preview
 
   return (
     <div className="bench-review-card">
@@ -87,7 +89,7 @@ function ReviewCard({ review, expanded, onToggleExpanded }) {
         {reviewText}
       </div>
 
-      {needsExpansion && (
+      {needsExpansion && ( 
         <button
           type="button"
           className="bench-read-review"
@@ -167,9 +169,10 @@ export default function BenchDetailsPopup({
     };
   }, [open, bench?.id, bench?.reviews]);
 
+  // 
   const reviewAverageRating = useMemo(() => getAverageRating(reviews), [reviews]);
-  const averageRating = reviewAverageRating || Number(bench?.avgRating) || 0;
-  const reviewCount = reviews.length || Number(bench?.reviewCount) || 0;
+  const averageRating = reviewAverageRating || 0;
+  const reviewCount = reviews.length || 0;
 
   if (!open || !bench) return null;
 
@@ -179,7 +182,8 @@ export default function BenchDetailsPopup({
 
   const hasMoreReviews = reviews.length > RECENT_REVIEW_COUNT;
 
-  const toggleExpandedReview = (reviewId) => {
+  // to be passed to component ReviewCard to determine whether to show "Read full review" link
+  const toggleExpandedReview = (reviewId) => { 
     setExpandedReviewIds((prevIds) =>
       prevIds.includes(reviewId)
         ? prevIds.filter((id) => id !== reviewId)
