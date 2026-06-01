@@ -1,4 +1,3 @@
-// MapView.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MapContainer,
@@ -13,7 +12,6 @@ import "leaflet/dist/leaflet.css";
 import ResultsPanel from "./ResultsPanel";
 import "./MapView.css";
 
-const API_KEY = import.meta.env.VITE_MAPTILER_KEY;
 const DEFAULT_CENTER = [34.0689, -118.4452]; // Westwood / UCLA-ish
 const DEFAULT_ZOOM = 16;
 const NEARBY_BENCH_RADIUS_MILES = 5;
@@ -37,7 +35,6 @@ const highlightedMarkerIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
 });
-
 
 function FlyToSelectedBench({ selectedBench }) {
   const map = useMap();
@@ -73,6 +70,7 @@ function MapCenterTracker({ onCenterChange }) {
   return null;
 }
 
+// This function exists for when user adds a new bench and needs to confirm the dropped pin location by dragging a marker.
 function DraggablePendingMarker({ position, onChange }) {
   const markerRef = useRef(null);
 
@@ -102,6 +100,7 @@ function DraggablePendingMarker({ position, onChange }) {
   );
 }
 
+// Calulcates bn
 function getDistanceInMiles(first, second) {
   const earthRadiusMiles = 3958.8;
   const latDistance = ((second.lat - first.lat) * Math.PI) / 180;
@@ -127,20 +126,21 @@ export default function MapView({
   confirmLocationMode = false,
   onMarkerClick,
   onAddBench,
+  onBenchesChange,
   onPendingMarkerMove,
   onConfirmBenchLocation,
   onCancelAddBench,
 }) {
   const [query, setQuery] = useState("");
-  //const [searchMode, setSearchMode] = useState("location");
-  const [results, setResults] = useState([]);
-  //const [selectedPlace, setSelectedPlace] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState({
     lat: DEFAULT_CENTER[0],
     lng: DEFAULT_CENTER[1],
   });
 
+  // TODO_BACKEND: This is currently frontend-only bench filtering against the
+  // benches prop from MapController. Replace with a backend bench search/read
+  // endpoint when the backend returns searchable benches with review summaries.
   const nearbyBenchResults = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -166,59 +166,25 @@ export default function MapView({
   }, [benches, mapCenter, query]);
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    // TODO_BACKEND: Call a bench-only endpoint here, for example:
+    // GET /bench-search?q=<query>&lat=<mapCenter.lat>&lng=<mapCenter.lng>
+    // The current UI already filters mock/frontend bench data as the user types.
+      try {
+      setLoading(true);
 
-    setLoading(true);
+      const params = new URLSearchParams({
+        q: query,              // what user typed
+        lat: mapCenter.lat,
+        lng: mapCenter.lng
+      });
 
-    try {
-      const organicUrl = `https://nominatim.openstreetmap.org/search?q=/${encodeURIComponent( // To find coords of requested location
-        query
-      )}&format=json&limit=1&addressdetails=1`
+      const res = await fetch(`http://localhost:8080/bench-search?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch benches');
 
-      const organicResponse = await fetch(organicUrl, {
-        headers: {
-          'User-Agent': 'YelpForBenches (fakeemail@gmail.com)'
-        }
-      })
-
-      const organicData = await organicResponse.json()
-
-      if (!organicData.length) throw new Error('No results found')
-
-      const organicFeature = organicData[0]
-
-      const organicFormattedResults = {
-        id: organicFeature.place_id,
-        name: organicFeature.display_name,
-        lon: parseFloat(organicFeature.lon),
-        lat: parseFloat(organicFeature.lat)
-      }
-
-      const benchUrl = `http://localhost:8080/bench-lookup?lat=${organicFormattedResults.lat}&lon=${organicFormattedResults.lon}`
-      const benchResponse = await fetch(benchUrl)
-      const benchData = await benchResponse.json()
-      console.log(benchData)
-
-      const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(
-        query
-      )}.json?key=${API_KEY}&limit=10&proximity=-118.4448,34.0696`
-
-      const response = await fetch(url)
-      const data = await response.json()
-
-      console.log(data)
-
-      const formattedResults = benchData.map((feature) => ({
-        id: feature.id,
-        name: feature.name,
-        address: feature.address,
-        lon: feature.lon,
-        lat: feature.lat,
-      }));
-
-      setResults(formattedResults);
-    } catch (error) {
-      console.error("Search failed:", error);
+      const data = await res.json();
+      onBenchesChange?.(data);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -226,7 +192,6 @@ export default function MapView({
 
   const clearSearch = () => {
     setQuery("");
-    setResults([]);
   };
 
   const handleAddBench = () => {
@@ -279,7 +244,6 @@ export default function MapView({
         {!confirmLocationMode && (
           <>
             <FlyToSelectedBench selectedBench={selectedBench} />
-            {/* <FlyToSelectedPlace selectedPlace={selectedPlace} /> */}
 
             <Marker position={DEFAULT_CENTER} icon={defaultMarkerIcon}>
               <Popup>UCLA</Popup>

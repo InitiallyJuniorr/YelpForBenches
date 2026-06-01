@@ -17,37 +17,60 @@ const EMPTY_BENCH_DRAFT = {
   lng: null,
 };
 
+// TODO_BACKEND: Replace this frontend seed data with GET /bench plus review data
+// from the backend once the bench/review read endpoints return the full shape.
+const MOCK_BENCHES = [
+  {
+    id: 'bench-1',
+    name: 'Sage Hill Bench',
+    address: '330 De Neve Drive, Los Angeles, CA, 90024',
+    lat: 34.0702,
+    lng: -118.4501,
+    avgRating: 4.0,
+    imageUrl: exampleBench,
+    reviews: [
+      {
+        id: 'review-1',
+        author: 'Tobias Durschmid',
+        badge: 'Ultimate Bench-Sitter',
+        rating: 4.0,
+        avatarUrl: toby,
+        preview:
+          'My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair?',
+      },
+    ],
+  },
+];
+
 const formatDroppedPinAddress = (location) => {
   if (!location) return '';
 
   return `Dropped pin: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
 };
 
-export default function MapController() {
-  const initialBenches = [
-    {
-      id: 'bench-1',
-      name: 'Sage Hill Bench',
-      address: '330 De Neve Drive, Los Angeles, CA, 90024',
-      lat: 34.0702,
-      lng: -118.4501,
-      avgRating: 4.0,
-      imageUrl: exampleBench,
-      reviews: [
-        {
-          id: 'review-1',
-          author: 'Tobias Durschmid',
-          badge: 'Ultimate Bench-Sitter',
-          rating: 4.0,
-          avatarUrl: toby,
-          preview:
-            'My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair?',
-        },
-      ],
-    },
-  ];
+const getAverageRating = (reviews) => {
+  if (!reviews.length) return 0;
 
-  const [benches, setBenches] = useState(initialBenches);
+  const totalRating = reviews.reduce(
+    (sum, review) => sum + Number(review.rating || 0),
+    0
+  );
+
+  return totalRating / reviews.length;
+};
+
+const addReviewToBench = (bench, review) => {
+  const reviews = [review, ...(bench.reviews || [])];
+
+  return {
+    ...bench,
+    reviews,
+    avgRating: getAverageRating(reviews),
+  };
+};
+
+export default function MapController() {
+  const [benches, setBenches] = useState(MOCK_BENCHES);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
   const [isCreateBenchOpen, setIsCreateBenchOpen] = useState(false);
@@ -56,6 +79,8 @@ export default function MapController() {
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
 
+  // TODO_BACKEND: Once backend loading is wired, this selection should use the
+  // backend bench id consistently instead of mixing mock ids and database ids.
   const handleMarkerClick = (benchId) => {
     setSelectedBenchId(benchId);
     const foundBench = benches.find((bench) => bench.id === benchId) || null;
@@ -117,6 +142,8 @@ export default function MapController() {
   const handleSubmitReview = ({ rating, preview }) => {
     if (!selectedBench) return;
 
+    // TODO_BACKEND: Replace this optimistic frontend-only review with a POST
+    // to /add-review using the logged-in user's id/email from auth state.
     const newReview = {
       id: `review-${Date.now()}`,
       author: 'You',
@@ -126,37 +153,15 @@ export default function MapController() {
       preview,
     };
 
-    // TODO: POST newReview to the backend once review creation endpoints are ready.
     setBenches((prevBenches) =>
-      prevBenches.map((bench) => {
-        if (bench.id !== selectedBench.id) return bench;
-
-        const reviews = [newReview, ...(bench.reviews || [])];
-        const totalRating = reviews.reduce(
-          (sum, review) => sum + Number(review.rating || 0),
-          0
-        );
-
-        return {
-          ...bench,
-          reviews,
-          avgRating: totalRating / reviews.length,
-        };
-      })
+      prevBenches.map((bench) =>
+        bench.id === selectedBench.id ? addReviewToBench(bench, newReview) : bench
+      )
     );
 
     setSelectedBench((prevBench) => {
-      const reviews = [newReview, ...(prevBench.reviews || [])];
-      const totalRating = reviews.reduce(
-        (sum, review) => sum + Number(review.rating || 0),
-        0
-      );
-
-      return {
-        ...prevBench,
-        reviews,
-        avgRating: totalRating / reviews.length,
-      };
+      if (!prevBench) return prevBench;
+      return addReviewToBench(prevBench, newReview);
     });
 
     setIsWriteReviewOpen(false);
@@ -169,24 +174,28 @@ export default function MapController() {
     }
 
     const rating = Number(draft.rating) || 0;
+    const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
+    const draftReview = {
+      id: `review-${Date.now()}`,
+      author: 'You',
+      badge: 'Bench Scout',
+      rating,
+      avatarUrl: toby,
+      preview: draft.review,
+    };
+
+    // TODO_BACKEND: imageUrl, avgRating, and reviews are frontend placeholders.
+    // Backend bench rows currently store name/address/coordinates separately
+    // from reviews and photos.
     const newBench = {
-      id: crypto.randomUUID?.() || `bench-${Date.now()}`, // NOT USED BY BACKEND
+      id: temporaryBenchId,
       name: draft.name,
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
       lng: draft.lng,
       imageUrl: draft.imageUrl || exampleBench,
-      avgRating: rating,  // NOT USED BY BACKEND
-      reviews: [    // NOT USED BY BACKEND
-        {
-          id: `review-${Date.now()}`,
-          author: 'You',
-          badge: 'Bench Scout',
-          rating,
-          avatarUrl: toby,
-          preview: draft.review,
-        },
-      ],
+      avgRating: rating,
+      reviews: [draftReview],
     };
 
     let lastBenchId = 0    // Tracks the ID generated by mysql for the new bench
@@ -204,6 +213,7 @@ export default function MapController() {
       console.log(lastBenchId)
     } catch (error) {}
 
+    // TODO_BACKEND: Replace user@gmail.com with the authenticated user's id.
     const newReview = {
       benchId: lastBenchId,
       userId: "user@gmail.com",
@@ -221,9 +231,14 @@ export default function MapController() {
       })
     } catch (error) {}
 
-    setBenches((prev) => [...prev, newBench]);
+    const savedBench = {
+      ...newBench,
+      id: lastBenchId,
+    };
+
+    setBenches((prev) => [...prev, savedBench]);
     setSelectedBenchId(lastBenchId);
-    setSelectedBench(newBench);
+    setSelectedBench(savedBench);
     setIsCreateBenchOpen(false);
     setPendingBenchLocation(null);
     setBenchDraft(EMPTY_BENCH_DRAFT);
@@ -231,7 +246,6 @@ export default function MapController() {
 
   return (
     <>
-    
       <MapView
         benches={benches}
         selectedBenchId={selectedBenchId}
@@ -240,11 +254,12 @@ export default function MapController() {
         pendingMarkerPosition={pendingBenchLocation}
         confirmLocationMode={isConfirmLocationOpen}
         onAddBench={handleStartAddBench}
+        onBenchesChange={setBenches}
         onPendingMarkerMove={setPendingBenchLocation}
         onConfirmBenchLocation={handleConfirmBenchLocation}
         onCancelAddBench={handleCancelAddBench}
       />
-      
+
       <CreateBenchPopup
         open={isCreateBenchOpen}
         draft={benchDraft}
