@@ -11,6 +11,7 @@ function StarRating({ rating = 0 }) {
           className={`bench-card-star ${star <= roundedRating ? 'filled' : ''}`}
           key={star}
         >
+          ★
         </span>
       ))}
     </div>
