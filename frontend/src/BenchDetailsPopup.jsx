@@ -45,7 +45,7 @@ export default function BenchDetailsPopup({
         <div className="bench-modal-header">
           <img
             className="bench-main-image"
-            src={bench.imageUrl}
+            src={bench.imageURL}
             alt={bench.name}
           />
 

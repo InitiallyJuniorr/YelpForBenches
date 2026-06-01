@@ -31,7 +31,7 @@ function LocationCard({ title, address, onClick, isSelected }) {
 }
 
 function BenchCard({ bench, onClick, isSelected }) {
-  const hasImage = Boolean(bench.imageUrl);
+  const hasImage = Boolean(bench.imageURL);
   const coordinateText = `${bench.lat.toFixed(5)}, ${bench.lng.toFixed(5)}`;
 
   return (
@@ -56,7 +56,7 @@ function BenchCard({ bench, onClick, isSelected }) {
         {hasImage ? (
           <img
             className="bench-card-image"
-            src={bench.imageUrl}
+            src={bench.imageURL}
             alt={bench.name}
           />
         ) : (

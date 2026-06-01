@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
@@ -12,7 +12,7 @@ const EMPTY_BENCH_DRAFT = {
   address: '',
   review: '',
   rating: 0,
-  imageUrl: '',
+  imageURL: '',
   lat: null,
   lng: null,
 };
@@ -27,7 +27,7 @@ const MOCK_BENCHES = [
     lat: 34.0702,
     lng: -118.4501,
     avgRating: 4.0,
-    imageUrl: exampleBench,
+    imageURL: exampleBench,
     reviews: [
       {
         id: 'review-1',
@@ -70,7 +70,7 @@ const addReviewToBench = (bench, review) => {
 };
 
 export default function MapController() {
-  const [benches, setBenches] = useState(MOCK_BENCHES);
+  const [benches, setBenches] = useState([]);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
   const [isCreateBenchOpen, setIsCreateBenchOpen] = useState(false);
@@ -78,6 +78,35 @@ export default function MapController() {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
+
+  useEffect(() => {
+    const fetchBenches = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/bench');
+
+        if (!response.ok) {
+          throw new Error(`Error fetching benches: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const formatted = data.map((bench) => ({
+          id: bench.id,
+          name: bench.name,
+          address: bench.address,
+          imageURL: bench.image_url,
+          lat: bench.coordinates.y,
+          lng: bench.coordinates.x,
+        }));
+
+        setBenches(formatted);
+      } catch (error) {
+        console.error('Error fetching benches:', error);
+      }
+    };
+
+    fetchBenches();
+  }, []);
 
   // TODO_BACKEND: Once backend loading is wired, this selection should use the
   // backend bench id consistently instead of mixing mock ids and database ids.
@@ -173,7 +202,7 @@ export default function MapController() {
       return;
     }
 
-    const imageURL = draft.imageUrls?.[0] || exampleBench; 
+    const imageURL = draft.imageURL; 
     const rating = Number(draft.rating) || 0;
     const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
     const draftReview = {
@@ -185,7 +214,7 @@ export default function MapController() {
       preview: draft.review,
     };
 
-    // TODO_BACKEND: imageUrl, avgRating, and reviews are frontend placeholders.
+    // TODO_BACKEND: imageURL, avgRating, and reviews are frontend placeholders.
     // Backend bench rows currently store name/address/coordinates separately
     // from reviews and photos.
     const newBench = {
@@ -194,7 +223,7 @@ export default function MapController() {
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
       lng: draft.lng,
-      imageURL: draft.imageURL || exampleBench,
+      imageURL: draft.imageURL,
       avgRating: rating,
       reviews: [draftReview],
     };

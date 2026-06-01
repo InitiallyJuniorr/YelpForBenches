@@ -98,20 +98,26 @@ app.get('/bench-search', async (req, res) => {
         id,
         name,
         address,
-        ST_X(coordinates) AS lng,
-        ST_Y(coordinates) AS lat,
+        image_url AS imageURL,
+        ST_X(coordinates) AS lat,
+        ST_Y(coordinates) AS lng,
         ST_Distance_Sphere(
           coordinates,
           ST_SRID(POINT(?, ?), 4326)
         ) AS distance_meters
       FROM benches
-      WHERE
-        (? = '' OR
-          name LIKE CONCAT('%', ?, '%') OR
-          address LIKE CONCAT('%', ?, '%'))
+      WHERE ST_Distance_Sphere(
+        coordinates,
+        ST_SRID(POINT(?, ?), 4326)
+      ) <= 5000
+      AND (
+        ? = '' OR
+        name LIKE CONCAT('%', ?, '%') OR
+        address LIKE CONCAT('%', ?, '%')
+      )
       ORDER BY distance_meters ASC
       LIMIT 50
-    `, [lng, lat, q, q, q]);
+    `, [lng, lat, lng, lat, q, q, q]);
 
     res.json(rows);
   } catch (err) {
