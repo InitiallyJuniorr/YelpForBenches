@@ -82,6 +82,44 @@ app.get('/bench', async (req, res) => {
     res.send(result[0]);
 })
 
+// Elise put this here to test a search for benches
+app.get('/bench-search', async (req, res) => {
+  const q = (req.query.q || '').trim();
+  const lat = Number(req.query.lat);
+  const lng = Number(req.query.lng);
+
+  if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    return res.status(400).json({ error: 'lat and lng are required' });
+  }
+
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+        id,
+        name,
+        address,
+        ST_X(coordinates) AS lng,
+        ST_Y(coordinates) AS lat,
+        ST_Distance_Sphere(
+          coordinates,
+          ST_SRID(POINT(?, ?), 4326)
+        ) AS distance_meters
+      FROM benches
+      WHERE
+        (? = '' OR
+          name LIKE CONCAT('%', ?, '%') OR
+          address LIKE CONCAT('%', ?, '%'))
+      ORDER BY distance_meters ASC
+      LIMIT 50
+    `, [lng, lat, q, q, q]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error('bench-search error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/bench-lookup', async (req, res) => {
     const lat = Number(req.query.lat);
     const lon = Number(req.query.lon);

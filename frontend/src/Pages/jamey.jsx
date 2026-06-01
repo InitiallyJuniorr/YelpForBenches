@@ -184,7 +184,7 @@ export default function Jamey() {
                     <input className='input'type="text" placeholder="Email" onChange={handleEChange} />
                     {/* needs styling */}
                     { emailError && !(isLogin) && (submitted) && <p className="error">Please enter a valid email address.</p>}
-                    <div style={{padding: "10px"}}/>
+                    <div style={{padding: "10px"}}/>    
                     <p1>Password</p1>
                     <br/>
                     <input className='input' type="password" placeholder="Password" onChange={handlePChange} />
