@@ -12,7 +12,7 @@ const EMPTY_BENCH_DRAFT = {
   address: '',
   review: '',
   rating: 0,
-  imageUrl: '',
+  imageURL: '',
   lat: null,
   lng: null,
 };
@@ -27,7 +27,7 @@ const MOCK_BENCHES = [
     lat: 34.0702,
     lng: -118.4501,
     avgRating: 4.0,
-    imageUrl: exampleBench,
+    imageURL: exampleBench,
     reviews: [
       {
         id: 'review-1',
@@ -173,7 +173,7 @@ export default function MapController() {
       return;
     }
 
-    const imageURL = draft.imageUrls?.[0] || exampleBench; 
+    const imageURL = draft.imageURL; 
     const rating = Number(draft.rating) || 0;
     const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
     const draftReview = {
@@ -185,7 +185,7 @@ export default function MapController() {
       preview: draft.review,
     };
 
-    // TODO_BACKEND: imageUrl, avgRating, and reviews are frontend placeholders.
+    // TODO_BACKEND: imageURL, avgRating, and reviews are frontend placeholders.
     // Backend bench rows currently store name/address/coordinates separately
     // from reviews and photos.
     const newBench = {
@@ -194,7 +194,7 @@ export default function MapController() {
       address: draft.address || formatDroppedPinAddress(draft),
       lat: draft.lat,
       lng: draft.lng,
-      imageUrl: draft.imageUrl || exampleBench,
+      imageURL: draft.imageURL,
       avgRating: rating,
       reviews: [draftReview],
     };
