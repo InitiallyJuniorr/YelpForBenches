@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import './BenchDetailsPopup.css';
+import './BenchDetailsPopup.css'; import './ResultsPanel.css';
 import noBenchImage from './assets/nobenchimage.png';
 
 const RECENT_REVIEW_COUNT = 2;
