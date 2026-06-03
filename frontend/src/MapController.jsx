@@ -38,7 +38,7 @@ const getAverageRating = (reviews) => {
 };
 
 const addReviewToBench = (bench, review) => {
-  const reviews = [review, ...(bench.reviews || [])];
+  const reviews = [review, ...(bench.reviews || [])]; // used ... to make a new array that starts with review, so to avoid changing original bench.reviews
 
   return {
     ...bench,
@@ -111,6 +111,12 @@ export default function MapController() {
     }
   }, []);
 
+  // On initial load, fetch benches from the backend. Also refetch whenever a new bench is added or the benches are reset.
+  useEffect(() => {
+    fetchBenches();
+  }, [fetchBenches]);
+
+  // If the user is logged in (i.e. we have a valid JWT with an email), fetch their user info from the backend to get their profile picture URL and other info for displaying in reviews and the profile page
  useEffect(() => {
       if (!email) return;
           const fetchUser = async () => {
