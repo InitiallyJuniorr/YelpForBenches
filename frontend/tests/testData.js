@@ -11,3 +11,4 @@ export async function login(page) {
     await page.getByRole('button', { name: 'Submit' }).click();
     await page.waitForURL(/app/);
 }
+
