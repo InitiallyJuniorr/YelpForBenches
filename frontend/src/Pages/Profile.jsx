@@ -115,11 +115,13 @@ export function Profile({isLoggedIn = true})
             {showMore ? 'Show Less' : 'Show More'}
         </button>
         </div>
+{/* SIDE BAR PANEL */}
 
         <div className="ProfileBenchMarks">
             <h1>My BenchMarks</h1>
         </div>
-        
+
+{/* END of SIDE BAR PANEL */}
         <div style={{paddingBottom: '500px'}}/>
     </div>
     <div style={{paddingBottom: '50px'}}/>

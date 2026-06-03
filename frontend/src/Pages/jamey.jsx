@@ -199,7 +199,7 @@ export default function Jamey() {
                     { showForgot && (
                     <div style={{justifyContent: 'flex-center', alignItems: 'center', display: 'flex'}}>
                         {/* add className */}
-                        <input className="forgot" type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)} />
+                        <input className="forgot" type="text" placeholder="Enter your email" onChange={e => setForgotEmail(e.target.value)}/>
                         <br/>
                         <button className="forgotbutton" onClick={handleForgot}>send</button>
                     
