@@ -79,6 +79,7 @@ export default function MapController() {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
   const token = localStorage.getItem('token');
   const email = token ? jwtDecode(token).email : null;
 
@@ -110,6 +111,16 @@ export default function MapController() {
 
     fetchBenches();
   }, []);
+
+ useEffect(() => {
+      if (!email) return;
+          const fetchUser = async () => {
+          const res = await fetch(`http://localhost:8080/user?email=${email}`);
+          const data = await res.json();
+          setUserInfo(data);
+      };
+      fetchUser();
+  }, [email]);  
 
   // TODO_BACKEND: Once backend loading is wired, this selection should use the
   // backend bench id consistently instead of mixing mock ids and database ids.
@@ -171,22 +182,32 @@ export default function MapController() {
     setIsWriteReviewOpen(false);
   };
 
-  const handleSubmitReview = ({ rating, preview }) => {
+  const handleSubmitReview = async ({ rating, preview }) => {
     if (!selectedBench) return;
-
     // TODO_BACKEND: Replace this optimistic frontend-only review with a POST
     // to /add-review using the logged-in user's id/email from auth state.
+
+    try {
+      await fetch('http://localhost:8080/add-review', {
+          method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            benchId: selectedBench.id,
+            userId: email,
+            stars: rating,
+            review: preview
+            })
+        });
+    } catch (error) {}
     const newReview = {
       id: `review-${Date.now()}`,
       benchId: selectedBenchId,
-      userId: 'user@gmail.com',    // Replace user@gmail.com with actual user
+      userId: userInfo.email,    // Replace user@gmail.com with actual user
       author: 'You',
       badge: 'Bench Scout',
       stars: rating,
-      rating,
-      avatarUrl: toby,
+      avatarUrl: userInfo.pfp_url,
       review: preview,
-      preview
     };
 
     try {

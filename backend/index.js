@@ -164,10 +164,6 @@ app.post('/add-bench', async (req, res) => {    // Adds bench to database, retur
 
 app.post('/add-review', async (req, res) => {    // Adds review to database, returns nothing
     const { benchId, userId, stars, review } = req.body
-    console.log(typeof benchId)
-    console.log(typeof userId)
-    console.log(typeof stars)
-    console.log(typeof review)
 
     try {
         await pool.query(
