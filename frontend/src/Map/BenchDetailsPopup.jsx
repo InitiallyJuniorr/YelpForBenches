@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import './BenchDetailsPopup.css'; import './ResultsPanel.css';
-import noBenchImage from './assets/nobenchimage.png';
+import noBenchImage from '../assets/nobenchimage.png';
 
 const RECENT_REVIEW_COUNT = 2;
 const REVIEW_PREVIEW_CHARS = 180;

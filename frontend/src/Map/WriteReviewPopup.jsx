@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import noBenchImage from '../assets/nobenchimage.png';
 import './WriteReviewPopup.css';
 
 const MAX_WORDS = 240;
@@ -92,7 +93,7 @@ export default function WriteReviewPopup({
         <div className="write-review-header">
           <img
             className="write-review-image"
-            src={bench.imageURL || bench.imageUrl}
+            src={bench.imageURL || noBenchImage}
             alt={bench.name}
           />
 
