@@ -59,8 +59,16 @@ export default function Jamey() {
         setUserError(!(re.test(String(username))));
     }
 
+    const isValidRegister = !emailError && !pwError && !isLogin && !userError
+    const isValidLogin = !emailError && isLogin
+
     const handleSubmit = async () => {
-        if (!(emailError) && !(pwError) && !(isLogin) && !(userError)){
+        if (email === '') return
+        const handleLoginSuccess = (token) => {
+            localStorage.setItem('token', token);
+            navigate('/app');
+        };
+        if (isValidRegister){
             try {
                 const res = await fetch("http://localhost:8080/register", {
                     method: "POST",
@@ -69,27 +77,30 @@ export default function Jamey() {
                 })
                 const data = await res.json()
                 if (data.success) {
-                    localStorage.setItem('token', data.token)
-                    navigate('/app')
+                    handleLoginSuccess(data.token)
                 }
             } catch (err) {
                 console.error(err)
             }
         }
-        else if (!(emailError) && isLogin) {
-            const res = await fetch("http://localhost:8080/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            })
-            const data = await res.json()
-            if (res.ok) {
-                localStorage.setItem('token', data.token)
-                navigate('/app')
-            } else {
-                setLoginError(data.error) 
+        else if (isValidLogin) {
+            try {
+                const res = await fetch("http://localhost:8080/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    handleLoginSuccess(data.token)
+                } else {
+                    setLoginError(data.error) 
+                }
+            } catch (err) {
+                console.error(err)
             }
         }
+        // Always flags to set ReGex errors
         setSubmitted(true);
     }
 
