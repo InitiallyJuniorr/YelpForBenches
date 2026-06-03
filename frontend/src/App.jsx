@@ -6,9 +6,8 @@ import './App.css'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import ResultsPanel from './ResultsPanel'
 import { NavBar } from './Components/Navbar.jsx'
-import MapController from './MapController.jsx'
+import MapController from './Map/MapController.jsx'
 import ResetPassword from './ResetPassword.jsx'
 
 

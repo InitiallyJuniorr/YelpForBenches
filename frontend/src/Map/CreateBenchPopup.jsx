@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import './CreateBenchPopup.css';
 import Ratings from './Ratings';
-import { uploadToCloudinary } from './utils/cloudinary.js';
+import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 export default function CreateBenchPopup({
   open,

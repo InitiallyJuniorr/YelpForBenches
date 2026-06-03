@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
-import LoginPrompt from './LoginPrompt.jsx';
+import LoginPrompt from '../LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
 import WriteReviewPopup from './WriteReviewPopup';
 
-import exampleBench from './assets/exampleBench.png';
-import toby from './assets/toby.png';
+import exampleBench from '../assets/exampleBench.png';
+import toby from '../assets/toby.png';
 
 const EMPTY_BENCH_DRAFT = { // Template for a new bench being added before it's saved to the backend
   name: '',
