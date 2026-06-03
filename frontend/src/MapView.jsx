@@ -36,6 +36,7 @@ const highlightedMarkerIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
+// When a bench is selected from the results panel, fly to it on the map and open its popup
 function FlyToSelectedBench({ selectedBench }) {
   const map = useMap();
 
@@ -50,6 +51,7 @@ function FlyToSelectedBench({ selectedBench }) {
   return null;
 }
 
+// Tracks the map center and reports changes to the parent component so that we can do things like search for nearby benches
 function MapCenterTracker({ onCenterChange }) {
   const map = useMapEvents({
     moveend() {
@@ -70,7 +72,7 @@ function MapCenterTracker({ onCenterChange }) {
   return null;
 }
 
-// This function exists for when user adds a new bench and needs to confirm the dropped pin location by dragging a marker.
+// Allows user to confirm the dropped pin location by dragging a marker for add new bench flow
 function DraggablePendingMarker({ position, onChange }) {
   const markerRef = useRef(null);
 
@@ -100,8 +102,8 @@ function DraggablePendingMarker({ position, onChange }) {
   );
 }
 
-// Calulcates bn
-function getDistanceInMiles(first, second) {
+// Utility function to calculate distance in miles between two lat/lng points using the Haversine formula
+function getDistanceInMiles(first, second) { 
   const earthRadiusMiles = 3958.8;
   const latDistance = ((second.lat - first.lat) * Math.PI) / 180;
   const lngDistance = ((second.lng - first.lng) * Math.PI) / 180;
@@ -127,6 +129,7 @@ export default function MapView({
   onMarkerClick,
   onAddBench,
   onBenchesChange,
+  onResetBenches,
   onPendingMarkerMove,
   onConfirmBenchLocation,
   onCancelAddBench,
@@ -138,9 +141,7 @@ export default function MapView({
     lng: DEFAULT_CENTER[1],
   });
 
-  // TODO_BACKEND: This is currently frontend-only bench filtering against the
-  // benches prop from MapController. Replace with a backend bench search/read
-  // endpoint when the backend returns searchable benches with review summaries.
+  // Filter benches to those within a certain radius of the map center and that match the search query, and sort by distance
   const nearbyBenchResults = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -165,15 +166,14 @@ export default function MapView({
       .sort((first, second) => first.distanceMiles - second.distanceMiles);
   }, [benches, mapCenter, query]);
 
+  // When the user performs a search, call the backend with the query and map center to get nearby benches matching the query
   const handleSearch = async () => {
-    // TODO_BACKEND: Call a bench-only endpoint here, for example:
-    // GET /bench-search?q=<query>&lat=<mapCenter.lat>&lng=<mapCenter.lng>
-    // The current UI already filters mock/frontend bench data as the user types.
+    
       try {
       setLoading(true);
 
       const params = new URLSearchParams({
-        q: query,              // what user typed
+        q: query,              
         lat: mapCenter.lat,
         lng: mapCenter.lng
       });
@@ -190,10 +190,22 @@ export default function MapView({
     }
   };
 
-  const clearSearch = () => {
+  const clearSearch = async () => {
     setQuery("");
+
+    if (!onResetBenches) return;
+
+    try {
+      setLoading(true);
+      await onResetBenches();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // when new bench first added, it is placed in the center of map and allows dragging to adjust location before confirming
   const handleAddBench = () => {
     onAddBench?.(mapCenter);
   };
@@ -202,6 +214,7 @@ export default function MapView({
     onMarkerClick?.(bench.id);
   };
 
+  // to be passed to component ResultsPanel
   const panelResults = nearbyBenchResults;
 
   return (
@@ -213,7 +226,7 @@ export default function MapView({
         zIndex: 0,
       }}
     >
-      {!confirmLocationMode && (
+      {!confirmLocationMode && ( // conditional so that panel doesn't show in "confirm new bench location" mode
         <ResultsPanel
           query={query}
           setQuery={setQuery}

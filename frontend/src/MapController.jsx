@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
@@ -8,7 +8,7 @@ import WriteReviewPopup from './WriteReviewPopup';
 import exampleBench from './assets/exampleBench.png';
 import toby from './assets/toby.png';
 
-const EMPTY_BENCH_DRAFT = {
+const EMPTY_BENCH_DRAFT = { // Template for a new bench being added before it's saved to the backend
   name: '',
   address: '',
   review: '',
@@ -17,31 +17,6 @@ const EMPTY_BENCH_DRAFT = {
   lat: null,
   lng: null,
 };
-
-// TODO_BACKEND: Replace this frontend seed data with GET /bench plus review data
-// from the backend once the bench/review read endpoints return the full shape.
-const MOCK_BENCHES = [
-  {
-    id: 'bench-1',
-    name: 'Sage Hill Bench',
-    address: '330 De Neve Drive, Los Angeles, CA, 90024',
-    lat: 34.0702,
-    lng: -118.4501,
-    avgRating: 4.0,
-    imageURL: exampleBench,
-    reviews: [
-      {
-        id: 'review-1',
-        author: 'Tobias Durschmid',
-        badge: 'Ultimate Bench-Sitter',
-        rating: 4.0,
-        avatarUrl: toby,
-        preview:
-          'My golly, what a cool bench! Right next to a suburban house, I never felt so safe. Had to take one star off unfortunately because the HOA kicked me out! Now, how is that fair?',
-      },
-    ],
-  },
-];
 
 const formatDroppedPinAddress = (location) => {
   if (!location) return '';
@@ -70,6 +45,22 @@ const addReviewToBench = (bench, review) => {
   };
 };
 
+// Transforms the bench data from the backend into the format expected by the frontend, and also merges in rating data from the /bench-ratings
+const formatBenchFromBackend = (bench, ratingByBenchId = new Map()) => {
+  const rating = ratingByBenchId.get(Number(bench.id));
+
+  return {
+    id: bench.id,
+    name: bench.name,
+    address: bench.address,
+    imageURL: bench.imageURL || bench.image_url,
+    lat: bench.lat ?? bench.coordinates?.y,
+    lng: bench.lng ?? bench.coordinates?.x,
+    avgRating: Number(bench.avgRating ?? rating?.avgRating) || 0,
+    reviewCount: Number(bench.reviewCount ?? rating?.reviewCount) || 0,
+  };
+};
+
 export default function MapController() {
   const [benches, setBenches] = useState([]);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
@@ -83,35 +74,39 @@ export default function MapController() {
   const token = localStorage.getItem('token');
   const email = token ? jwtDecode(token).email : null;
 
-  useEffect(() => {
-    const fetchBenches = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/bench');
+  const fetchBenches = useCallback(async () => {
+    try {
+      const benchesResponse = await fetch('http://localhost:8080/bench');
 
-        if (!response.ok) {
-          throw new Error(`Error fetching benches: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        const formatted = data.map((bench) => ({
-          id: bench.id,
-          name: bench.name,
-          address: bench.address,
-          imageURL: bench.image_url,
-          lat: bench.coordinates.y,
-          lng: bench.coordinates.x,
-        }));
-
-        setBenches(formatted);
-      } catch (error) {
-        console.error('Error fetching benches:', error);
+      if (!benchesResponse.ok) {
+        throw new Error(`Error fetching benches: ${benchesResponse.status}`);
       }
-    };
 
-    fetchBenches();
+      const benchData = await benchesResponse.json();
+      let ratingByBenchId = new Map();
+
+      try {
+        const ratingsResponse = await fetch('http://localhost:8080/bench-ratings');
+
+        if (ratingsResponse.ok) {
+          const ratingData = await ratingsResponse.json();
+          ratingByBenchId = new Map(
+            ratingData.map((rating) => [Number(rating.benchId), rating])
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching bench ratings:', error);
+      }
+
+      setBenches(
+        benchData.map((bench) => formatBenchFromBackend(bench, ratingByBenchId))
+      );
+    } catch (error) {
+      console.error('Error fetching benches:', error);
+    }
   }, []);
 
+<<<<<<< HEAD
  useEffect(() => {
       if (!email) return;
           const fetchUser = async () => {
@@ -124,6 +119,13 @@ export default function MapController() {
 
   // TODO_BACKEND: Once backend loading is wired, this selection should use the
   // backend bench id consistently instead of mixing mock ids and database ids.
+=======
+  useEffect(() => { // On initial load, fetch all benches from the backend
+    fetchBenches();
+  }, [fetchBenches]);
+
+
+>>>>>>> 3e84dc56b25591381eebd338bc369e56e502e512
   const handleMarkerClick = (benchId) => {
     setSelectedBenchId(benchId);
     const foundBench = benches.find((bench) => bench.id === benchId) || null;
@@ -139,7 +141,7 @@ export default function MapController() {
     setSelectedBench(null);
     setSelectedBenchId(null);
     setPendingBenchLocation(location);
-    setBenchDraft({
+    setBenchDraft({ // Start with empty draft but pre-fill lat/lng/address based on where the user center of map is
       ...EMPTY_BENCH_DRAFT,
       lat: location.lat,
       lng: location.lng,
@@ -148,7 +150,7 @@ export default function MapController() {
     setIsConfirmLocationOpen(true);
   };
 
-  const handleConfirmBenchLocation = () => {
+  const handleConfirmBenchLocation = () => { // user confirms location of new bench after dragging the marker to adjust location, which opens the CreateBenchPopup, passing the lat/lng properties
     if (!pendingBenchLocation) return;
 
     setBenchDraft((prev) => ({
@@ -182,6 +184,7 @@ export default function MapController() {
     setIsWriteReviewOpen(false);
   };
 
+<<<<<<< HEAD
   const handleSubmitReview = async ({ rating, preview }) => {
     if (!selectedBench) return;
     // TODO_BACKEND: Replace this optimistic frontend-only review with a POST
@@ -199,12 +202,18 @@ export default function MapController() {
             })
         });
     } catch (error) {}
+=======
+  // When a new review is submitted, add the new review to the bench in the frontend and then post the new review to the backend
+  const handleSubmitReview = ({ rating, preview }) => {
+    if (!selectedBench) return;
+
+>>>>>>> 3e84dc56b25591381eebd338bc369e56e502e512
     const newReview = {
       id: `review-${Date.now()}`,
       benchId: selectedBenchId,
       userId: userInfo.email,    // Replace user@gmail.com with actual user
       author: 'You',
-      badge: 'Bench Scout',
+      badge: 'Complacent Sitter',
       stars: rating,
       avatarUrl: userInfo.pfp_url,
       review: preview,
@@ -234,7 +243,7 @@ export default function MapController() {
     setIsWriteReviewOpen(false);
   };
 
-  const handleCreateBenchSubmit = async (draft) => {
+  const handleCreateBenchSubmit = async (draft) => { // sends POST request to backend to create new bench (and also adds new review to it), then adds the new bench to the map and opens the details popup for the new bench
     if (draft.lat == null || draft.lng == null) {
       alert('Choose a bench location first.');
       return;
@@ -243,6 +252,7 @@ export default function MapController() {
     const imageURL = draft.imageURL; 
     const rating = Number(draft.rating) || 0;
     const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
+
     const draftReview = {
       id: `review-${Date.now()}`,
       author: 'You',
@@ -252,9 +262,7 @@ export default function MapController() {
       preview: draft.review,
     };
 
-    // TODO_BACKEND: imageURL, avgRating, and reviews are frontend placeholders.
-    // Backend bench rows currently store name/address/coordinates separately
-    // from reviews and photos.
+    // create new bench object with temporary id and data from the draft, which will be replaced with the actual bench data returned from the backend (including the real id) after the POST request
     const newBench = {
       id: temporaryBenchId,
       name: draft.name,
@@ -268,7 +276,8 @@ export default function MapController() {
 
     let lastBenchId = 0    // Tracks the ID generated by mysql for the new bench
 
-    try {
+    // post new bench to backend
+    try { 
       const response = await fetch('http://localhost:8080/add-bench', {
         method: 'POST',
         headers: {
@@ -281,7 +290,7 @@ export default function MapController() {
       console.log(lastBenchId)
     } catch (error) {}
 
-    // TODO_BACKEND: Replace user@gmail.com with the authenticated user's id.
+
     const newReview = {
       benchId: lastBenchId,
       userId: email,
@@ -289,7 +298,8 @@ export default function MapController() {
       review: draft.review
     }
 
-    try {
+    // post new review to backend, associated with the newly posted bench
+    try { 
       fetch('http://localhost:8080/add-review', {
         method: 'POST',
         headers: {
@@ -323,6 +333,7 @@ export default function MapController() {
         confirmLocationMode={isConfirmLocationOpen}
         onAddBench={handleStartAddBench}
         onBenchesChange={setBenches}
+        onResetBenches={fetchBenches}
         onPendingMarkerMove={setPendingBenchLocation}
         onConfirmBenchLocation={handleConfirmBenchLocation}
         onCancelAddBench={handleCancelAddBench}

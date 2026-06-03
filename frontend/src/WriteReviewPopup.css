@@ -78,8 +78,6 @@
   display: flex;
   align-items: center;
   gap: 0;
-  direction: ltr;
-  flex-direction: row-reverse;
 }
 
 .write-review-stars button {
@@ -94,9 +92,7 @@
   cursor: pointer;
 }
 
-.write-review-stars button.active,
-.write-review-stars button:hover,
-.write-review-stars button:hover ~ button {
+.write-review-stars button.active {
   color: #231f20;
 }
 
