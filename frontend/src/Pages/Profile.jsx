@@ -114,7 +114,7 @@ export function Profile({isLoggedIn = true})
                 img={review.image_url}
             />
         ))}
-        <button onClick={() => setShowMore(!showMore)}>
+        <button className=""onClick={() => setShowMore(!showMore)}>
             {showMore ? 'Show Less' : 'Show More'}
         </button>
         </div>

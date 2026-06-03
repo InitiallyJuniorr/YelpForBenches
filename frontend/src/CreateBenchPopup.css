@@ -14,6 +14,7 @@
 
 .modal-card {
   position: relative;
+  display: flexgrid;
   width: min(1042px, 96vw);
   min-height: 595px;
   padding: 36px 40px 33px;
