@@ -61,47 +61,46 @@ export default function Jamey() {
 
     const isValidRegister = !emailError && !pwError && !isLogin && !userError
     const isValidLogin = !emailError && isLogin
-
+    const invalidSubmission = !isValidRegister && !isValidLogin || email === ''
+ 
     const handleSubmit = async () => {
-        if (email === '') return
+        if (invalidSubmission) { 
+            setSubmitted(true);
+            return
+        }
+
+        const endpoint = isLogin ? '/login' : '/register';
+        const payload = isLogin ? { email, password } : { email, password, username };
+
         const handleLoginSuccess = (token) => {
             localStorage.setItem('token', token);
             navigate('/app');
         };
-        if (isValidRegister){
-            try {
-                const res = await fetch("http://localhost:8080/register", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password, username })
-                })
-                const data = await res.json()
-                if (data.success) {
-                    handleLoginSuccess(data.token)
-                }
-            } catch (err) {
-                console.error(err)
+
+        try {
+            const res = await fetch(`http://localhost:8080${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            const data = await res.json()
+
+            if (!res.ok) {
+                setLoginError(data.error || "Invalid email or password");
+                return; 
             }
-        }
-        else if (isValidLogin) {
-            try {
-                const res = await fetch("http://localhost:8080/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password })
-                })
-                const data = await res.json()
-                if (res.ok) {
-                    handleLoginSuccess(data.token)
-                } else {
-                    setLoginError(data.error) 
-                }
-            } catch (err) {
-                console.error(err)
+
+            // Handle Login Success
+            localStorage.setItem('token', token);
+            navigate('/app');    
             }
+        catch (err) {
+            console.error(err)
         }
         // Always flags to set ReGex errors
-        setSubmitted(true);
+        finally {
+          setSubmitted(true);  
+        }
     }
 
     const handleForgot = async () => {
