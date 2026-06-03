@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom';
+import LoginPrompt from './LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
@@ -36,7 +38,7 @@ const getAverageRating = (reviews) => {
 };
 
 const addReviewToBench = (bench, review) => {
-  const reviews = [review, ...(bench.reviews || [])];
+  const reviews = [review, ...(bench.reviews || [])]; // used ... to make a new array that starts with review, so to avoid changing original bench.reviews
 
   return {
     ...bench,
@@ -62,6 +64,7 @@ const formatBenchFromBackend = (bench, ratingByBenchId = new Map()) => {
 };
 
 export default function MapController() {
+  const navigate = useNavigate();
   const [benches, setBenches] = useState([]);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
@@ -70,6 +73,9 @@ export default function MapController() {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
   const token = localStorage.getItem('token');
   const email = token ? jwtDecode(token).email : null;
 
@@ -105,11 +111,24 @@ export default function MapController() {
     }
   }, []);
 
-  useEffect(() => { // On initial load, fetch all benches from the backend
+  // On initial load, fetch benches from the backend. Also refetch whenever a new bench is added or the benches are reset.
+  useEffect(() => {
     fetchBenches();
   }, [fetchBenches]);
 
+  // If the user is logged in (i.e. we have a valid JWT with an email), fetch their user info from the backend to get their profile picture URL and other info for displaying in reviews and the profile page
+ useEffect(() => {
+      if (!email) return;
+          const fetchUser = async () => {
+          const res = await fetch(`http://localhost:8080/user?email=${email}`);
+          const data = await res.json();
+          setUserInfo(data);
+      };
+      fetchUser();
+  }, [email]);  
 
+  // TODO_BACKEND: Once backend loading is wired, this selection should use the
+  // backend bench id consistently instead of mixing mock ids and database ids.
   const handleMarkerClick = (benchId) => {
     setSelectedBenchId(benchId);
     const foundBench = benches.find((bench) => bench.id === benchId) || null;
@@ -161,28 +180,37 @@ export default function MapController() {
   };
 
   const handleOpenWriteReview = () => {
-    setIsWriteReviewOpen(true);
+      if (!email) { setShowLoginPrompt(true); return; }
+      setIsWriteReviewOpen(true);
   };
 
   const handleCloseWriteReview = () => {
     setIsWriteReviewOpen(false);
   };
 
-  // When a new review is submitted, add the new review to the bench in the frontend and then post the new review to the backend
-  const handleSubmitReview = ({ rating, preview }) => {
+  const handleSubmitReview = async ({ rating, preview }) => {
     if (!selectedBench) return;
-
+    try { 
+      await fetch('http://localhost:8080/add-review', {
+          method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            benchId: selectedBench.id,
+            userId: email,
+            stars: rating,
+            review: preview
+            })
+        });
+    } catch (error) {}
     const newReview = {
       id: `review-${Date.now()}`,
       benchId: selectedBenchId,
-      userId: 'user@gmail.com',    // Replace user@gmail.com with actual user
+      userId: userInfo.email,   
       author: 'You',
       badge: 'Complacent Sitter',
       stars: rating,
-      rating,
-      avatarUrl: toby,
+      avatarUrl: userInfo.pfp_url,
       review: preview,
-      preview
     };
 
     try {
@@ -289,6 +317,7 @@ export default function MapController() {
   };
 
   return (
+    
     <>
       <MapView
         benches={benches}
@@ -326,6 +355,7 @@ export default function MapController() {
         onClose={handleCloseWriteReview}
         onSubmit={handleSubmitReview}
       />
+      <LoginPrompt open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)} />
     </>
   );
 }

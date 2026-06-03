@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 // non default export functions NEED curly braces
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
+import { useNavigate } from 'react-router-dom';
 import { BenchMarks } from '../Components/ProfileComponents.jsx';
 import { Honorific } from './Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
@@ -13,37 +14,36 @@ import Login from '../Login.jsx'
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 import { jwtDecode } from 'jwt-decode'
+import LoginPrompt from '../LoginPrompt.jsx';
 import { Navigate } from 'react-router-dom'
 import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 
 export function Profile({isLoggedIn = true})
 {
-
+    const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(null);
     const [userReviews, setUserReviews] = useState([]);
     const [showMore, setShowMore] = useState(false);
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
 
-    useEffect(() => {
-        if (!email) return;
-            const fetchUser = async () => {
-            const res = await fetch(`http://localhost:8080/user?email=${email}`);
-            const data = await res.json();
-            setUserInfo(data);
-        };
-        fetchUser();
-    }, [email]);
-
-  useEffect(() => {
-        if (!email) return;
-            const fetchReviews = async () => {
-            const res = await fetch(`http://localhost:8080/reviews?user_id=${email}`);
-            const data = await res.json();
-            setUserReviews(data);
-        };
-        fetchReviews();
+   useEffect(() => {
+    if (!email) return;
+    
+    const fetchData = async () => {
+        const [userRes, reviewsRes] = await Promise.all([
+            fetch(`http://localhost:8080/user?email=${email}`),
+            fetch(`http://localhost:8080/reviews?user_id=${email}`)
+        ]);
+        
+        const userData = await userRes.json();
+        const reviewsData = await reviewsRes.json();
+        setUserInfo(userData);
+        setUserReviews(Array.isArray(reviewsData) ? reviewsData : []);
+    };
+    
+    fetchData();
     }, [email]);
 
     const someReviews = userReviews
@@ -52,8 +52,11 @@ export function Profile({isLoggedIn = true})
 
     const visibleReviews = showMore ? userReviews : someReviews;
 
-    if (!token) return <Navigate to="/" />;
+    if (!token) return <LoginPrompt open={true} onClose={() => navigate('/home')} />;
+    if (!token) console.log("help")
+
     if (!userInfo) return <div>Loading...</div>;
+
 
     const handlePfpUpload = async (e) => {
         const file = e.target.files[0];

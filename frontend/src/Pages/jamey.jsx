@@ -59,38 +59,48 @@ export default function Jamey() {
         setUserError(!(re.test(String(username))));
     }
 
+    const isValidRegister = !emailError && !pwError && !isLogin && !userError
+    const isValidLogin = !emailError && isLogin
+    const invalidSubmission = !isValidRegister && !isValidLogin || email === ''
+ 
     const handleSubmit = async () => {
-        if (!(emailError) && !(pwError) && !(isLogin) && !(userError)){
-            try {
-                const res = await fetch("http://localhost:8080/register", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password, username })
-                })
-                const data = await res.json()
-                if (data.success) {
-                    localStorage.setItem('token', data.token)
-                    navigate('/app')
-                }
-            } catch (err) {
-                console.error(err)
-            }
+        if (invalidSubmission) { 
+            setSubmitted(true);
+            return
         }
-        else if (!(emailError) && isLogin) {
-            const res = await fetch("http://localhost:8080/login", {
+
+        const endpoint = isLogin ? '/login' : '/register';
+        const payload = isLogin ? { email, password } : { email, password, username };
+
+        const handleLoginSuccess = (token) => {
+            localStorage.setItem('token', token);
+            navigate('/app');
+        };
+
+        try {
+            const res = await fetch(`http://localhost:8080${endpoint}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify(payload)
             })
             const data = await res.json()
-            if (res.ok) {
-                localStorage.setItem('token', data.token)
-                navigate('/app')
-            } else {
-                setLoginError(data.error) 
+
+            if (!res.ok) {
+                setLoginError(data.error || "Invalid email or password");
+                return; 
             }
+
+            // Handle Login Success
+            localStorage.setItem('token', token);
+            navigate('/app');    
+            }
+        catch (err) {
+            console.error(err)
         }
-        setSubmitted(true);
+        // Always flags to set ReGex errors
+        finally {
+          setSubmitted(true);  
+        }
     }
 
     const handleForgot = async () => {
@@ -153,7 +163,10 @@ export default function Jamey() {
                     <div style={{padding: "10px"}}/>
                     <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
                     <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
-                    <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
+                    <p className="guest" onClick={() => {
+                        localStorage.removeItem('token');
+                        navigate('/home');
+                    }}>Sign in Later</p>
 
 
                     </div>
