@@ -106,7 +106,6 @@ export default function MapController() {
     }
   }, []);
 
-<<<<<<< HEAD
  useEffect(() => {
       if (!email) return;
           const fetchUser = async () => {
@@ -119,13 +118,6 @@ export default function MapController() {
 
   // TODO_BACKEND: Once backend loading is wired, this selection should use the
   // backend bench id consistently instead of mixing mock ids and database ids.
-=======
-  useEffect(() => { // On initial load, fetch all benches from the backend
-    fetchBenches();
-  }, [fetchBenches]);
-
-
->>>>>>> 3e84dc56b25591381eebd338bc369e56e502e512
   const handleMarkerClick = (benchId) => {
     setSelectedBenchId(benchId);
     const foundBench = benches.find((bench) => bench.id === benchId) || null;
@@ -184,12 +176,8 @@ export default function MapController() {
     setIsWriteReviewOpen(false);
   };
 
-<<<<<<< HEAD
   const handleSubmitReview = async ({ rating, preview }) => {
     if (!selectedBench) return;
-    // TODO_BACKEND: Replace this optimistic frontend-only review with a POST
-    // to /add-review using the logged-in user's id/email from auth state.
-
     try {
       await fetch('http://localhost:8080/add-review', {
           method: 'POST',
@@ -202,16 +190,10 @@ export default function MapController() {
             })
         });
     } catch (error) {}
-=======
-  // When a new review is submitted, add the new review to the bench in the frontend and then post the new review to the backend
-  const handleSubmitReview = ({ rating, preview }) => {
-    if (!selectedBench) return;
-
->>>>>>> 3e84dc56b25591381eebd338bc369e56e502e512
     const newReview = {
       id: `review-${Date.now()}`,
       benchId: selectedBenchId,
-      userId: userInfo.email,    // Replace user@gmail.com with actual user
+      userId: userInfo.email,   
       author: 'You',
       badge: 'Complacent Sitter',
       stars: rating,
