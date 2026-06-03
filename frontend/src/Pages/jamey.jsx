@@ -153,7 +153,10 @@ export default function Jamey() {
                     <div style={{padding: "10px"}}/>
                     <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
                     <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
-                    <p className="guest" onClick={() => navigate('/home')}>Sign in Later</p>
+                    <p className="guest" onClick={() => {
+                        localStorage.removeItem('token');
+                        navigate('/home');
+                    }}>Sign in Later</p>
 
 
                     </div>

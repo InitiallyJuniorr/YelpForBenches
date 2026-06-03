@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom';
+import LoginPrompt from './LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
@@ -62,6 +64,7 @@ const formatBenchFromBackend = (bench, ratingByBenchId = new Map()) => {
 };
 
 export default function MapController() {
+  const navigate = useNavigate();
   const [benches, setBenches] = useState([]);
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
@@ -71,6 +74,8 @@ export default function MapController() {
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
   const token = localStorage.getItem('token');
   const email = token ? jwtDecode(token).email : null;
 
@@ -169,7 +174,8 @@ export default function MapController() {
   };
 
   const handleOpenWriteReview = () => {
-    setIsWriteReviewOpen(true);
+      if (!email) { setShowLoginPrompt(true); return; }
+      setIsWriteReviewOpen(true);
   };
 
   const handleCloseWriteReview = () => {
@@ -178,7 +184,7 @@ export default function MapController() {
 
   const handleSubmitReview = async ({ rating, preview }) => {
     if (!selectedBench) return;
-    try {
+    try { 
       await fetch('http://localhost:8080/add-review', {
           method: 'POST',
            headers: { 'Content-Type': 'application/json' },
@@ -305,6 +311,7 @@ export default function MapController() {
   };
 
   return (
+    
     <>
       <MapView
         benches={benches}
@@ -342,6 +349,7 @@ export default function MapController() {
         onClose={handleCloseWriteReview}
         onSubmit={handleSubmitReview}
       />
+      <LoginPrompt open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)} />
     </>
   );
 }
