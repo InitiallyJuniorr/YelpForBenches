@@ -72,10 +72,10 @@ export default function Jamey() {
         const endpoint = isLogin ? '/login' : '/register';
         const payload = isLogin ? { email, password } : { email, password, username };
 
-        const handleLoginSuccess = (token) => {
-            localStorage.setItem('token', token);
-            navigate('/app');
-        };
+        // const handleLoginSuccess = (token) => {
+        //     localStorage.setItem('token', token);
+        //     navigate('/app');
+        // };
 
         try {
             const res = await fetch(`http://localhost:8080${endpoint}`, {
@@ -90,8 +90,9 @@ export default function Jamey() {
                 return; 
             }
 
+
             // Handle Login Success
-            localStorage.setItem('token', token);
+            localStorage.setItem('token', data.token);
             navigate('/app');    
             }
         catch (err) {
