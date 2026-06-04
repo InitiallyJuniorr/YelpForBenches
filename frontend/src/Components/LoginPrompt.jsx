@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
+
+// Prompts user to login given they have opted to 'sign in later' and are attempting to use a feature which requires an account
 export default function LoginPrompt({ open, onClose }) {
     const navigate = useNavigate();
     

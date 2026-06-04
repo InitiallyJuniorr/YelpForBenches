@@ -1,3 +1,4 @@
+// A function which exports an image to cloudinary so that it can be saved as a URL in the database
 export async function uploadToCloudinary(file) {
     const formData = new FormData();
     formData.append('file', file);

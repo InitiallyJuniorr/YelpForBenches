@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
-import LoginPrompt from '../LoginPrompt.jsx';
+import LoginPrompt from '../Components/LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';

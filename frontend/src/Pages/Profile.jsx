@@ -14,7 +14,7 @@ import Login from '../Login.jsx'
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 import { jwtDecode } from 'jwt-decode'
-import LoginPrompt from '../LoginPrompt.jsx';
+import LoginPrompt from '../Components/LoginPrompt.jsx';
 import { Navigate } from 'react-router-dom'
 import { uploadToCloudinary } from '../utils/cloudinary.js';
 
@@ -28,33 +28,36 @@ export function Profile({isLoggedIn = true})
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
 
-   useEffect(() => {
-    if (!email) return;
+    // Function to retrieve user info based off of their email
+    useEffect(() => {
+        if (!email) return;
     
-    const fetchData = async () => {
-        const [userRes, reviewsRes] = await Promise.all([
-            fetch(`http://localhost:8080/user?email=${email}`),
-            fetch(`http://localhost:8080/reviews?user_id=${email}`)
-        ]);
-        
-        const userData = await userRes.json();
-        const reviewsData = await reviewsRes.json();
-        setUserInfo(userData);
-        setUserReviews(Array.isArray(reviewsData) ? reviewsData : []);
+        const fetchData = async () => {
+            const [userRes, reviewsRes] = await Promise.all([
+                fetch(`http://localhost:8080/user?email=${email}`),
+                fetch(`http://localhost:8080/reviews?user_id=${email}`)
+            ]);
+            
+            const userData = await userRes.json();
+            const reviewsData = await reviewsRes.json();
+            setUserInfo(userData);
+            setUserReviews(Array.isArray(reviewsData) ? reviewsData : []);
     };
     
     fetchData();
     }, [email]);
 
+    // someReviews is a subset of userReviews, which houses the default amount of recent reviews to be shown to the user
     const someReviews = userReviews
     .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
     .slice(0,8)
 
     const visibleReviews = showMore ? userReviews : someReviews;
 
+    // Handles users opening the profile screen when they select 'sign in later'
     if (!token) return <LoginPrompt open={true} onClose={() => navigate('/home')} />;
-    if (!token) console.log("help")
 
+    // Will display 'Loading...' when the data has not yet been t
     if (!userInfo) return <div>Loading...</div>;
 
 
@@ -75,12 +78,7 @@ export function Profile({isLoggedIn = true})
         setUserInfo(prev => ({ ...prev, pfp_url: url }));
     }
 
-
-    // const honorificData = Honorific(6);
-    // const honorificData = Honorific(16);
-    // const honorificData = Honorific(51);
-    // const honorificData = Honorific(101);
-    // const honorificData = Honorific(251);
+    // Displays a title based off of the number of benches the user has reviewed
     const honorificData = Honorific(userInfo.num_reviewed);
     return(
     <>
