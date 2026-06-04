@@ -46,7 +46,7 @@ export default function CreateBenchPopup({
 
   return (
     <>
-    
+
     <div className="modal-overlay" onClick={onClose}>
     
       <div

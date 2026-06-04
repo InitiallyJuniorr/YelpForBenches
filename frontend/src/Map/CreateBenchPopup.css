@@ -6,30 +6,31 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: center;   /* Keeps it centered horizontally */
+  justify-content: center;  
   
-  /* UPDATED: Aligns card to the top, then pushes it down by 110px */
+  
   align-items: flex-start;   
   padding-top: 120px;        
-  
+  padding-bottom: 30px;
+  overflow-y: auto;
   z-index: 1000;
   box-sizing: border-box;
 }
 
 .modal-card {
   position: relative;
-  /* Increased width: now scales up to 1100px on desktop, takes 94% of screen on mobile */
+  
   width: min(1100px, 94vw); 
-  padding: 35px 40px;        /* Slightly more breathing room for a wider layout */
+  padding: 35px 40px;      
   background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(5px); /* Optional: makes the transparent glass effect look cleaner */
+  backdrop-filter: blur(5px);
   border: 2px solid #5a2522;
   border-radius: 25px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Kumbh Sans', sans-serif;
   box-sizing: border-box;
   
-  /* Prevent modal from cutting off on short screens */
+  
   max-height: 90vh;
   overflow-y: auto;
 }
