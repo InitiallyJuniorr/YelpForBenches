@@ -12,13 +12,20 @@
 
 .bench-modal-card {
   position: relative;
-  width: min(825px, 94vw);
-  padding: 28px 30px 30px;
+  /* Increased width: now scales up to 1100px on desktop, takes 94% of screen on mobile */
+  width: min(1100px, 94vw); 
+  padding: 35px 40px;        /* Slightly more breathing room for a wider layout */
   background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px); /* Optional: makes the transparent glass effect look cleaner */
   border: 2px solid #5a2522;
   border-radius: 25px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Kumbh Sans', sans-serif;
+  box-sizing: border-box;
+  
+  /* Prevent modal from cutting off on short screens */
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .bench-modal-close {
