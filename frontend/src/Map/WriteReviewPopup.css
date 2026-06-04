@@ -1,14 +1,13 @@
 .write-review-overlay {
   position: fixed;
   inset: 0;
-  z-index: 3400;
+  z-index: 3200;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(2px);
-  margin-top: 130px;
 }
 
 .write-review-card {
