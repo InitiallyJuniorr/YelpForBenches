@@ -74,7 +74,9 @@ export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
   };
 
   return (
+    
     <div className="write-review-overlay" onClick={onClose}>
+     
       <form
         className="write-review-card"
         onClick={(event) => event.stopPropagation()}
@@ -103,7 +105,7 @@ export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
             <ReviewStars value={rating} onChange={setRating} />
           </div>
         </div>
-
+        
         <div className="write-review-input-wrap">
           <textarea
             className="write-review-input"
@@ -116,7 +118,7 @@ export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
             {wordCount}/{MAX_WORDS} Words
           </div>
         </div>
-
+        
         <button
           type="submit"
           className="write-review-submit"

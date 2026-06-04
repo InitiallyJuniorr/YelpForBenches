@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import React from 'react';
 import './components.css';
+import edit from '../assets/editblack.svg'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
@@ -58,7 +59,8 @@ export default function ProfileBanner ({name="Null", tag="Null", tagClass="",pho
 
     return(
         <>
-        <div className="ProfileBanner"> 
+        <div className="ProfileBanner" style={{ display: 'flex', alignItems: 'center' }}> 
+            <div style={{ position: 'relative', height: '150px', width: '150px' }}>
             <div onClick={() => document.getElementById('pfp-upload').click()} style={{cursor: 'pointer'}}>
                 <img src={photo} alt="" style={{height: '150px', width: '150px', borderRadius: '200px'}}/>
                 <input 
@@ -69,13 +71,28 @@ export default function ProfileBanner ({name="Null", tag="Null", tagClass="",pho
                     onChange={onPhotoUpload}
                 />
             </div>
-            <div className="ProfileContent" style={{paddingLeft: '29px'}}>
+            <img 
+            src={edit} 
+            alt="edit pen icon" 
+            onClick={() => document.getElementById('pfp-upload').click()} // Makes clicking the pen open the upload too
+            style={{ 
+                position: 'absolute', 
+                bottom: '5px', 
+                right: '5px', 
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                padding: '5px',
+                width: '24px', 
+                height: '24px', 
+                cursor: 'pointer',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.2)'
+            }} 
+        />
+            </div>
+            <div className="ProfileContent" style={{paddingLeft: '35px'}}>
                 <h1>{name}</h1>
-                <p1>{tag}</p1>
                 <p className={`profile-tag ${tagClass}`}>{tag}</p>
-                <button className='ProfileButton'><s1>Edit</s1></button>
-                <button className='ProfileButton'><s1>Share</s1></button>
-                <button className='ProfileButton' onClick={handleLogout}><s1>LogOut</s1></button>
+                <button className='ProfileButton' onClick={handleLogout}><span>Log Out</span></button>
             </div> 
         </div>
         </>

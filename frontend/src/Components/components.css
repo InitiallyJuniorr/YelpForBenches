@@ -162,6 +162,10 @@ navbar .title{
     height: 39px;
     border-radius: 35px;
     background: #3D77BF;
+    color: #FFF;
+    font-family: "Kumbh Sans",sans-serif;
+    font-weight: 300px;
+    border: none;
 
     s1{
         color: #FFF;
@@ -273,7 +277,7 @@ navbar .title{
 }
 .honorific1{ 
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -287,7 +291,7 @@ navbar .title{
 }
 .honorific2 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -301,7 +305,7 @@ navbar .title{
 } 
 .honorific3 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -315,7 +319,7 @@ navbar .title{
 }
 .honorific4 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -329,7 +333,7 @@ navbar .title{
 } 
 .honorific5 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -343,7 +347,7 @@ navbar .title{
 }
 .honorific6 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -357,7 +361,7 @@ navbar .title{
 }
 .honorific7 {
     width: 200px;
-    height: 500px;
+    height: 30px;
     padding: 10px;
     display: inline-flex;
     align-items: center;
@@ -394,9 +398,11 @@ navbar .title{
     height: 200px;
     display: flex;
     flex-direction: column;
-    align-items: left;
-    justify-content:left;
+    align-items: flex-start;
+    justify-content: flex-start;
     text-align: left;
+
+    gap: 0px;
 
     h1{
         color: #5A2522;
@@ -406,6 +412,7 @@ navbar .title{
         font-style: normal;
         font-weight: 700;
         line-height: normal;
+        margin:0;
     }
     h2{
         color: #5A2522;
@@ -415,7 +422,7 @@ navbar .title{
         font-weight: 700;
         line-height: normal;
     }
-    p1{
+    .profile-tag-textp1{
         color: #5A2522;
         text-align: left;
         font-family: "Kumbh Sans" sans-serif;
@@ -424,6 +431,7 @@ navbar .title{
         font-weight: 400;
         line-height: normal;
         justify-content: center;
+        margin: 0px;
     }
     
 }

@@ -55,7 +55,7 @@ export default function CreateBenchPopup({
 
   return (
     <>
-    <div style={{padding: '110px'}}/>
+
     <div className="modal-overlay" onClick={onClose}>
     
       <div

@@ -275,6 +275,7 @@
   .bench-modal-card {
     width: min(94vw, 700px);
     padding: 24px 20px 22px;
+    
   }
 
   .bench-modal-header {
@@ -312,6 +313,7 @@
   .bench-modal-card {
     border-radius: 20px;
     padding: 20px 14px 16px;
+
   }
 
   .bench-modal-close {
