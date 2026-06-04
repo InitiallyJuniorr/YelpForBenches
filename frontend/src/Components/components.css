@@ -162,6 +162,10 @@ navbar .title{
     height: 39px;
     border-radius: 35px;
     background: #3D77BF;
+    color: #FFF;
+    font-family: "Kumbh Sans",sans-serif;
+    font-weight: 300px;
+    border: none;
 
     s1{
         color: #FFF;

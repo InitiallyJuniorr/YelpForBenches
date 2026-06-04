@@ -13,6 +13,7 @@ import Login from '../Login.jsx'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
+import profile from '../assets/profile.svg'
 import { jwtDecode } from 'jwt-decode'
 import LoginPrompt from '../Components/LoginPrompt.jsx';
 import { Navigate } from 'react-router-dom'
@@ -95,9 +96,10 @@ export function Profile({isLoggedIn = true})
             
             tagClass={honorificData.className}
 
-            photo={userInfo.pfp_url ? userInfo.pfp_url : Tobi}
+            photo={userInfo.pfp_url ? userInfo.pfp_url : profile}
             onPhotoUpload={handlePfpUpload}
-        >                </ProfileBanner>
+        />
+   
             <div style={{paddingTop: '30px'}}/>
             <h2>Recent Reviews</h2>
             <div style={{paddingTop: '23px'}}/>
