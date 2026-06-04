@@ -191,10 +191,11 @@ export default function Jamey() {
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
+                   
                     <button className="back" onClick={toggleKKSignIn}>Back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
-                    <p1>In a world of Benches, be sure to find the right one for you.</p1>
+                        <p1>In a world of Benches, be sure to find the right one for you.</p1>
                     </div>
 
                     <div style={{padding: "40px"}}/>
@@ -209,7 +210,7 @@ export default function Jamey() {
                     <input className='input' type="password" placeholder="Password" onChange={handlePChange} />
                     {/* needs styling */}
                     { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> }
-                    <div style={{padding: "10px"}}/>
+                    <div style={{padding: "10px"}}/> 
                     <p1>Username</p1>
                     { !(isLogin) && <input className='input'type="text" placeholder="Username" onChange={handleUChange} /> }
                     { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}
