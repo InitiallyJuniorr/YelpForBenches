@@ -2,17 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../Login.css'
 import './fooLogin.jsx'
+import { validateEmail, validateUsername, validatePassword, PwError_Display } from '../utils/validate.jsx';
 import gang from '../assets/gang.png'
 
 
 export default function Jamey() {
-
     const navigate = useNavigate(); 
-
-
     const [isLogin, setIsLogin] = useState(true);
-
-
     const [emailError,   setEmailError] = useState("");
     const [pwError,   setpwError] = useState("");
     const [userError, setUserError] = useState("");
@@ -26,43 +22,30 @@ export default function Jamey() {
     const [forgotMsg, setForgotMsg] = useState("");
     const [kkSlider, isKKSlider] = useState(true);
     
+    //Functions called when any input is given t
     const handleEChange = (e) => {
         const value = e.target.value;
         setEmail(value);
-        validateEmail(value);
+        setEmailError(validateEmail(value));
     }
 
     const handlePChange = (e) => {
         const value = e.target.value;
         setPassword(value);
-        validatePassword(value);
+        setpwError(validatePassword(value));
     }
 
     const handleUChange = (e) => {
         const value = e.target.value;
         setUsername(value);
-        validateUsername(value);
-    }
-
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setEmailError(!(re.test(String(email).toLowerCase())));
-    }
-
-    const validatePassword = (password) => {
-        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%&?])([\w@$!%&?]){8,}$/;
-        setpwError(!(re.test(String(password))));
-    }
-
-    const validateUsername = (username) => {
-        const re = /^[A-Za-zÀ-ÿ1-9_]{4,16}$/;
-        setUserError(!(re.test(String(username))));
+        setUserError(validateUsername(value));
     }
 
     const isValidRegister = !emailError && !pwError && !isLogin && !userError
     const isValidLogin = !emailError && isLogin
     const invalidSubmission = !isValidRegister && !isValidLogin || email === ''
  
+    // Handles submission of both Login and Register
     const handleSubmit = async () => {
         if (invalidSubmission) { 
             setSubmitted(true);
@@ -72,6 +55,7 @@ export default function Jamey() {
         const endpoint = isLogin ? '/login' : '/register';
         const payload = isLogin ? { email, password } : { email, password, username };
 
+        // Try to POST Login credentials
         try {
             const res = await fetch(`http://localhost:8080${endpoint}`, {
                 method: "POST",
@@ -110,28 +94,6 @@ export default function Jamey() {
         else setForgotMsg(data.error)
     }
 
-
-    function PwError_Display({ password }) {
-        const re_lowercase = /(?=.*[a-z])/;
-        const re_uppercase = /(?=.*[A-Z])/;
-        const re_digit = /(?=.*\d)/;
-        const re_special = /(?=.*[@$!%&?])/;
-        const re_8 = /^.{8,}$/;
-
-    return (
-        <div>
-            { !(re_uppercase.test(String(password))) && <p className="error ">Password must include an uppercase letter.</p> }
-            { !(re_lowercase.test(String(password))) && <p className="error ">Password must include a lowercase letter.</p> }
-            { !(re_digit.test(String(password))) && <p className="error ">Password must include a digit.</p> }
-            { !(re_special.test(String(password))) && <p className="error ">Password must include a special character from '@$!%&?'.</p> }
-            { !(re_8.test(String(password))) && <p className="error ">Password must be at least 8 characters.</p> }
-        </div>
-    )
-    }
-
-
-    
-   
     const toggleKKLogIn = () => {
         isKKSlider(!kkSlider);
         
