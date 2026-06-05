@@ -18,9 +18,9 @@ export default function LoginPrompt({ open, onClose }) {
                 position: 'relative', zIndex: 10000
             }} onClick={e => e.stopPropagation()}>
                 <h2>Hold up!</h2>
-                <p>You need to be logged in to do this.</p>
-                <button onClick={() => navigate('/')}>Log In</button>
-                <button onClick={onClose} style={{marginLeft: '10px'}}>Maybe Later</button>
+                <p style={{fontFamily: 'sans-serif'}}>You need to be logged in to do this.</p>
+                <button onClick={() => navigate('/')} style={{background: '#3D77BF', borderRadius: '35px', border: 'none', color: '#ffff', fontWeight: '700', height: '30px', width: '80px'}}>Log In</button>
+                <button onClick={onClose} style={{marginLeft: '10px', background: '#3D77BF', borderRadius: '35px', border: 'none', color: '#ffff', fontWeight: '700', height: '30px', width: '80px'}}>Maybe Later</button>
             </div>
         </div>
     );
