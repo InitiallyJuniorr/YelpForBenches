@@ -28,17 +28,11 @@ export default function LoginFoo() {
             <button className="button" onClick={() => navigate('/signup')}>Sign Up</button>
             <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
 
-                {/* PLACEHOLDER: delete on final
-                <p1 onClick={() => navigate('/home')}>Enter as Guest</p1> */}
             </div>
-            {/* <button className="button" onClick={SignUpClick}>Login</button> */}
-            
-            {/* <button className="button" onClick={() => setIsSigned(true)}>Sign Up</button> */}
         </div>
         
         </div>
 
-        {/* width: 287px; */}
         </div>
         </>
     )

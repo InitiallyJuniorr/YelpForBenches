@@ -5,10 +5,6 @@ import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Honorific } from '../Components/Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
-
-
-// PLACEHOLDER IMG
-import Tobi from '../assets/tobi.jpg'
 import profile from '../assets/profile.svg'
 import { jwtDecode } from 'jwt-decode'
 import LoginPrompt from '../Components/LoginPrompt.jsx';
@@ -77,10 +73,10 @@ export function Profile({isLoggedIn = true})
 
     // Displays a title based off of the number of benches the user has reviewed
     const honorificData = Honorific(userInfo.num_reviewed);
+    
     return(
     <>
     <NavBar/>
-    {/* must include */}
     <div style={{paddingTop: '161px'}}/>
 
     <div style={{display: 'flex', paddingRight: '50px'}}>

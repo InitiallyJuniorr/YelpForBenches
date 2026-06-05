@@ -1,12 +1,9 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import React from 'react';
 import './components.css';
 import edit from '../assets/editblack.svg'
 
-// PLACEHOLDER IMG
-import Tobi from '../assets/tobi.jpg'
-
+// RecentReviews is a function that describes the user's documentation of their past reviews
 export function RecentReviews({name="Null", address="Null", review="Null", rating="Null", img="Tobi"})
 {
     return(
@@ -38,18 +35,8 @@ export function RecentReviews({name="Null", address="Null", review="Null", ratin
     )
 }
 
-export function BenchMarks()
-{
-    return (
-        <>
-            <div className="ProfileBenchMarks">
-            <h1>My BenchMarks</h1>
-            </div>
-        </>
-
-    )
-}
-
+//Profile banner describes and builds the Profile Header of the profile page
+//Includes user name, tag(Honorific), and profile picture
 export default function ProfileBanner ({name="Null", tag="Null", tagClass="",photo, onPhotoUpload})
 {
     const navigate = useNavigate();
