@@ -7,7 +7,6 @@ const STAR_RATINGS = [1, 2, 3, 4, 5];
 
 function countWords(text) {
   return text.trim().split(/\s+/).filter(Boolean).length; 
-  // Split by whitespace and filter out empty strings to get accurate word count
 }
 
 function ReviewStars({ value, onChange }) {
@@ -44,11 +43,13 @@ export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
   const wordCount = useMemo(() => countWords(reviewText), [reviewText]);
   const canSubmit = rating > 0 && trimmedReviewText.length > 0;
 
+  const resetForm = () => {
+    setRating(0);
+    setReviewText('');
+  }
+
   useEffect(() => {
-    if (!open) {
-      setRating(0);
-      setReviewText('');
-    }
+    if (!open) resetForm();
   }, [open]);
 
   if (!open || !bench) return null;
@@ -68,7 +69,7 @@ export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
 
     onSubmit({
       rating,
-      preview: trimmedReviewText,
+      reviewText: trimmedReviewText,
     });
     onClose();
   };

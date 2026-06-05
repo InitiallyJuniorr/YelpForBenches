@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
-import { useNavigate } from 'react-router-dom';
 import LoginPrompt from '../Components/LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
@@ -21,17 +20,6 @@ const formatDroppedPinAddress = (location) => {
   if (!location) return '';
 
   return `Dropped pin: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
-};
-
-const getAverageRating = (reviews) => {
-  if (!reviews.length) return 0;
-
-  const totalRating = reviews.reduce(
-    (sum, review) => sum + Number(review.rating || 0),
-    0
-  );
-
-  return totalRating / reviews.length;
 };
 
 // Transforms the bench data from the backend into the format expected by the frontend, and also merges in rating data from the /bench-ratings
@@ -155,12 +143,12 @@ export default function MapController() {
       lng: mapCenter.lng,
     };
 
-    // reset any existing bench selection or draft data, and open the confirm location popup with the marker initially placed at the center of the map
+    // reset any existing bench selection or draft data, and open the confirm location with the marker placed at the center of the map
     setSelectedBench(null);
     setSelectedBenchId(null);
     setIsBenchDetailsOpen(false);
     setPendingBenchLocation(location);
-    setBenchDraft({ // Start with empty draft but pre-fill lat/lng/address based on where the user center of map is
+    setBenchDraft({ // empty draft but pre-fill with lat/lng/address
       ...EMPTY_BENCH_DRAFT,
       lat: location.lat,
       lng: location.lng,
@@ -169,7 +157,7 @@ export default function MapController() {
     setIsConfirmLocationOpen(true);
   };
 
-  // user confirms location of new bench after dragging the marker to adjust location, which opens the CreateBenchPopup, passing the lat/lng properties
+  // user confirms location of new bench after dragging the marker to adjust location
   const handleConfirmBenchLocation = () => { 
     if (!pendingBenchLocation) return;
 
@@ -206,7 +194,7 @@ export default function MapController() {
     setIsWriteReviewOpen(false);
   };
 
-  const handleSubmitReview = async ({ rating, preview }) => {
+  const handleSubmitReview = async ({ rating, reviewText }) => {
     if (!selectedBench) return;
     const previousReviewCount = Number(selectedBench.reviewCount) || 0;
 
@@ -218,9 +206,11 @@ export default function MapController() {
             benchId: selectedBench.id,
             userId: email,
             stars: rating,
-            review: preview
+            review: reviewText,
             })
       });
+
+      // fetch updated bench data from backend
       const refreshedBenches = await fetchBenches();
       const updatedBenches = applySubmittedRatingToBenches(
         refreshedBenches,
@@ -241,17 +231,24 @@ export default function MapController() {
       }
 
       setIsWriteReviewOpen(false);
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
   };
 
-  // sends POST request to backend to create new bench (and also adds new review to it), then adds the new bench to the map and opens the details popup for the new bench
+  // sends POST request to backend to create new bench (and also adds new review to it)
   const handleCreateBenchSubmit = async (draft) => { 
+    if (!email) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     if (draft.lat == null || draft.lng == null) {
       alert('Choose a bench location first.');
       return;
     }
 
-    // create new bench object with temporary id and data from the draft, which will be replaced with the actual bench data returned from the backend (including the real id) after the POST request
+    // Keep bench data separate from the required initial review.
     const newBench = {
       name: draft.name,
       address: draft.address || formatDroppedPinAddress(draft),
@@ -303,7 +300,7 @@ export default function MapController() {
       console.error('Error creating initial review:', error);
     }
 
-    // fetch the updated list of benches from the backend to get the new bench with its generated ID and updated rating/review count, then update the benches state and open the details popup for the new bench
+    // fetch the updated list of benches from the backend
     const refreshedBenches = await fetchBenches();
     const updatedBenches = applySubmittedRatingToBenches(
       refreshedBenches,
@@ -314,6 +311,7 @@ export default function MapController() {
     const savedBenchFromBackend = updatedBenches.find(
       (bench) => Number(bench.id) === Number(lastBenchId)
     );
+
     const savedBench =
       savedBenchFromBackend ||
       {
@@ -322,8 +320,10 @@ export default function MapController() {
         avgRating: initialReview.stars,
         reviewCount: 1,
       };
+    const nextBenches = savedBenchFromBackend ? updatedBenches : [...updatedBenches, savedBench];
 
-    setBenches(savedBenchFromBackend ? updatedBenches : [...updatedBenches, savedBench]);
+    // Update state with the new bench and select it + show details
+    setBenches(nextBenches);
     setSelectedBenchId(lastBenchId);
     setSelectedBench(savedBench);
     setIsBenchDetailsOpen(true);
