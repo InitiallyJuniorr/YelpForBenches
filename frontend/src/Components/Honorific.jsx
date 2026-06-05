@@ -1,4 +1,4 @@
-import '../Components/components.css'
+import './components.css'
 
 // A title granted to a user based off of the number of reviews they have
     export function Honorific(num) {

@@ -1,22 +1,17 @@
 import  '../Components/components.css'
-// default exports dont need curly braces
 import ProfileBanner from '../Components/ProfileComponents.jsx';
 import React, { useState, useEffect } from 'react'
-
-// non default export functions NEED curly braces
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { useNavigate } from 'react-router-dom';
-import { BenchMarks } from '../Components/ProfileComponents.jsx';
-import { Honorific } from './Honorific.jsx'
+import { Honorific } from '../Components/Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
-import Login from '../stashedFolder/Login.jsx'
+
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
 import profile from '../assets/profile.svg'
 import { jwtDecode } from 'jwt-decode'
 import LoginPrompt from '../Components/LoginPrompt.jsx';
-import { Navigate } from 'react-router-dom'
 import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 
