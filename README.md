@@ -17,7 +17,4 @@
 ###### -have both the "frontend" folder and "backend" folder running by opening two separate terminal windows and using the "npm run dev" command on frontend and "node index.js" command on backend 
 ###### -Create a valid user profile under the sign up page or press "Sign In Later"
 ###### -Explore our website and features
-###### -Once done with use, quit both terminals by entering ^C command or 'q'
-### QnA:
-###### Q: This thing broke
-###### A: Well that's too bad
+###### -Once done with use, quit both terminals by entering ^C command or 'q.' Do not forget this step.
