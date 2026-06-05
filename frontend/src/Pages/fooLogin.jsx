@@ -8,7 +8,7 @@ import Tobi from '../assets/tobi.jpg'
 import gang from '../assets/gang.png'
 
 
-// JAMEY HERE
+
 import { useNavigate } from 'react-router-dom'
 
 

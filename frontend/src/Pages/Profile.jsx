@@ -28,7 +28,7 @@ export function Profile({isLoggedIn = true})
     const [showMore, setShowMore] = useState(false);
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
-    const milestones = [0, 5, 15, 50, 100, 250, 251];
+    const milestones = [0, 1, 6, 16, 51, 101, 251];
 
     // Function to retrieve user info based off of their email
     useEffect(() => {
@@ -139,6 +139,7 @@ export function Profile({isLoggedIn = true})
                         >
                             <strong>{tag}</strong> 
                             <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
+                                
                                 (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
                             </span>
                         </li>

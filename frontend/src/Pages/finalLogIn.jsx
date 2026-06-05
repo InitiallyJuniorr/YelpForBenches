@@ -6,7 +6,7 @@ import { validateEmail, validateUsername, validatePassword, PwError_Display } fr
 import gang from '../assets/gang.png'
 
 
-export default function Jamey() {
+export default function LogIn() {
     const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
     const [emailError,   setEmailError] = useState("");
