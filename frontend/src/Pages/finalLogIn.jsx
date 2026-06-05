@@ -118,15 +118,14 @@ export default function LogIn() {
                     {/* <button className="button" onClick={() => setIsClicked(true)}>Log In</button> */}
                     <button className="button" onClick={toggleLogIn}>Log In</button>
                     <div style={{padding: "10px"}}/>
-                    <button className="button" onClick={toggleSignIn}>Sign Up</button>
-                    <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
-                    <p className="guest" onClick={() => {
-                        localStorage.removeItem('token');
-                        navigate('/home');
-                    }}>Sign in Later</p>
+                    <button className="button" onClick={toggleSignIn} style={{whiteSpace: 'nowrap'}}>Sign Up</button>
+                   
+                    <p className="guest" style={{color: '#3d77BF', alignContent: 'center', textAlign: 'center'}}
+                            onClick={() => {localStorage.removeItem('token'); navigate('/home');
+                        }}>Sign in Later</p>
 
 
-                    </div>
+
 
                 </div>
                 
