@@ -8,5 +8,5 @@ import '../Components/components.css'
         if (num <= 50)  return { tag: "Constantly Sitting",  className: "honorific4" };
         if (num <= 100) return { tag: "Super Bench Sitter",  className: "honorific5" };
         if (num <= 250) return { tag: "Ultra Bench Sitter",  className: "honorific6" };
-        return { tag: "🐈🐈🐈BENCH🐈🐈🐈", className: "honorific7"};
+        return { tag: "BENCH", className: "honorific7"};
     }

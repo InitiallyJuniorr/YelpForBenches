@@ -120,32 +120,37 @@ export function Profile({isLoggedIn = true})
         </button>
         </div>
 
-{/* SIDE BAR PANEL THAT DESCRIBES HONORIFIC TAGS*/}
+{/* START: SIDE BAR PANEL THAT DESCRIBES HONORIFIC TAGS*/}
 
-        <div className="ProfileBenchMarks">
-            <h1>My BenchMarks</h1>
-            <p>My Current number of Reviews: {userInfo.num_reviewed}</p>
+        <div className="ProfileBenchMarks" style={{alignItems: 'flexstart' }}>
+            <h1>BenchMarks:</h1>
+            <div style={{paddingLeft: '10px', paddingRight: '10px'}}>
+            <p style={{fontFamily: 'sans-serif', fontWeight: '500'}}>My Current Number of Reviews: {userInfo.num_reviewed}</p>
+            <p style={{fontFamily: 'sans-serif'}}>Unlockable Tags:</p>
+            </div>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-                 {milestones.map((num) => {
-                 const { tag, className } = Honorific(num);
-          return (
-            <li 
-              key={num} 
-              className={className} 
-              style={{ margin: '10px 0', padding: '8px', borderRadius: '4px' }}
-            >
-              <strong>{tag}</strong> 
-              <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
-                (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
-              </span>
-            </li>
-          );
-        })}
+            {milestones.map((num) => {
+                    const { tag, className } = Honorific(num);
+                    return (
+                        <li 
+                        key={num} 
+                        className={className} 
+                        style={{ margin: '10px 0', padding: '8px', borderRadius: '25px', fontSize:'15px' }}
+                        >
+                            <strong>{tag}</strong> 
+                            <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
+                                (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
+                            </span>
+                        </li>
+                    );
+                }
+            )
+            }
       </ul>
             
         </div>
 
-{/* END of SIDE BAR PANEL */}
+{/* END: SIDE BAR PANEL */}
 
         <div style={{paddingBottom: '500px'}}/>
     </div>

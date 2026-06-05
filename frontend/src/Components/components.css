@@ -440,18 +440,20 @@ navbar .title{
 .ProfileBenchMarks
 {
     /* skinny legend */
-    width: 500px;
-    height: 791px;
+    width: 850px;
+    height: 700px;
     border-radius: 15px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     background: #FFF;
     padding-top: 20px;
+    align-content: center;
+    text-align: center;
 }
 h1{
     color: #5A2522;
     text-align: center;
     font-family: "Kumbh Sans", sans-serif;
-    font-size: 50px;
+    font-size: 30px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
