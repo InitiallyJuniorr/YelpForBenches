@@ -208,6 +208,13 @@ app.post('/add-review', async (req, res) => {
             'INSERT INTO reviews (bench_id, user_id, stars, review) VALUES (?, ?, ?, ?)',
             [benchId, userId, stars, review]
         )
+        const [result] = await pool.query(
+            'SELECT num_reviewed FROM users WHERE email = ?', [userId]
+        )
+        console.log(result[0].num_reviewed + 1)
+        await pool.query(
+            'UPDATE users SET num_reviewed = ? WHERE email = ?', [result[0].num_reviewed + 1, userId]
+        )
     } catch (err) {
         console.log(err.message)
         res.status(500).json({ error: err.message })
