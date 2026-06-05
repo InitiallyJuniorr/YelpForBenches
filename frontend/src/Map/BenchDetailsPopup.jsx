@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './BenchDetailsPopup.css'; import './ResultsPanel.css';
 import noBenchImage from '../assets/nobenchimage.png';
+import { Honorific } from '../Components/Honorific';
 
 const RECENT_REVIEW_COUNT = 2;
 const REVIEW_PREVIEW_CHARS = 180;
@@ -146,6 +147,17 @@ export default function BenchDetailsPopup({
 
         const data = await response.json();
 
+        for (let i = 0; i < data.length; i++) {
+          let userResponse = await fetch(
+            `http://localhost:8080/user?email=${data[i].userId}`
+          );
+  
+          let userData = await userResponse.json();
+  
+          data[i].badge = Honorific(userData.num_reviewed).tag;
+        }
+
+        
         if (!ignore) {
           setReviews(data);
         }
