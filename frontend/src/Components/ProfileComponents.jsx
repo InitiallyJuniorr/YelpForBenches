@@ -9,7 +9,7 @@ export function RecentReviews({name="Null", address="Null", review="Null", ratin
     return(
     <>
         <div>
-            <div className="ProfileReviews">
+            <div className="ProfileReviews" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <div style={{paddingTop: '10px'}}>
                     <h1>{name}</h1>
                 
@@ -23,7 +23,7 @@ export function RecentReviews({name="Null", address="Null", review="Null", ratin
                         <p1>{review}</p1>
                     </div>
                 </div>
-                <img src={img} alt="" style={{height: '150px', width: '150px'}}/>
+                <img src={img} alt="" style={{height: '150px', width: '150px', objectFit: 'cover', borderRadius: '15px'}}/>
             </div>
            
         </div>
