@@ -30,6 +30,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
 }).promise();
 
+
+// sets up ability to send an email
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -38,6 +40,10 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+
+// handles accepting request to change password and sending email
+// requires email address
+// returns success status
 app.post('/forgot-password', async (req, res) => {
     const { email } = req.body
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email])
@@ -57,7 +63,9 @@ app.post('/forgot-password', async (req, res) => {
 })
 
 
-
+// handles actual resetting of password in the database
+// requires JWT token and new password
+// returns success status
 app.post('/reset-password', async (req, res) => {
     const { token, newPassword } = req.body
     try {
@@ -71,9 +79,12 @@ app.post('/reset-password', async (req, res) => {
 })
 
 
+// LEGACY: should not be used, but kept in case it actually is
+// allows testing whether server is online
 app.get('/', (req, res) => {
     res.send( {success: true} );
 })
+
 
 // gets all benches from database
 // requires nothing
@@ -83,6 +94,10 @@ app.get('/bench', async (req, res) => {
     res.send(result[0]);
 })
 
+
+// calculates the star rating and number of ratings for each bench
+// requires nothing
+// returns list of benches with their associated rating and number of reviews
 app.get('/bench-ratings', async (req, res) => {
     try {
         const [rows] = await pool.query(`
@@ -102,7 +117,10 @@ app.get('/bench-ratings', async (req, res) => {
 })
 
 
-app.get('/bench-search', async (req, res) => { // Search for benches near the users location, optionally filtered by a query string 
+// search for benches near the users location, optionally filtered by a query string 
+// requires latitdue and longitude, can accept query string
+// returns list of benches nearby
+app.get('/bench-search', async (req, res) => { // 
   const q = (req.query.q || '').trim();
   const lat = Number(req.query.lat);
   const lng = Number(req.query.lng);
@@ -155,6 +173,8 @@ app.get('/bench-search', async (req, res) => { // Search for benches near the us
   }
 });
 
+
+// LEGACY: should not be used, but kept in case it actually is
 // gets benches from database that are near certain coordinates
 // requires a coordinate as a query paramater
 // returns all benches from "benches" table that are within 50,000 meters
@@ -179,6 +199,7 @@ app.get('/bench-lookup', async (req, res) => {
     res.send(result[0])
 })
 
+
 // adds new bench to database
 // requires bench name, address, coordinates, and image URL of a bench
 // returns the database id of the added bench
@@ -196,6 +217,7 @@ app.post('/add-bench', async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 })
+
 
 // adds new review to database
 // requires a bench ID, a user ID, stars, text
@@ -222,7 +244,10 @@ app.post('/add-review', async (req, res) => {
 })
 
 
-app.get('/bench-reviews', async (req, res) => { // Gets reviews for a bench, returns array of reviews with author info
+// gets reviews for a bench
+// requries bench id
+// returns array of reviews with author info
+app.get('/bench-reviews', async (req, res) => {
     const benchId = Number(req.query.bench_id);
 
     if (!benchId) {
@@ -257,6 +282,10 @@ app.get('/bench-reviews', async (req, res) => { // Gets reviews for a bench, ret
     }
 })
 
+
+// inserts new user into database and logs in user
+// requires email, password, username
+// returns success status
 app.post('/register', async (req, res) => {
     const { email, password, username } = req.body
     
@@ -277,6 +306,10 @@ app.post('/register', async (req, res) => {
     }
 })
 
+
+// checks if credentials are correct and logs in user
+// requires email, password
+// returns success status
 app.post('/login', async (req, res) => {
     const { email, password } = req.body
     
@@ -294,7 +327,10 @@ app.post('/login', async (req, res) => {
     }
 })
 
-// Queries necessary profile information linked to the email
+
+// queries necessary profile information linked to the email
+// requires email
+// returns username, profile picture, number of reviews
 app.get('/user', async (req, res) => {
     const { email } = req.query;
     const [rows] = await pool.query(
@@ -304,7 +340,10 @@ app.get('/user', async (req, res) => {
     res.json(rows[0]);
 })
 
-// Queries necessary profile reviews linked with email
+
+// quereis necessary profile reviews linked with email
+// requires user id
+// returns list of reviews associated with the user
 app.get('/reviews', async (req, res) => {
     const { user_id } = req.query;
     try {
@@ -322,7 +361,11 @@ app.get('/reviews', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 })
-// POST the username profile picture
+
+
+// add the username profile picture to user entry in database
+// requires email and picture url
+// returns success status
 app.post('/update-pfp', async (req, res) => {
     const { email, url } = req.body;
     await pool.query(
@@ -332,6 +375,8 @@ app.post('/update-pfp', async (req, res) => {
     res.json({ success: true });
 });
 
+
+// lets the developer know that the server is online
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 })
