@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
+import noBenchImage from '../assets/nobenchimage.png';
 import './WriteReviewPopup.css';
 
 const MAX_WORDS = 240;
+const STAR_RATINGS = [1, 2, 3, 4, 5];
 
 function countWords(text) {
-  return text.trim().split(/\s+/).filter(Boolean).length;
+  return text.trim().split(/\s+/).filter(Boolean).length; 
 }
 
 function ReviewStars({ value, onChange }) {
@@ -17,14 +19,14 @@ function ReviewStars({ value, onChange }) {
       aria-label="Review rating"
       onMouseLeave={() => setHoverRating(0)}
     >
-      {[1, 2, 3, 4, 5].map((rating) => (
+      {STAR_RATINGS.map((star) => (
         <button
+          key={star}
           type="button"
-          className={rating <= displayRating ? 'active' : ''}
-          key={rating}
-          onClick={() => onChange(rating)}
-          onMouseEnter={() => setHoverRating(rating)}
-          aria-label={`${rating} star${rating === 1 ? '' : 's'}`}
+          className={star <= displayRating ? 'active' : ''}
+          onClick={() => onChange(star)}
+          onMouseEnter={() => setHoverRating(star)}
+          aria-label={`${star} star${star === 1 ? '' : 's'}`}
         >
           ★
         </button>
@@ -33,51 +35,52 @@ function ReviewStars({ value, onChange }) {
   );
 }
 
-export default function WriteReviewPopup({
-  open,
-  bench,
-  onClose,
-  onSubmit,
-}) {
+export default function WriteReviewPopup({ open, bench, onClose, onSubmit }) {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
 
-  useEffect(() => {
-    if (!open) {
-      setRating(0);
-      setReviewText('');
-    }
-  }, [open]);
-
+  const trimmedReviewText = reviewText.trim();
   const wordCount = useMemo(() => countWords(reviewText), [reviewText]);
+  const canSubmit = rating > 0 && trimmedReviewText.length > 0;
+
+  const resetForm = () => {
+    setRating(0);
+    setReviewText('');
+  }
+
+  useEffect(() => {
+    if (!open) resetForm();
+  }, [open]);
 
   if (!open || !bench) return null;
 
-  const handleReviewChange = (e) => {
-    const nextText = e.target.value;
+  const handleReviewChange = (event) => {
+    const nextText = event.target.value;
 
     if (countWords(nextText) <= MAX_WORDS) {
       setReviewText(nextText);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-    if (!rating || !reviewText.trim()) return;
+    if (!canSubmit) return;
 
     onSubmit({
       rating,
-      preview: reviewText.trim(),
+      reviewText: trimmedReviewText,
     });
     onClose();
   };
 
   return (
+    
     <div className="write-review-overlay" onClick={onClose}>
+     
       <form
         className="write-review-card"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
         onSubmit={handleSubmit}
       >
         <button
@@ -92,17 +95,18 @@ export default function WriteReviewPopup({
         <div className="write-review-header">
           <img
             className="write-review-image"
-            src={bench.imageURL || bench.imageUrl}
+            src={bench.imageURL || noBenchImage}
             alt={bench.name}
           />
 
           <div className="write-review-meta">
             <h2>{bench.name}</h2>
             <p>{bench.address}</p>
+            
             <ReviewStars value={rating} onChange={setRating} />
           </div>
         </div>
-
+        
         <div className="write-review-input-wrap">
           <textarea
             className="write-review-input"
@@ -112,14 +116,14 @@ export default function WriteReviewPopup({
             rows={7}
           />
           <div className="write-review-word-count">
-            Max {wordCount}/{MAX_WORDS} Words
+            {wordCount}/{MAX_WORDS} Words
           </div>
         </div>
-
+        
         <button
           type="submit"
           className="write-review-submit"
-          disabled={!rating || !reviewText.trim()}
+          disabled={!canSubmit}
         >
           Post Review
         </button>

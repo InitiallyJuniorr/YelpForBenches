@@ -1,22 +1,10 @@
 import React from 'react'
 import './fooLogin.css'
 import '../Components/components.css'
-import { useState } from 'react';
-import SignUp from './Signup.jsx'
-
-import Tobi from '../assets/tobi.jpg'
 import gang from '../assets/gang.png'
 
 
-// JAMEY HERE
 import { useNavigate } from 'react-router-dom'
-
-
-
-
-
-
-
 
 
 export default function LoginFoo() {
@@ -40,17 +28,11 @@ export default function LoginFoo() {
             <button className="button" onClick={() => navigate('/signup')}>Sign Up</button>
             <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
 
-                {/* PLACEHOLDER: delete on final
-                <p1 onClick={() => navigate('/home')}>Enter as Guest</p1> */}
             </div>
-            {/* <button className="button" onClick={SignUpClick}>Login</button> */}
-            
-            {/* <button className="button" onClick={() => setIsSigned(true)}>Sign Up</button> */}
         </div>
         
         </div>
 
-        {/* width: 287px; */}
         </div>
         </>
     )

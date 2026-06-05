@@ -1,28 +1,38 @@
 .modal-overlay {
-  width: 700px;
-  height: 500px;
-  position: center;
-  inset: 0;
-  z-index: 3000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 17px;
-  background: #FFFF;
-  /* backdrop-filter: blur(2px); */
+  justify-content: center;  
+  
+  
+  align-items: flex-start;   
+  padding-top: 120px;        
+  padding-bottom: 30px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
 .modal-card {
   position: relative;
-  width: min(1042px, 96vw);
-  min-height: 595px;
-  padding: 36px 40px 33px;
-  background: rgba(255, 255, 255);
+  
+  width: min(1100px, 94vw); 
+  padding: 35px 40px;      
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
   border: 2px solid #5a2522;
-  border-radius: 21px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Kumbh Sans', sans-serif;
-  overflow: hidden;
+  box-sizing: border-box;
+  
+  
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-close {

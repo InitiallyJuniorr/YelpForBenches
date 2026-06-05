@@ -1,22 +1,26 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { validatePassword, PwError_Display } from '../utils/validate.jsx';
+
 
 export default function ResetPassword() {
     const [newPassword, setNewPassword] = useState("")
     const [message, setMessage] = useState("")
     const [pwError, setpwError] = useState("")
     const [cpwError, setcpwError] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const navigate = useNavigate()
-    const [confirmPassword, setConfirmPassword] = useState("")
 
+    // Calls regex on the new password when updated
     const handleNPChange = (e) => {
         const value = e.target.value;
         setNewPassword(value);
-        validatePassword(value);
+        setpwError(validatePassword(value));
     }
 
+    // Set a password error if the re-types password does not match the original
     const handleCPChange = (e) => {
         const value = e.target.value;
         setConfirmPassword(value);
@@ -24,31 +28,11 @@ export default function ResetPassword() {
         else { setcpwError(false); }
     }
 
-    const validatePassword = (password) => {
-        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%&?])([\w@$!%&?]){8,}$/;
-        setpwError(!(re.test(String(password))));
-    }
+    const passwordError = pwError || cpwError
 
-    function PwError_Display({ password }) {
-        const re_lowercase = /(?=.*[a-z])/;
-        const re_uppercase = /(?=.*[A-Z])/;
-        const re_digit = /(?=.*\d)/;
-        const re_special = /(?=.*[@$!%&?])/;
-        const re_8 = /^.{8,}$/;
-
-    return (
-        <div>
-            { !(re_uppercase.test(String(password))) && <p className="error ">Password must include an uppercase letter.</p> }
-            { !(re_lowercase.test(String(password))) && <p className="error ">Password must include a lowercase letter.</p> }
-            { !(re_digit.test(String(password))) && <p className="error ">Password must include a digit.</p> }
-            { !(re_special.test(String(password))) && <p className="error ">Password must include a special character from '@$!%&?'.</p> }
-            { !(re_8.test(String(password))) && <p className="error ">Password must be at least 8 characters.</p> }
-        </div>
-    )
-    }
-
+    // Handles submission of a replacement password
     const handleReset = async () => {
-        if (newPassword !== confirmPassword) {
+        if (passwordError) {
             setMessage("Passwords don't match")
             return
         }

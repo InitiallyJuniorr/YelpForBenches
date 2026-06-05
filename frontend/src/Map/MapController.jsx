@@ -1,50 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
-import { useNavigate } from 'react-router-dom';
-import LoginPrompt from './LoginPrompt.jsx';
+import LoginPrompt from '../Components/LoginPrompt.jsx';
 import MapView from './MapView';
 import CreateBenchPopup from './CreateBenchPopup';
 import BenchDetailsPopup from './BenchDetailsPopup';
 import WriteReviewPopup from './WriteReviewPopup';
 
-import exampleBench from './assets/exampleBench.png';
-import toby from './assets/toby.png';
-
 const EMPTY_BENCH_DRAFT = { // Template for a new bench being added before it's saved to the backend
   name: '',
   address: '',
-  review: '',
-  rating: 0,
   imageURL: '',
   lat: null,
   lng: null,
+  review: '',
+  rating: 0,
 };
 
 const formatDroppedPinAddress = (location) => {
   if (!location) return '';
 
   return `Dropped pin: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
-};
-
-const getAverageRating = (reviews) => {
-  if (!reviews.length) return 0;
-
-  const totalRating = reviews.reduce(
-    (sum, review) => sum + Number(review.rating || 0),
-    0
-  );
-
-  return totalRating / reviews.length;
-};
-
-const addReviewToBench = (bench, review) => {
-  const reviews = [review, ...(bench.reviews || [])]; // used ... to make a new array that starts with review, so to avoid changing original bench.reviews
-
-  return {
-    ...bench,
-    reviews,
-    avgRating: getAverageRating(reviews),
-  };
 };
 
 // Transforms the bench data from the backend into the format expected by the frontend, and also merges in rating data from the /bench-ratings
@@ -58,22 +33,54 @@ const formatBenchFromBackend = (bench, ratingByBenchId = new Map()) => {
     imageURL: bench.imageURL || bench.image_url,
     lat: bench.lat ?? bench.coordinates?.y,
     lng: bench.lng ?? bench.coordinates?.x,
-    avgRating: Number(bench.avgRating ?? rating?.avgRating) || 0,
-    reviewCount: Number(bench.reviewCount ?? rating?.reviewCount) || 0,
+    avgRating: Number(rating?.avgRating ?? bench.avgRating) || 0,
+    reviewCount: Number(rating?.reviewCount ?? bench.reviewCount) || 0,
   };
 };
 
+const applySubmittedRatingToBench = (bench, submittedRating, previousReviewCount) => {
+  const currentReviewCount = Number(bench.reviewCount) || 0;
+
+  if (currentReviewCount > previousReviewCount) {
+    return bench;
+  }
+
+  const nextReviewCount = previousReviewCount + 1;
+  const nextAvgRating =
+    ((Number(bench.avgRating) || 0) * previousReviewCount + Number(submittedRating)) /
+    nextReviewCount;
+
+  return {
+    ...bench,
+    avgRating: nextAvgRating,
+    reviewCount: nextReviewCount,
+  };
+};
+
+const applySubmittedRatingToBenches = (
+  benches,
+  benchId,
+  submittedRating,
+  previousReviewCount
+) =>
+  benches.map((bench) =>
+    Number(bench.id) === Number(benchId)
+      ? applySubmittedRatingToBench(bench, submittedRating, previousReviewCount)
+      : bench
+  );
+
 export default function MapController() {
-  const navigate = useNavigate();
-  const [benches, setBenches] = useState([]);
+  const [benches, setBenches] = useState([]); 
   const [selectedBenchId, setSelectedBenchId] = useState(null);
   const [selectedBench, setSelectedBench] = useState(null);
+
   const [isCreateBenchOpen, setIsCreateBenchOpen] = useState(false);
+  const [isBenchDetailsOpen, setIsBenchDetailsOpen] = useState(false);
   const [isConfirmLocationOpen, setIsConfirmLocationOpen] = useState(false);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
+
   const [benchDraft, setBenchDraft] = useState(EMPTY_BENCH_DRAFT);
   const [pendingBenchLocation, setPendingBenchLocation] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const token = localStorage.getItem('token');
@@ -88,6 +95,7 @@ export default function MapController() {
       }
 
       const benchData = await benchesResponse.json();
+      
       let ratingByBenchId = new Map();
 
       try {
@@ -103,36 +111,30 @@ export default function MapController() {
         console.error('Error fetching bench ratings:', error);
       }
 
-      setBenches(
-        benchData.map((bench) => formatBenchFromBackend(bench, ratingByBenchId))
+      const formattedBenches = benchData.map((bench) =>
+        formatBenchFromBackend(bench, ratingByBenchId)
       );
+
+      setBenches(formattedBenches);
+      return formattedBenches;
     } catch (error) {
       console.error('Error fetching benches:', error);
+      return [];
     }
   }, []);
 
-  // On initial load, fetch benches from the backend. Also refetch whenever a new bench is added or the benches are reset.
+  
   useEffect(() => {
     fetchBenches();
   }, [fetchBenches]);
 
-  // If the user is logged in (i.e. we have a valid JWT with an email), fetch their user info from the backend to get their profile picture URL and other info for displaying in reviews and the profile page
- useEffect(() => {
-      if (!email) return;
-          const fetchUser = async () => {
-          const res = await fetch(`http://localhost:8080/user?email=${email}`);
-          const data = await res.json();
-          setUserInfo(data);
-      };
-      fetchUser();
-  }, [email]);  
-
-  // TODO_BACKEND: Once backend loading is wired, this selection should use the
-  // backend bench id consistently instead of mixing mock ids and database ids.
+  
   const handleMarkerClick = (benchId) => {
     setSelectedBenchId(benchId);
-    const foundBench = benches.find((bench) => bench.id === benchId) || null;
-    setSelectedBench(foundBench);
+    // .find to search through the benches array for the bench with the matching id, and sets selectedBench to that bench object (or null if not found)
+    const foundBench = benches.find((bench) => bench.id === benchId) || null; 
+    setSelectedBench(foundBench); 
+    setIsBenchDetailsOpen(Boolean(foundBench));
   };
 
   const handleStartAddBench = (mapCenter) => {
@@ -141,10 +143,12 @@ export default function MapController() {
       lng: mapCenter.lng,
     };
 
+    // reset any existing bench selection or draft data, and open the confirm location with the marker placed at the center of the map
     setSelectedBench(null);
     setSelectedBenchId(null);
+    setIsBenchDetailsOpen(false);
     setPendingBenchLocation(location);
-    setBenchDraft({ // Start with empty draft but pre-fill lat/lng/address based on where the user center of map is
+    setBenchDraft({ // empty draft but pre-fill with lat/lng/address
       ...EMPTY_BENCH_DRAFT,
       lat: location.lat,
       lng: location.lng,
@@ -153,11 +157,12 @@ export default function MapController() {
     setIsConfirmLocationOpen(true);
   };
 
-  const handleConfirmBenchLocation = () => { // user confirms location of new bench after dragging the marker to adjust location, which opens the CreateBenchPopup, passing the lat/lng properties
+  // user confirms location of new bench after dragging the marker to adjust location
+  const handleConfirmBenchLocation = () => { 
     if (!pendingBenchLocation) return;
 
-    setBenchDraft((prev) => ({
-      ...prev,
+    setBenchDraft((prev) => ({ 
+      ...prev, 
       lat: pendingBenchLocation.lat,
       lng: pendingBenchLocation.lng,
       address: formatDroppedPinAddress(pendingBenchLocation),
@@ -182,14 +187,17 @@ export default function MapController() {
   const handleOpenWriteReview = () => {
       if (!email) { setShowLoginPrompt(true); return; }
       setIsWriteReviewOpen(true);
+      setIsBenchDetailsOpen(false);
   };
 
   const handleCloseWriteReview = () => {
     setIsWriteReviewOpen(false);
   };
 
-  const handleSubmitReview = async ({ rating, preview }) => {
+  const handleSubmitReview = async ({ rating, reviewText }) => {
     if (!selectedBench) return;
+    const previousReviewCount = Number(selectedBench.reviewCount) || 0;
+
     try { 
       await fetch('http://localhost:8080/add-review', {
           method: 'POST',
@@ -198,79 +206,59 @@ export default function MapController() {
             benchId: selectedBench.id,
             userId: email,
             stars: rating,
-            review: preview
+            review: reviewText,
             })
-        });
-    } catch (error) {}
-    const newReview = {
-      id: `review-${Date.now()}`,
-      benchId: selectedBenchId,
-      userId: userInfo.email,   
-      author: 'You',
-      badge: 'Complacent Sitter',
-      stars: rating,
-      avatarUrl: userInfo.pfp_url,
-      review: preview,
-    };
+      });
 
-    try {
-      fetch('http://localhost:8080/add-review', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Inform server you are sending JSON
-        },
-        body: JSON.stringify(newReview)
-      })
-    } catch (error) {}
+      // fetch updated bench data from backend
+      const refreshedBenches = await fetchBenches();
+      const updatedBenches = applySubmittedRatingToBenches(
+        refreshedBenches,
+        selectedBench.id,
+        rating,
+        previousReviewCount
+      );
+      const updatedBench = refreshedBenches.find(
+        (bench) => Number(bench.id) === Number(selectedBench.id)
+      );
 
-    setBenches((prevBenches) =>
-      prevBenches.map((bench) =>
-        bench.id === selectedBench.id ? addReviewToBench(bench, newReview) : bench
-      )
-    );
+      setBenches(updatedBenches);
 
-    setSelectedBench((prevBench) => {
-      if (!prevBench) return prevBench;
-      return addReviewToBench(prevBench, newReview);
-    });
+      if (updatedBench) {
+        setSelectedBench(
+          applySubmittedRatingToBench(updatedBench, rating, previousReviewCount)
+        );
+      }
 
-    setIsWriteReviewOpen(false);
+      setIsWriteReviewOpen(false);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
   };
 
-  const handleCreateBenchSubmit = async (draft) => { // sends POST request to backend to create new bench (and also adds new review to it), then adds the new bench to the map and opens the details popup for the new bench
+  // sends POST request to backend to create new bench (and also adds new review to it)
+  const handleCreateBenchSubmit = async (draft) => { 
+    if (!email) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     if (draft.lat == null || draft.lng == null) {
       alert('Choose a bench location first.');
       return;
     }
 
-    const imageURL = draft.imageURL; 
-    const rating = Number(draft.rating) || 0;
-    const temporaryBenchId = crypto.randomUUID?.() || `bench-${Date.now()}`;
-
-    const draftReview = {
-      id: `review-${Date.now()}`,
-      author: 'You',
-      badge: 'Bench Scout',
-      rating,
-      avatarUrl: toby,
-      preview: draft.review,
-    };
-
-    // create new bench object with temporary id and data from the draft, which will be replaced with the actual bench data returned from the backend (including the real id) after the POST request
+    // Keep bench data separate from the required initial review.
     const newBench = {
-      id: temporaryBenchId,
       name: draft.name,
       address: draft.address || formatDroppedPinAddress(draft),
-      lat: draft.lat,
-      lng: draft.lng,
       imageURL: draft.imageURL,
-      avgRating: rating,
-      reviews: [draftReview],
+      lat: draft.lat,
+      lng: draft.lng
     };
 
     let lastBenchId = 0    // Tracks the ID generated by mysql for the new bench
 
-    // post new bench to backend
     try { 
       const response = await fetch('http://localhost:8080/add-bench', {
         method: 'POST',
@@ -280,40 +268,65 @@ export default function MapController() {
         body: JSON.stringify(newBench)
       })
       const data = await response.json()
-      lastBenchId = data.insertId
-      console.log(lastBenchId)
-    } catch (error) {}
+      lastBenchId = data.insertId || data.id
+    } catch (error) {
+      console.error('Error creating bench:', error);
+      return;
+    }
 
+    if (!lastBenchId) return;
 
-    const newReview = {
+    setIsCreateBenchOpen(false);
+    setPendingBenchLocation(null);
+    setBenchDraft(EMPTY_BENCH_DRAFT);
+
+    const initialReview = { // create the initial review for new bench
       benchId: lastBenchId,
       userId: email,
-      stars: rating,
+      stars: Number(draft.rating) || 0,
       review: draft.review
     }
 
     // post new review to backend, associated with the newly posted bench
     try { 
-      fetch('http://localhost:8080/add-review', {
+      await fetch('http://localhost:8080/add-review', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Inform server you are sending JSON
         },
-        body: JSON.stringify(newReview)
+        body: JSON.stringify(initialReview)
       })
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error creating initial review:', error);
+    }
 
-    const savedBench = {
-      ...newBench,
-      id: lastBenchId,
-    };
+    // fetch the updated list of benches from the backend
+    const refreshedBenches = await fetchBenches();
+    const updatedBenches = applySubmittedRatingToBenches(
+      refreshedBenches,
+      lastBenchId,
+      initialReview.stars,
+      0
+    );
+    const savedBenchFromBackend = updatedBenches.find(
+      (bench) => Number(bench.id) === Number(lastBenchId)
+    );
 
-    setBenches((prev) => [...prev, savedBench]);
+    const savedBench =
+      savedBenchFromBackend ||
+      {
+        ...newBench,
+        id: lastBenchId,
+        avgRating: initialReview.stars,
+        reviewCount: 1,
+      };
+    const nextBenches = savedBenchFromBackend ? updatedBenches : [...updatedBenches, savedBench];
+
+    // Update state with the new bench and select it + show details
+    setBenches(nextBenches);
     setSelectedBenchId(lastBenchId);
     setSelectedBench(savedBench);
-    setIsCreateBenchOpen(false);
-    setPendingBenchLocation(null);
-    setBenchDraft(EMPTY_BENCH_DRAFT);
+    setIsBenchDetailsOpen(true);
   };
 
   return (
@@ -343,9 +356,12 @@ export default function MapController() {
       />
 
       <BenchDetailsPopup
-        open={!!selectedBench}
+        open={isBenchDetailsOpen && !!selectedBench}
         bench={selectedBench}
-        onClose={() => setSelectedBench(null)}
+        onClose={() => {
+          setIsBenchDetailsOpen(false);
+          setSelectedBench(null);
+        }}
         onWriteReview={handleOpenWriteReview}
       />
 

@@ -1,7 +1,7 @@
 .write-review-overlay {
   position: fixed;
   inset: 0;
-  z-index: 3400;
+  z-index: 3200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +17,8 @@
   padding: 33px 47px 34px;
   border: 2px solid #5a2522;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.8);
+  /* background: rgba(255, 255, 255, 0.8); */
+  background: #ffff;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   font-family: 'Kumbh Sans', sans-serif;
@@ -98,7 +99,8 @@
 
 .write-review-input-wrap {
   position: relative;
-  margin-top: 36px;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 .write-review-input {

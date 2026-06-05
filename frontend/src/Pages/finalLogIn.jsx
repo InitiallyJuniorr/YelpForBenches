@@ -1,18 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../Login.css'
-import './fooLogin.jsx'
+import '../stashedFolder/Login.css'
+import '../stashedFolder/fooLogin.jsx'
+import { validateEmail, validateUsername, validatePassword, PwError_Display } from '../utils/validate.jsx';
 import gang from '../assets/gang.png'
 
-
-export default function Jamey() {
-
+export default function LogIn() {
     const navigate = useNavigate(); 
-
-
     const [isLogin, setIsLogin] = useState(true);
-
-
     const [emailError,   setEmailError] = useState("");
     const [pwError,   setpwError] = useState("");
     const [userError, setUserError] = useState("");
@@ -24,45 +19,32 @@ export default function Jamey() {
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
     const [forgotMsg, setForgotMsg] = useState("");
-    const [kkSlider, isKKSlider] = useState(true);
+    const [LandingLogIn, isLandingLogIn] = useState(true);
     
+    //Functions called when any input is given t
     const handleEChange = (e) => {
         const value = e.target.value;
         setEmail(value);
-        validateEmail(value);
+        setEmailError(validateEmail(value));
     }
 
     const handlePChange = (e) => {
         const value = e.target.value;
         setPassword(value);
-        validatePassword(value);
+        setpwError(validatePassword(value));
     }
 
     const handleUChange = (e) => {
         const value = e.target.value;
         setUsername(value);
-        validateUsername(value);
-    }
-
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setEmailError(!(re.test(String(email).toLowerCase())));
-    }
-
-    const validatePassword = (password) => {
-        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%&?])([\w@$!%&?]){8,}$/;
-        setpwError(!(re.test(String(password))));
-    }
-
-    const validateUsername = (username) => {
-        const re = /^[A-Za-zÀ-ÿ1-9_]{4,16}$/;
-        setUserError(!(re.test(String(username))));
+        setUserError(validateUsername(value));
     }
 
     const isValidRegister = !emailError && !pwError && !isLogin && !userError
     const isValidLogin = !emailError && isLogin
     const invalidSubmission = !isValidRegister && !isValidLogin || email === ''
  
+    // Handles submission of both Login and Register
     const handleSubmit = async () => {
         if (invalidSubmission) { 
             setSubmitted(true);
@@ -72,11 +54,7 @@ export default function Jamey() {
         const endpoint = isLogin ? '/login' : '/register';
         const payload = isLogin ? { email, password } : { email, password, username };
 
-        // const handleLoginSuccess = (token) => {
-        //     localStorage.setItem('token', token);
-        //     navigate('/app');
-        // };
-
+        // Try to POST Login credentials
         try {
             const res = await fetch(`http://localhost:8080${endpoint}`, {
                 method: "POST",
@@ -115,40 +93,18 @@ export default function Jamey() {
         else setForgotMsg(data.error)
     }
 
-
-    function PwError_Display({ password }) {
-        const re_lowercase = /(?=.*[a-z])/;
-        const re_uppercase = /(?=.*[A-Z])/;
-        const re_digit = /(?=.*\d)/;
-        const re_special = /(?=.*[@$!%&?])/;
-        const re_8 = /^.{8,}$/;
-
-    return (
-        <div>
-            { !(re_uppercase.test(String(password))) && <p className="error ">Password must include an uppercase letter.</p> }
-            { !(re_lowercase.test(String(password))) && <p className="error ">Password must include a lowercase letter.</p> }
-            { !(re_digit.test(String(password))) && <p className="error ">Password must include a digit.</p> }
-            { !(re_special.test(String(password))) && <p className="error ">Password must include a special character from '@$!%&?'.</p> }
-            { !(re_8.test(String(password))) && <p className="error ">Password must be at least 8 characters.</p> }
-        </div>
-    )
-    }
-
-
-    
-   
-    const toggleKKLogIn = () => {
-        isKKSlider(!kkSlider);
+    const toggleLogIn = () => {
+        isLandingLogIn(!LandingLogIn);
         
     }
-    const toggleKKSignIn = () => {
+    const toggleSignIn = () => {
         setIsLogin(!isLogin);
-        isKKSlider(!kkSlider);
+        isLandingLogIn(!LandingLogIn);
     }
 
     return (
         <>
-        {kkSlider &&
+        {LandingLogIn &&
         <>
              <div style={{overflow: 'auto'}}>
                 <div style={{justifyContent: 'right', display: 'flex'}}>
@@ -160,9 +116,9 @@ export default function Jamey() {
                     </div>
                     <div style={{padding: "100px"}}/>
                     {/* <button className="button" onClick={() => setIsClicked(true)}>Log In</button> */}
-                    <button className="button" onClick={toggleKKLogIn}>Log In</button>
+                    <button className="button" onClick={toggleLogIn}>Log In</button>
                     <div style={{padding: "10px"}}/>
-                    <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
+                    <button className="button" onClick={toggleSignIn}>Sign Up</button>
                     <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
                     <p className="guest" onClick={() => {
                         localStorage.removeItem('token');
@@ -181,12 +137,12 @@ export default function Jamey() {
         </>
         }
 
-        {!kkSlider && isLogin &&
+        {!LandingLogIn && isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button className="back" onClick={toggleKKLogIn}>Back</button>
+                    <button className="back" onClick={toggleLogIn}>Back</button>
                     <h1>Benchmark</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
@@ -229,15 +185,16 @@ export default function Jamey() {
             </>
         }
 
-        {!kkSlider && !isLogin &&
+        {!LandingLogIn && !isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button className="back" onClick={toggleKKSignIn}>Back</button>
+                   
+                    <button className="back" onClick={toggleSignIn}>Back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
-                    <p1>In a world of Benches, be sure to find the right one for you.</p1>
+                        <p1>In a world of Benches, be sure to find the right one for you.</p1>
                     </div>
 
                     <div style={{padding: "40px"}}/>
@@ -252,7 +209,7 @@ export default function Jamey() {
                     <input className='input' type="password" placeholder="Password" onChange={handlePChange} />
                     {/* needs styling */}
                     { pwError && !(isLogin) && (submitted) && <PwError_Display password={password} /> }
-                    <div style={{padding: "10px"}}/>
+                    <div style={{padding: "10px"}}/> 
                     <p1>Username</p1>
                     { !(isLogin) && <input className='input'type="text" placeholder="Username" onChange={handleUChange} /> }
                     { userError && !(isLogin) && (submitted) && <p className="error">Username must contain between 4-16 letters, numbers, and underscores.</p>}

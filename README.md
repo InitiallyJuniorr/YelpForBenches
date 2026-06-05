@@ -8,6 +8,8 @@
 ###### -Ensure all desired tech stack items are downloaded (node, python, etc)
 ###### -Download a local copy of the repository  
 ###### -Download all node packages via the termianl command "npm install"
+###### -Download packages for the leaflet map with "npm install leaflet"
+
 
 ### Instructions to **use** Locally:
 

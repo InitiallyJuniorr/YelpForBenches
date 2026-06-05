@@ -1,5 +1,5 @@
 import './ResultsPanel.css';
-import noBenchImage from "./assets/nobenchimage.png";
+import noBenchImage from "../assets/nobenchimage.png";
 
 function StarRating({ rating = 0 }) {
   const roundedRating = Math.round(Number(rating) || 0);

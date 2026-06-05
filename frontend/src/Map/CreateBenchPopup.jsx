@@ -2,23 +2,27 @@
 import { useEffect, useState } from 'react';
 import './CreateBenchPopup.css';
 import Ratings from './Ratings';
-import { uploadToCloudinary } from './utils/cloudinary.js';
+import { uploadToCloudinary } from '../utils/cloudinary.js';
 
-export default function CreateBenchPopup({
+// props: open - boolean, draft - object {name, review, rating, lat, lng}, setDraft - function with useState, onClose - function with useState, onSubmit - function with useState)
+export default function CreateBenchPopup({ 
   open,
   draft,
   setDraft,
   onClose,
   onSubmit,
 }) {
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectedFileNames, setSelectedFileNames] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]); // for storing the image file(s)
+  const [selectedFileNames, setSelectedFileNames] = useState([]); // for displaying the file name(s) in the UI
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!open) {
+    if (!open) { // reset file selection when popup is closed
+      setSelectedFiles([]);
       setSelectedFileNames([]);
+      setIsSubmitting(false);
     }
-  }, [open]);
+  }, [open]); 
 
   if (!open) return null;
 
@@ -31,12 +35,17 @@ export default function CreateBenchPopup({
 
   const handleSubmit = async (e) => {
       e.preventDefault();
+      setIsSubmitting(true);
       
-      const imageUrls = await Promise.all(
-          selectedFiles.map(file => uploadToCloudinary(file))
-      );
-      
-      onSubmit({ ...draft, imageUrls });
+      try {
+        const imageUrls = await Promise.all(
+            selectedFiles.map(file => uploadToCloudinary(file))
+        );
+        
+        await onSubmit({ ...draft, imageURL: imageUrls[0] || draft.imageURL });
+      } finally {
+        setIsSubmitting(false);
+      }
   };
   const handleFileChange = (e) => {
       const files = Array.from(e.target.files || []);
@@ -46,7 +55,7 @@ export default function CreateBenchPopup({
 
   return (
     <>
-    <div style={{padding: '110px'}}/>
+
     <div className="modal-overlay" onClick={onClose}>
     
       <div
@@ -148,7 +157,9 @@ export default function CreateBenchPopup({
                 </div>
             </div>
 
-            <button type="submit">Add Bench</button>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Adding Bench...' : 'Add Bench'}
+            </button>
             </form>
       </div>
     </div>
