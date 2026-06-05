@@ -1,22 +1,10 @@
 import React from 'react'
 import './fooLogin.css'
 import '../Components/components.css'
-import { useState } from 'react';
-import SignUp from './Signup.jsx'
-
-import Tobi from '../assets/tobi.jpg'
 import gang from '../assets/gang.png'
 
 
-
 import { useNavigate } from 'react-router-dom'
-
-
-
-
-
-
-
 
 
 export default function LoginFoo() {

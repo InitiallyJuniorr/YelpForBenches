@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../Login.css'
-import './fooLogin.jsx'
+import '../stashedFolder/Login.css'
+import '../stashedFolder/fooLogin.jsx'
 import { validateEmail, validateUsername, validatePassword, PwError_Display } from '../utils/validate.jsx';
 import gang from '../assets/gang.png'
 

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { BenchMarks } from '../Components/ProfileComponents.jsx';
 import { Honorific } from './Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
-import Login from '../Login.jsx'
+import Login from '../stashedFolder/Login.jsx'
 
 // PLACEHOLDER IMG
 import Tobi from '../assets/tobi.jpg'
