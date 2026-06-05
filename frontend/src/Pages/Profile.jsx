@@ -28,6 +28,7 @@ export function Profile({isLoggedIn = true})
     const [showMore, setShowMore] = useState(false);
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
+    const milestones = [0, 5, 15, 50, 100, 250, 251];
 
     // Function to retrieve user info based off of their email
     useEffect(() => {
@@ -118,13 +119,34 @@ export function Profile({isLoggedIn = true})
             {showMore ? 'Show Less' : 'Show More'}
         </button>
         </div>
-{/* SIDE BAR PANEL */}
+
+{/* SIDE BAR PANEL THAT DESCRIBES HONORIFIC TAGS*/}
 
         <div className="ProfileBenchMarks">
             <h1>My BenchMarks</h1>
+            <p>My Current number of Reviews: {userInfo.num_reviewed}</p>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+                 {milestones.map((num) => {
+                 const { tag, className } = Honorific(num);
+          return (
+            <li 
+              key={num} 
+              className={className} 
+              style={{ margin: '10px 0', padding: '8px', borderRadius: '4px' }}
+            >
+              <strong>{tag}</strong> 
+              <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
+                (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+            
         </div>
 
 {/* END of SIDE BAR PANEL */}
+
         <div style={{paddingBottom: '500px'}}/>
     </div>
     <div style={{paddingBottom: '50px'}}/>

@@ -137,6 +137,7 @@ h1 {
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     width: 488px;
     height: 45px;
+    padding-left: 20px;
 }
 
 body{
