@@ -93,11 +93,11 @@ export default function LogIn() {
         else setForgotMsg(data.error)
     }
 
-    const toggleKKLogIn = () => {
+    const toggleLogIn = () => {
         isLandingLogIn(!LandingLogIn);
         
     }
-    const toggleKKSignIn = () => {
+    const toggleSignIn = () => {
         setIsLogin(!isLogin);
         isLandingLogIn(!LandingLogIn);
     }
@@ -116,9 +116,9 @@ export default function LogIn() {
                     </div>
                     <div style={{padding: "100px"}}/>
                     {/* <button className="button" onClick={() => setIsClicked(true)}>Log In</button> */}
-                    <button className="button" onClick={toggleKKLogIn}>Log In</button>
+                    <button className="button" onClick={toggleLogIn}>Log In</button>
                     <div style={{padding: "10px"}}/>
-                    <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
+                    <button className="button" onClick={toggleSignIn}>Sign Up</button>
                     <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
                     <p className="guest" onClick={() => {
                         localStorage.removeItem('token');
@@ -142,7 +142,7 @@ export default function LogIn() {
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button className="back" onClick={toggleKKLogIn}>Back</button>
+                    <button className="back" onClick={toggleLogIn}>Back</button>
                     <h1>Benchmark</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
@@ -191,7 +191,7 @@ export default function LogIn() {
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
                    
-                    <button className="back" onClick={toggleKKSignIn}>Back</button>
+                    <button className="back" onClick={toggleSignIn}>Back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
                         <p1>In a world of Benches, be sure to find the right one for you.</p1>

@@ -12,27 +12,24 @@ export function Home()
     return(
     <>
         <NavBar/>
-        <div style={{paddingTop: '161px', display: 'grid', justifyContent: 'center', textAlign: 'right'}}/>
-         
-            
+        <div style={{paddingTop: '161px', display: 'grid', justifyContent: 'center', textAlign: 'right'}}/> 
+{/* Hero Text */}
             <motion.div
                 initial={{opacity:0,  y:  -40}} 
                 animate={{opacity:1, y: 0}}
                 transition={{duration: 0.5, ease: 'easeInOut' }}
-            
-            
             >
                 <h1 style={{fontSize: '50px'}}>Find your next Benchmark</h1>
             </motion.div>
+{/* Hero Image */}
             <motion.div
               initial={{opacity:0,  y:  40}} 
               animate={{opacity:1, y: 0}}
               transition={{duration: 0.5, ease: 'easeInOut' }}
-            
             >
                 <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
-          
             </motion.div>
+{/* About Benches Flip-Able Cards */}
             <div className="homedividertwo"/>
             <h1 style={{fontSize: '50px'}}>About Benches</h1>
             <div style={{alignItems: 'center', display: 'flex', justifyContent: 'center', gap: '30px'}}>
@@ -43,6 +40,7 @@ export function Home()
                 <Card Name="Bench Fun Facts" info="In Geneva Switzerland, you can find a 120m long bench along Promenade de la Treille. Arguably noted as the world's longest bench, it is a popular tourist attraction."/>
             </div>
             <div style={{padding: "40px"}}/>
+{/* Footer */}
             <div className="homedivider" style={{alignContent: 'left', alignItems: 'left'}}>
                 <div style={{display: 'flex'}}>
                 <img src={bench} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0', alignItems:'center'}}/>
