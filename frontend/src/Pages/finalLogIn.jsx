@@ -5,7 +5,6 @@ import '../stashedFolder/fooLogin.jsx'
 import { validateEmail, validateUsername, validatePassword, PwError_Display } from '../utils/validate.jsx';
 import gang from '../assets/gang.png'
 
-
 export default function LogIn() {
     const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
@@ -20,7 +19,7 @@ export default function LogIn() {
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
     const [forgotMsg, setForgotMsg] = useState("");
-    const [kkSlider, isKKSlider] = useState(true);
+    const [LandingLogIn, isLandingLogIn] = useState(true);
     
     //Functions called when any input is given t
     const handleEChange = (e) => {
@@ -95,17 +94,17 @@ export default function LogIn() {
     }
 
     const toggleKKLogIn = () => {
-        isKKSlider(!kkSlider);
+        isLandingLogIn(!LandingLogIn);
         
     }
     const toggleKKSignIn = () => {
         setIsLogin(!isLogin);
-        isKKSlider(!kkSlider);
+        isLandingLogIn(!LandingLogIn);
     }
 
     return (
         <>
-        {kkSlider &&
+        {LandingLogIn &&
         <>
              <div style={{overflow: 'auto'}}>
                 <div style={{justifyContent: 'right', display: 'flex'}}>
@@ -138,7 +137,7 @@ export default function LogIn() {
         </>
         }
 
-        {!kkSlider && isLogin &&
+        {!LandingLogIn && isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
@@ -186,7 +185,7 @@ export default function LogIn() {
             </>
         }
 
-        {!kkSlider && !isLogin &&
+        {!LandingLogIn && !isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
