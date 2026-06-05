@@ -22,7 +22,7 @@ export function Home()
             
             
             >
-                <h1>Find your next Benchmark</h1>
+                <h1 style={{fontSize: '50px'}}>Find your next Benchmark</h1>
             </motion.div>
             <motion.div
               initial={{opacity:0,  y:  40}} 
@@ -34,7 +34,7 @@ export function Home()
           
             </motion.div>
             <div className="homedividertwo"/>
-            <h1>About Benches</h1>
+            <h1 style={{fontSize: '50px'}}>About Benches</h1>
             <div style={{alignItems: 'center', display: 'flex', justifyContent: 'center', gap: '30px'}}>
                 <Card Name="Bench Definition" info="A bench is a long seat designed for multiple people to sit on at once. It is typically made of wood, metal, or stone and can be with or without a backrest. (Oxford English Dictionary)">
 
