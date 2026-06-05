@@ -1,22 +1,13 @@
 import  '../Components/components.css'
-// default exports dont need curly braces
 import ProfileBanner from '../Components/ProfileComponents.jsx';
 import React, { useState, useEffect } from 'react'
-
-// non default export functions NEED curly braces
 import { RecentReviews } from '../Components/ProfileComponents.jsx';
 import { useNavigate } from 'react-router-dom';
-import { BenchMarks } from '../Components/ProfileComponents.jsx';
-import { Honorific } from './Honorific.jsx'
+import { Honorific } from '../Components/Honorific.jsx'
 import { NavBar } from '../Components/Navbar.jsx'
-import Login from '../Login.jsx'
-
-// PLACEHOLDER IMG
-import Tobi from '../assets/tobi.jpg'
 import profile from '../assets/profile.svg'
 import { jwtDecode } from 'jwt-decode'
 import LoginPrompt from '../Components/LoginPrompt.jsx';
-import { Navigate } from 'react-router-dom'
 import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 
@@ -28,7 +19,7 @@ export function Profile({isLoggedIn = true})
     const [showMore, setShowMore] = useState(false);
     const token = localStorage.getItem('token');
     const email = token ? jwtDecode(token).email : null;
-    const milestones = [0, 5, 15, 50, 100, 250, 251];
+    const milestones = [0, 1, 6, 16, 51, 101, 251];
 
     // Function to retrieve user info based off of their email
     useEffect(() => {
@@ -82,10 +73,10 @@ export function Profile({isLoggedIn = true})
 
     // Displays a title based off of the number of benches the user has reviewed
     const honorificData = Honorific(userInfo.num_reviewed);
+    
     return(
     <>
     <NavBar/>
-    {/* must include */}
     <div style={{paddingTop: '161px'}}/>
 
     <div style={{display: 'flex', paddingRight: '50px'}}>
@@ -120,32 +111,38 @@ export function Profile({isLoggedIn = true})
         </button>
         </div>
 
-{/* SIDE BAR PANEL THAT DESCRIBES HONORIFIC TAGS*/}
+{/* START: SIDE BAR PANEL THAT DESCRIBES HONORIFIC TAGS*/}
 
-        <div className="ProfileBenchMarks">
-            <h1>My BenchMarks</h1>
-            <p>My Current number of Reviews: {userInfo.num_reviewed}</p>
+        <div className="ProfileBenchMarks" style={{alignItems: 'flexstart' }}>
+            <h1>BenchMarks:</h1>
+            <div style={{paddingLeft: '10px', paddingRight: '10px'}}>
+            <p style={{fontFamily: 'sans-serif', fontWeight: '500'}}>My Current Number of Reviews: {userInfo.num_reviewed}</p>
+            <p style={{fontFamily: 'sans-serif'}}>Unlockable Tags:</p>
+            </div>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-                 {milestones.map((num) => {
-                 const { tag, className } = Honorific(num);
-          return (
-            <li 
-              key={num} 
-              className={className} 
-              style={{ margin: '10px 0', padding: '8px', borderRadius: '4px' }}
-            >
-              <strong>{tag}</strong> 
-              <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
-                (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
-              </span>
-            </li>
-          );
-        })}
+            {milestones.map((num) => {
+                    const { tag, className } = Honorific(num);
+                    return (
+                        <li 
+                        key={num} 
+                        className={className} 
+                        style={{ margin: '10px 0', padding: '8px', borderRadius: '25px', fontSize:'15px' }}
+                        >
+                            <strong>{tag}</strong> 
+                            <span style={{ fontSize: '0.85em', color: '#666', marginLeft: '10px' }}>
+                                
+                                (Unlocked at {num === 251 ? '251+' : `${num}`} reviews)
+                            </span>
+                        </li>
+                    );
+                }
+            )
+            }
       </ul>
             
         </div>
 
-{/* END of SIDE BAR PANEL */}
+{/* END: SIDE BAR PANEL */}
 
         <div style={{paddingBottom: '500px'}}/>
     </div>

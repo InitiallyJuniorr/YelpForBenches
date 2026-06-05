@@ -1,4 +1,4 @@
-import '../Components/components.css'
+import './components.css'
 
 // A title granted to a user based off of the number of reviews they have
     export function Honorific(num) {
@@ -8,5 +8,5 @@ import '../Components/components.css'
         if (num <= 50)  return { tag: "Constantly Sitting",  className: "honorific4" };
         if (num <= 100) return { tag: "Super Bench Sitter",  className: "honorific5" };
         if (num <= 250) return { tag: "Ultra Bench Sitter",  className: "honorific6" };
-        return { tag: "🐈🐈🐈BENCH🐈🐈🐈", className: "honorific7"};
+        return { tag: "BENCH", className: "honorific7"};
     }

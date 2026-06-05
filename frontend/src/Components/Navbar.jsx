@@ -8,7 +8,6 @@ export const NavBar = () => {
         <nav className="navbar">
             <ul>
                 <li><Link to="/home">Home</Link></li>
-                {/* PLACEHOLDER */}
                 <li><Link to="/app">Map</Link></li>
                 <li><Link to="/profile">Profile</Link></li>
             

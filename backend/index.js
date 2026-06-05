@@ -1,20 +1,19 @@
-import dotenv from 'dotenv'
-dotenv.config();
-import express from 'express';
-import mysql from 'mysql2'
-import cors from 'cors'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'     // allows using .env file to set mysql parameters (user, host, etc.)
+dotenv.config();    // imports .env file
+import express from 'express';      // allows handling HTTP requests
+import mysql from 'mysql2'      // allows communicating with mysql database
+import cors from 'cors'     // gives permission to frontend server to send HTTP requests to backend proxy server (this server)
+import bcrypt from 'bcrypt'     // used to hash passwords
+import jwt from 'jsonwebtoken'  // turns email into token to be used as variable on pages
+import nodemailer from 'nodemailer'     // used to send email for password recovery
 
-const app = express();
-app.use(express.json())
-// app.use(cors({ origin: ["http://127.0.0.1:5173", "http://localhost:5173"] }))
-app.use(cors({ origin: ["http://127.0.0.1:5174", "http://localhost:5174", "http://127.0.0.1:5173", "http://localhost:5173"] }))
+const app = express();  // starts HTTP handler
+app.use(express.json())     // allows parsing POST requests that contain json objects
+app.use(cors({ origin: ["http://127.0.0.1:5174", "http://localhost:5174", "http://127.0.0.1:5173", "http://localhost:5173"] })) // gives permission to frontend to send HTTP requests
 
-const PORT = 8080;
+const PORT = 8080;  // port of this server
 
-// Testing Database is corect
+// testing database is corect
 console.log(process.env.DB_HOST);
 console.log(process.env.DB_PORT);
 console.log(process.env.DB_USER);
@@ -22,7 +21,7 @@ console.log(process.env.DB_PASSWORD);
 console.log(process.env.DB_DATABASE);
 
 
-
+// setting up connection to mysql database
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -76,7 +75,10 @@ app.get('/', (req, res) => {
     res.send( {success: true} );
 })
 
-app.get('/bench', async (req, res) => { // Get all benches
+// gets all benches from database
+// requires nothing
+// returns everything in "bench" table in database
+app.get('/bench', async (req, res) => {
     const result = await pool.query("SELECT * FROM benches");
     res.send(result[0]);
 })
@@ -153,6 +155,9 @@ app.get('/bench-search', async (req, res) => { // Search for benches near the us
   }
 });
 
+// gets benches from database that are near certain coordinates
+// requires a coordinate as a query paramater
+// returns all benches from "benches" table that are within 50,000 meters
 app.get('/bench-lookup', async (req, res) => {
     const lat = Number(req.query.lat);
     const lon = Number(req.query.lon);
@@ -174,7 +179,10 @@ app.get('/bench-lookup', async (req, res) => {
     res.send(result[0])
 })
 
-app.post('/add-bench', async (req, res) => {    // Adds bench to database, returns id of new bench
+// adds new bench to database
+// requires bench name, address, coordinates, and image URL of a bench
+// returns the database id of the added bench
+app.post('/add-bench', async (req, res) => {
     const { name, address, lng, lat, imageURL } = req.body
 
     try {
@@ -189,7 +197,10 @@ app.post('/add-bench', async (req, res) => {    // Adds bench to database, retur
     }
 })
 
-app.post('/add-review', async (req, res) => {    // Adds review to database, returns nothing
+// adds new review to database
+// requires a bench ID, a user ID, stars, text
+// returns nothing
+app.post('/add-review', async (req, res) => { 
     const { benchId, userId, stars, review } = req.body
 
     try {
@@ -197,11 +208,19 @@ app.post('/add-review', async (req, res) => {    // Adds review to database, ret
             'INSERT INTO reviews (bench_id, user_id, stars, review) VALUES (?, ?, ?, ?)',
             [benchId, userId, stars, review]
         )
+        const [result] = await pool.query(
+            'SELECT num_reviewed FROM users WHERE email = ?', [userId]
+        )
+        console.log(result[0].num_reviewed + 1)
+        await pool.query(
+            'UPDATE users SET num_reviewed = ? WHERE email = ?', [result[0].num_reviewed + 1, userId]
+        )
     } catch (err) {
         console.log(err.message)
         res.status(500).json({ error: err.message })
     }
 })
+
 
 app.get('/bench-reviews', async (req, res) => { // Gets reviews for a bench, returns array of reviews with author info
     const benchId = Number(req.query.bench_id);

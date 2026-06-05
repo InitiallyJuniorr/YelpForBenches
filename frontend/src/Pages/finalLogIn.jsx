@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../Login.css'
-import './fooLogin.jsx'
+import '../stashedFolder/Login.css'
+import '../stashedFolder/fooLogin.jsx'
 import { validateEmail, validateUsername, validatePassword, PwError_Display } from '../utils/validate.jsx';
 import gang from '../assets/gang.png'
 
-
-export default function Jamey() {
+export default function LogIn() {
     const navigate = useNavigate(); 
     const [isLogin, setIsLogin] = useState(true);
     const [emailError,   setEmailError] = useState("");
@@ -20,7 +19,7 @@ export default function Jamey() {
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
     const [forgotMsg, setForgotMsg] = useState("");
-    const [kkSlider, isKKSlider] = useState(true);
+    const [LandingLogIn, isLandingLogIn] = useState(true);
     
     //Functions called when any input is given t
     const handleEChange = (e) => {
@@ -94,18 +93,18 @@ export default function Jamey() {
         else setForgotMsg(data.error)
     }
 
-    const toggleKKLogIn = () => {
-        isKKSlider(!kkSlider);
+    const toggleLogIn = () => {
+        isLandingLogIn(!LandingLogIn);
         
     }
-    const toggleKKSignIn = () => {
+    const toggleSignIn = () => {
         setIsLogin(!isLogin);
-        isKKSlider(!kkSlider);
+        isLandingLogIn(!LandingLogIn);
     }
 
     return (
         <>
-        {kkSlider &&
+        {LandingLogIn &&
         <>
              <div style={{overflow: 'auto'}}>
                 <div style={{justifyContent: 'right', display: 'flex'}}>
@@ -117,17 +116,16 @@ export default function Jamey() {
                     </div>
                     <div style={{padding: "100px"}}/>
                     {/* <button className="button" onClick={() => setIsClicked(true)}>Log In</button> */}
-                    <button className="button" onClick={toggleKKLogIn}>Log In</button>
+                    <button className="button" onClick={toggleLogIn}>Log In</button>
                     <div style={{padding: "10px"}}/>
-                    <button className="button" onClick={toggleKKSignIn}>Sign Up</button>
-                    <div style={{justifyContent: 'right',width: '287px', textAlign: 'center'}}>
-                    <p className="guest" onClick={() => {
-                        localStorage.removeItem('token');
-                        navigate('/home');
-                    }}>Sign in Later</p>
+                    <button className="button" onClick={toggleSignIn} style={{whiteSpace: 'nowrap'}}>Sign Up</button>
+                   
+                    <p className="guest" style={{color: '#3d77BF', alignContent: 'center', textAlign: 'center'}}
+                            onClick={() => {localStorage.removeItem('token'); navigate('/home');
+                        }}>Sign in Later</p>
 
 
-                    </div>
+
 
                 </div>
                 
@@ -138,12 +136,12 @@ export default function Jamey() {
         </>
         }
 
-        {!kkSlider && isLogin &&
+        {!LandingLogIn && isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
-                    <button className="back" onClick={toggleKKLogIn}>Back</button>
+                    <button className="back" onClick={toggleLogIn}>Back</button>
                     <h1>Benchmark</h1>
                     <div style={{width: '287px'}}>
                     <p1>In a world of Benches, be sure to find the right one for you.</p1>
@@ -186,13 +184,13 @@ export default function Jamey() {
             </>
         }
 
-        {!kkSlider && !isLogin &&
+        {!LandingLogIn && !isLogin &&
             <>
             <div style={{justifyContent: 'right', display: 'flex'}}>
             <img src={gang} alt="" style={{height: '53%', width: '53%', margin: '0', padding: '0'}}/>
                 <div className="loginCard" style={{paddingTop: '5%'}}>
                    
-                    <button className="back" onClick={toggleKKSignIn}>Back</button>
+                    <button className="back" onClick={toggleSignIn}>Back</button>
                     <h1>Benchmark Sign Up</h1>
                     <div style={{width: '287px'}}>
                         <p1>In a world of Benches, be sure to find the right one for you.</p1>
