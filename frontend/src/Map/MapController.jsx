@@ -138,6 +138,7 @@ export default function MapController() {
   };
 
   const handleStartAddBench = (mapCenter) => {
+    if (!email) { setShowLoginPrompt(true); return; }
     const location = {
       lat: mapCenter.lat,
       lng: mapCenter.lng,
