@@ -150,7 +150,7 @@ export default function BenchDetailsPopup({
         const reviewsData = await reviewsResponse.json();
         
         for (let i = 0; i < reviewsData.length; i++) { // sets correct honorific for each review
-          let userResponse = await fetch(
+          const userResponse = await fetch(
             `http://localhost:8080/user?email=${reviewsData[i].userId}`
           );
 
@@ -158,7 +158,7 @@ export default function BenchDetailsPopup({
             throw new Error(`Error fetching reviews: ${userResponse.status}`);
           }
           
-          let userData = await userResponse.json();
+          const userData = await userResponse.json();
   
           reviewsData[i].badge = Honorific(userData.num_reviewed).tag;
         }
