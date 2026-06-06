@@ -134,42 +134,44 @@ export default function BenchDetailsPopup({
     setReviews(fallbackReviews);
     setIsLoadingReviews(true);
     setReviewsError('');
-
+  
+    // sets revews state variable to a list of review object associated with the bench represented by the bench variable
+    // requires a valid bench state variable
     const fetchReviews = async () => {
       try {
-        const response = await fetch(
+        const reviewsResponse = await fetch(   // fetches complete list of reviews for a bench
           `http://localhost:8080/bench-reviews?bench_id=${encodeURIComponent(bench.id)}`
         );
 
-        if (!response.ok) {
+        if (!reviewsResponse.ok) {
           throw new Error(`Error fetching reviews: ${response.status}`);
         }
 
-        const data = await response.json();
+        const reviewsData = await reviewsResponse.json();
 
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < reviewsData.length; i++) { // sets correct honorific for each review
           let userResponse = await fetch(
-            `http://localhost:8080/user?email=${data[i].userId}`
+            `http://localhost:8080/user?email=${reviewsData[i].userId}`
           );
   
           let userData = await userResponse.json();
   
-          data[i].badge = Honorific(userData.num_reviewed).tag;
+          reviewsData[i].badge = Honorific(userData.num_reviewed).tag;
         }
 
         
-        if (!ignore) {
-          setReviews(data);
+        if (!ignore) {  // safeguard in case useEffect gets called again before this async function is finished (useEffect would set ignore to true in that case)
+          setReviews(reviewsData);
         }
       } catch (error) {
         console.error('Error fetching bench reviews:', error);
 
-        if (!ignore) {
+        if (!ignore) {  // safeguard (see above)
           setReviewsError('Could not load reviews right now.');
         }
       } finally {
-        if (!ignore) {
-          setIsLoadingReviews(false);
+        if (!ignore) {    // safeguard (see above)
+          setIsLoadingReviews(false);   // indicates that loading reviews is complete
         }
       }
     };
