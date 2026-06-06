@@ -94,7 +94,7 @@
 }
 
 .write-review-stars button.active {
-  color: #231f20;
+  color: orange;
 }
 
 .write-review-input-wrap {

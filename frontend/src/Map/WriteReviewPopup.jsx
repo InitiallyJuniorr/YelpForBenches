@@ -16,17 +16,14 @@ function ReviewStars({ value, onChange }) {
   return (
     <div
       className="write-review-stars"
-      aria-label="Review rating"
       onMouseLeave={() => setHoverRating(0)}
     >
       {STAR_RATINGS.map((star) => (
         <button
           key={star}
-          type="button"
           className={star <= displayRating ? 'active' : ''}
           onClick={() => onChange(star)}
           onMouseEnter={() => setHoverRating(star)}
-          aria-label={`${star} star${star === 1 ? '' : 's'}`}
         >
           ★
         </button>
